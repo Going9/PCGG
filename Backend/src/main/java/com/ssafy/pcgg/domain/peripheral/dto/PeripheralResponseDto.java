@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class KeyboardResponse {
-
+public class PeripheralResponseDto {
 	private Long id;
 	private String name;
 	private Integer lprice;
@@ -14,5 +13,4 @@ public class KeyboardResponse {
 	private String imageSource;
 	private String link;
 	private String brand;
-
 }
