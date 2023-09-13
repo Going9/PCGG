@@ -14,6 +14,6 @@ export function registerPlugins (app) {
   loadFonts()
   app
     .use(vuetify)
-    .use(pinia)
     .use(router)
+    .use(pinia)
 }
