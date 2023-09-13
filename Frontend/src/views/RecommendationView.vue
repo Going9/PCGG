@@ -6,7 +6,7 @@
         <img
           alt="BannerImg"
           class="bannerImg"
-          src="@/assets/image/ranking-banner.jpg"
+          src="@/assets/ranking-banner.jpg"
         />
         <div class="box">
           <div class="bannerComment">
