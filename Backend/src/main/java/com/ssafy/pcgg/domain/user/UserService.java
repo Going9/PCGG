@@ -31,7 +31,7 @@ public class UserService {
         String password = userSignupRequest.getPassword();
 
         AuthorityEntity authorityEntity = AuthorityEntity.builder()
-                .authority("ROLE_USER")
+                .authorityName("ROLE_USER")
                 .build();
 
         UserEntity userEntity = UserEntity.builder()

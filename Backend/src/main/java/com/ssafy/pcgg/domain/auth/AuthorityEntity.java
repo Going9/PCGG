@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "authorities")
+@Table(name = "authority")
 public class AuthorityEntity {
 
     @Id
-    @Column(length = 50)
-    private String authority;
+    @Column(name = "authority_name", length = 50)
+    private String authorityName;
 
 }
