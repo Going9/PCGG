@@ -3,7 +3,7 @@
     <div class="container">
       <div class="nametag">
         <p>주변기기</p>
-        <img :src="peripheral" alt="" />
+        <img :src="peripheralIcon" alt="" />
       </div>
       <div class="menu-groups">
         <v-btn-toggle v-model="toggle" class="btns">
@@ -30,7 +30,7 @@
             class="searchbar-inner"
           />
           <img
-            :src="searchmark"
+            :src="searchIcon"
             alt="돋보기"
             @click="goSearch"
             class="searchmark"
@@ -51,8 +51,8 @@
 
 <script setup>
 import { ref } from "vue";
-import peripheral from "@/assets/peripheral.png";
-import searchmark from "@/assets/search.png";
+import { peripheralIcon } from "@/assets/Icon";
+import { searchIcon } from "@/assets/Icon";
 import KeyboardComponentVue from "../components/PeripheralViewComponents/KeyboardComponent.vue";
 import MouseComponentVue from "../components/PeripheralViewComponents/MouseComponent.vue";
 import MonitorComponentVue from "../components/PeripheralViewComponents/MonitorComponent.vue";
