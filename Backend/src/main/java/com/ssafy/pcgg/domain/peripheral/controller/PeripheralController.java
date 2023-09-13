@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
 import com.ssafy.pcgg.domain.peripheral.service.PeripheralService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,10 +38,10 @@ public class PeripheralController {
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@GetMapping("/{category}")
-	public ResponseEntity<?> keyBoardList(@PathVariable String category, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+	public ResponseEntity<Slice<PeripheralResponseDto>> keyBoardList(@PathVariable String category, @RequestParam(value = "pages", defaultValue = "0") int pages) {
 		logger.debug("keyBoardList(), category = {}, pages = {}", category, pages);
-
-		return ResponseEntity.ok().body(peripheralService.peripheralList(category, pages));
+		Slice<PeripheralResponseDto> peripheralResponseDtoSlice = peripheralService.peripheralList(category, pages);
+		return ResponseEntity.ok().body(peripheralResponseDtoSlice);
 	}
 
 }
