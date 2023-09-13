@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import BestSeller from "@/components/RecommendtionViewComponents/BestSellerComponent.vue";
+import BestSeller from "@/components/RecommendationViewComponents/BestSellerComponent.vue";
 import { defineComponent } from "vue";
 import { Carousel, Navigation, Slide, Pagination } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
