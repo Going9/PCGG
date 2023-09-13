@@ -3,7 +3,7 @@
     <div class="container">
       <!-- 상단 배너 -->
       <div class="banner">
-        <img alt="BannerImg" class="bannerImg" src="@/assets/ranking-banner.jpg" />
+        <img alt="BannerImg" class="bannerImg" src="@/assets/image/ranking-banner.jpg" />
         <div class="box">
           <div class="bannerComment">
             <span>견적 랭킹에서는 가장 많이 판매되는 제품을 확인하세요.</span>
