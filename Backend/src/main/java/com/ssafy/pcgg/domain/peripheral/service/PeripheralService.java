@@ -52,7 +52,7 @@ public class PeripheralService {
 		} else if(category.equals("printer")){
 			peripheralResponseDtoSlice =  printerRepository.findSliceBy(pageRequest);
 		} else if(category.equals("etc")){
-			peripheralResponseDtoSlice =  monitorRepository.findSliceBy(pageRequest);
+			peripheralResponseDtoSlice =  etcRepository.findSliceBy(pageRequest);
 		}
 
 		return peripheralResponseDtoSlice;
