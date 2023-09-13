@@ -18,7 +18,6 @@
         </div>
       </div>
     </div>
-    <hr />
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
