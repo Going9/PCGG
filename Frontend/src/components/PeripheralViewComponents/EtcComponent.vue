@@ -13,7 +13,6 @@
         </div>
       </div>
     </div>
-    <hr />
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
@@ -94,11 +93,10 @@ const buttonItems = [
   height: 100%;
   width: 90%;
   padding: 5px;
-  background-color: #d9d9d9;
+  background-color: #d9d9d966;
   flex-direction: column;
   border-radius: 10px;
 }
-
 .text {
   margin: 5px;
 }
