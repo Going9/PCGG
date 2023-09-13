@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "part_power")
@@ -41,4 +42,10 @@ public class PowerEntity {
 
     @Column(name = "free_warranty_period")
     private Integer freeWarrantyPeriod;
+
+    @OneToMany(mappedBy = "power")
+    List<QuoteCandidateEntity> quoteCandidate;
+
+    @OneToMany(mappedBy = "power")
+    List<QuoteEntity> quote;
 }

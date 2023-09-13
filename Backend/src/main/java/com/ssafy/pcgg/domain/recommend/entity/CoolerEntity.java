@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "part_cooler")
@@ -45,4 +46,10 @@ public class CoolerEntity {
 
     @Column(name = "max_fan_noise", columnDefinition = "DECIMAL(7,2)")
     private BigDecimal maxFanNoise;
+
+    @OneToMany(mappedBy = "cooler")
+    List<QuoteCandidateEntity> quoteCandidate;
+
+    @OneToMany(mappedBy = "cooler")
+    List<QuoteEntity> quote;
 }

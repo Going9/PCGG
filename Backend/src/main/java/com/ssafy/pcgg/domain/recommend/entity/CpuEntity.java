@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "part_cpu")
@@ -39,4 +40,9 @@ public class CpuEntity {
     @Column(name = "cooler_included")
     private Boolean coolerIncluded;
 
+    @OneToMany(mappedBy = "cpu")
+    List<QuoteCandidateEntity> quoteCandidate;
+
+    @OneToMany(mappedBy = "cpu")
+    List<QuoteEntity> quote;
 }

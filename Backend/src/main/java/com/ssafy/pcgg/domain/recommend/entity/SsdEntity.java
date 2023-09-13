@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "part_ssd")
@@ -35,4 +36,10 @@ public class SsdEntity {
 
     @Column(name="writing_speed")
     private Integer writingSpeed;
+
+    @OneToMany(mappedBy = "ssd")
+    List<QuoteCandidateEntity> quoteCandidate;
+
+    @OneToMany(mappedBy = "ssd")
+    List<QuoteEntity> quote;
 }

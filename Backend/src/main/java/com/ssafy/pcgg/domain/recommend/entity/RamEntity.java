@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "part_ram")
@@ -35,4 +36,10 @@ public class RamEntity {
 
     @Column(name = "heat_sink")
     private Boolean heatSink;
+
+    @OneToMany(mappedBy = "ram")
+    List<QuoteCandidateEntity> quoteCandidate;
+
+    @OneToMany(mappedBy = "ram")
+    List<QuoteEntity> quote;
 }
