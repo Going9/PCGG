@@ -78,6 +78,7 @@ const goList = () => {
 
 .product-profile {
   height: 30%;
+  width: 50%;
 }
 
 .product-profile img {
@@ -86,6 +87,7 @@ const goList = () => {
 
 .price {
   height: 30%;
+  width: 50%;
 }
 .price img {
   height: 225px;

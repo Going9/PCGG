@@ -1,11 +1,16 @@
 <template>
-  <Carousel :autoplay="5000" :itemsToShow="3.95" :wrapAround="true" :transition="500">
+  <Carousel
+    :autoplay="5000"
+    :itemsToShow="3.95"
+    :wrapAround="true"
+    :transition="500"
+  >
     <Slide v-for="slide in 5" :key="slide">
       <div class="carousel__item">
         <!-- {{ slide }} -->
         <!-- <img src="@/assets/laptopImg.jpg" alt="laptopImg" width="400" height="200"> -->
         <div class="item">
-          <BestSeller/>
+          <BestSeller />
         </div>
       </div>
     </Slide>
@@ -16,14 +21,13 @@
   </Carousel>
 </template>
 
-
-<script >
-import BestSeller from '@/components/BestSellerComponent.vue';
-import { defineComponent } from 'vue'
-import { Carousel, Navigation, Slide, Pagination } from 'vue3-carousel'
-import 'vue3-carousel/dist/carousel.css'
+<script>
+import BestSeller from "@/components/RecommendtionViewComponents/BestSellerComponent.vue";
+import { defineComponent } from "vue";
+import { Carousel, Navigation, Slide, Pagination } from "vue3-carousel";
+import "vue3-carousel/dist/carousel.css";
 export default defineComponent({
-  name: 'ExamplePagination',
+  name: "ExamplePagination",
   components: {
     Pagination,
     Carousel,
@@ -35,7 +39,7 @@ export default defineComponent({
     // carousel settings
     settings: {
       itemsToShow: 1,
-      snapAlign: 'center',
+      snapAlign: "center",
     },
     // breakpoints are mobile first
     // any settings not specified will fallback to the carousel settings
@@ -43,23 +47,20 @@ export default defineComponent({
       // 700px and up
       700: {
         itemsToShow: 3.5,
-        snapAlign: 'center',
+        snapAlign: "center",
       },
       // 1024 and up
       1024: {
         itemsToShow: 5,
-        snapAlign: 'start',
+        snapAlign: "start",
       },
     },
   }),
-})
-
+});
 </script>
 
 <style scoped>
-
 .item {
-
 }
 .carousel__slide {
   padding: 5px;
@@ -101,4 +102,3 @@ export default defineComponent({
   transform: rotateY(0) scale(1.1);
 }
 </style>
-
