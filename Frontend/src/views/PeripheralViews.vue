@@ -53,11 +53,11 @@
 import { ref } from "vue";
 import peripheral from "@/assets/peripheral.png";
 import searchmark from "@/assets/search.png";
-import KeyboardComponentVue from "../components/KeyboardComponent.vue";
-import MouseComponentVue from "../components/MouseComponent.vue";
-import MonitorComponentVue from "../components/MonitorComponent.vue";
-import PrinterComponentVue from "../components/PrinterComponent.vue";
-import EtcComponentVue from "../components/EtcComponent.vue";
+import KeyboardComponentVue from "../components/PeripheralViewComponents/KeyboardComponent.vue";
+import MouseComponentVue from "../components/PeripheralViewComponents/MouseComponent.vue";
+import MonitorComponentVue from "../components/PeripheralViewComponents/MonitorComponent.vue";
+import PrinterComponentVue from "../components/PeripheralViewComponents/PrinterComponent.vue";
+import EtcComponentVue from "../components/PeripheralViewComponents/EtcComponent.vue";
 
 const toggle = ref("keyboard");
 
