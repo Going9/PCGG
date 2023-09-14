@@ -1,18 +1,15 @@
 <template>
   <div class="container">
     <div class="text">
-      <span class="username">username</span
-      ><span>님께 추천드리는 주변기기 ;)</span>
+      <span class="username">username</span><span>님께 추천드리는 </span>
+      <span v-if="store.peripheralCategory === 'keyboard'">키보드</span>
+      <span v-if="store.peripheralCategory === 'mouse'">마우스</span>
+      <span v-if="store.peripheralCategory === 'monitor'">모니터</span>
+      <span v-if="store.peripheralCategory === 'printer'">프린터와 복합기</span>
+      <span v-if="store.peripheralCategory === 'etc'">주변기기</span>
     </div>
-    <div class="recommend">
-      <div v-for="(card, index) in temps" :key="index" class="cardform">
-        <img :src="card" alt="Card Image" />
-        <div class="card-body">
-          <h3 class="card-title">매우 비싼 주변기기</h3>
-          <p class="card-text">흐르는 강물을</p>
-        </div>
-      </div>
-    </div>
+    <PeripheralCardComponentVue class="recommend" :categoryVariable="toggle" />
+    <!-- 분리선 -->
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
@@ -33,44 +30,17 @@
           </v-btn>
         </v-btn-toggle>
       </div>
-      <div class="list">
-        <div v-for="(card, index) in temps" :key="index" class="cardform">
-          <img :src="card" alt="Card Image" />
-          <div class="card-body">
-            <h3 class="card-title">매우 비싼 주변기기</h3>
-            <p class="card-text">거꾸로 거슬러</p>
-          </div>
-        </div>
-      </div>
+      <PeripheralCardComponentVue class="list" :categoryVariable="toggle" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import temp1 from "@/assets/temp1.png";
-import temp2 from "@/assets/temp2.png";
-import temp3 from "@/assets/temp3.png";
-import temp4 from "@/assets/temp4.png";
+import { useAppStore } from "@/store/app";
+import PeripheralCardComponentVue from "./PeripheralCardComponent.vue";
 
-const temps = ref([
-  temp1,
-  temp2,
-  temp3,
-  temp4,
-  temp1,
-  temp2,
-  temp3,
-  temp4,
-  temp1,
-  temp2,
-  temp3,
-  temp4,
-  temp1,
-  temp2,
-  temp3,
-  temp4,
-]);
+const store = useAppStore();
 
 const toggle = ref(null);
 
@@ -97,6 +67,7 @@ const buttonItems = [
   flex-direction: column;
   border-radius: 10px;
 }
+
 .text {
   margin: 5px;
 }
@@ -119,35 +90,6 @@ const buttonItems = [
 .recommend::-webkit-scrollbar-thumb {
   background-color: #fff;
   border-radius: 15px;
-}
-
-.cardform {
-  width: 17.3%;
-  margin: 0% 1.3% 2% 1.3%;
-  border-radius: 10px;
-  background-color: #ffffff9a;
-  flex: none;
-  transition: transform 0.2s ease;
-}
-
-.cardform:hover {
-  transform: scale(1.1);
-}
-
-.cardform img {
-  border-radius: 10px 10px 0px 0px;
-  width: 100%;
-}
-
-.card-body {
-  margin: 5px 5px 0px 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.card-body p {
-  text-align: right;
 }
 
 .all-products {
