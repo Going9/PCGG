@@ -1,6 +1,9 @@
 package com.ssafy.pcgg.global.config;
 
 import com.ssafy.pcgg.domain.auth.*;
+import com.ssafy.pcgg.domain.auth.oauth.CustomOAuth2UserService;
+import com.ssafy.pcgg.domain.auth.oauth.OAuth2LoginFailureHandler;
+import com.ssafy.pcgg.domain.auth.oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,8 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -48,9 +53,13 @@ public class SecurityConfig {
                 // token을 사용하는 방식이기 때문에 csrf를 disable한다.
                 .csrf(csrf -> csrf.disable())
 
-                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
-                        userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService)
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                        .userInfoEndpoint(
+                                userInfoEndpointConfig -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService
+                                )
                 ))
 
                 .exceptionHandling(exceptionHandling -> exceptionHandling

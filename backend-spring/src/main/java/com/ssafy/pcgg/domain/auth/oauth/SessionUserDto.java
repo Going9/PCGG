@@ -1,4 +1,4 @@
-package com.ssafy.pcgg.domain.auth.dto;
+package com.ssafy.pcgg.domain.auth.oauth;
 
 import com.ssafy.pcgg.domain.user.UserEntity;
 import lombok.Getter;
