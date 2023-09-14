@@ -36,10 +36,4 @@ public class SsdEntity {
 
     @Column(name="writing_speed")
     private Integer writingSpeed;
-
-    @OneToMany(mappedBy = "ssd")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "ssd")
-    List<QuoteEntity> quote;
 }

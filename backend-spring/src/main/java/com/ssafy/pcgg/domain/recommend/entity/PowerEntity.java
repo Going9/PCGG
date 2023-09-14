@@ -42,10 +42,4 @@ public class PowerEntity {
 
     @Column(name = "free_warranty_period")
     private Integer freeWarrantyPeriod;
-
-    @OneToMany(mappedBy = "power")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "power")
-    List<QuoteEntity> quote;
 }

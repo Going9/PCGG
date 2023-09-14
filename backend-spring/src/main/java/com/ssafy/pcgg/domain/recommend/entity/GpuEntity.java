@@ -39,10 +39,4 @@ public class GpuEntity {
 
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal thickness;
-
-    @OneToMany(mappedBy = "gpu")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "gpu")
-    List<QuoteEntity> quote;
 }
