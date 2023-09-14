@@ -9,13 +9,13 @@
           <span class="text"> Login</span>
         </RouterLink>
         <RouterLink to="/">
-          <img alt="profileIcon" class="profile" src="@/assets/icon/profileIcon.png" />
+          <img alt="profileIcon" class="profile" src="@/assets/Icon/profileIcon.png" />
         </RouterLink>
         <RouterLink to="/">
-          <img alt="bellIcon" class="bell" src="@/assets/icon/bellIcon.png" />
+          <img alt="bellIcon" class="bell" src="@/assets/Icon/bellIcon.png" />
         </RouterLink>
         <RouterLink to="/">
-          <img alt="hambergerIcon" class="hamberger" src="@/assets/icon/hambergerIcon.png" />
+          <img alt="hambergerIcon" class="hamberger" src="@/assets/Icon/hambergerIcon.png" />
         </RouterLink>
       </div>
     </nav>
