@@ -1,26 +1,20 @@
 package com.ssafy.pcgg.global.config;
 
-import com.ssafy.pcgg.domain.auth.JwtAccessDeniedHandler;
-import com.ssafy.pcgg.domain.auth.JwtAuthenticationEntryPoint;
-import com.ssafy.pcgg.domain.auth.JwtFilter;
-import com.ssafy.pcgg.domain.auth.TokenProvider;
+import com.ssafy.pcgg.domain.auth.*;
+import com.ssafy.pcgg.domain.auth.oauth.CustomOAuth2UserService;
+import com.ssafy.pcgg.domain.auth.oauth.OAuth2LoginFailureHandler;
+import com.ssafy.pcgg.domain.auth.oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +24,9 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -55,6 +52,15 @@ public class SecurityConfig {
         return httpSecurity
                 // token을 사용하는 방식이기 때문에 csrf를 disable한다.
                 .csrf(csrf -> csrf.disable())
+
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                        .userInfoEndpoint(
+                                userInfoEndpointConfig -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService
+                                )
+                ))
 
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
