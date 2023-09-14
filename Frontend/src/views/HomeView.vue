@@ -1,50 +1,51 @@
 <script setup>
-  import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink } from "vue-router";
+import { rankingIcon } from "@/assets/Icon";
+import { mainbannerImg } from "@/assets/image";
 </script>
-
 
 <template>
   <main>
     <div class="banner">
-      <img alt="BannerImg" class="bannerImg" src="@/assets/main-banner.jpg" />
+      <img alt="BannerImg" class="bannerImg" :src="mainbannerImg" />
       <div class="box">
         <div class="bannerComment">
           <span>
-            PC.GG는 빅 데이터를 이용해서 사용자에게 최적화된 견적을 제공하는걸 목표로 합니다
+            PC.GG는 빅 데이터를 이용해서 사용자에게 최적화된 견적을 제공하는걸
+            목표로 합니다
           </span>
         </div>
       </div>
-      <div class="button-tap-up flex-center ">
-        <v-btn class="estimate text-2" color="#4599FC" size="x-large"
-         :style="{height: '5.0625rem'}">견적 받으러 가기</v-btn>
-         <RouterLink to="/recommendation">
+      <div class="button-tap-up flex-center">
+        <v-btn
+          class="estimate text-2"
+          color="#4599FC"
+          size="x-large"
+          :style="{ height: '5.0625rem' }"
+          >견적 받으러 가기</v-btn
+        >
+        <RouterLink to="/recommendation">
           <v-hover>
             <template v-slot:default="{ isHovering, props }">
-              <div class="rangking text-1 flex-center "
-                    size="x-large"
-                    v-bind="props"
-                    :style="isHovering
-                    ?
-                    { height:'6rem' ,background:'#F9D13E'}
-                    :
-                    {background:'#706E5E'} "
-                    style="cursor: pointer"
-                    >
-                    <div class="flex-center">
-                      {{ !isHovering
-                        ?
-                        '견적랭킹'
-                        :
-                        'Ranking'
-                        }}
-                      <img v-if="isHovering" src="@/assets/Ranking.png" alt="Ranking">
-                    </div>
-
+              <div
+                class="rangking text-1 flex-center"
+                size="x-large"
+                v-bind="props"
+                :style="
+                  isHovering
+                    ? { height: '6rem', background: '#F9D13E' }
+                    : { background: '#706E5E' }
+                "
+                style="cursor: pointer"
+              >
+                <div class="flex-center">
+                  {{ !isHovering ? "견적랭킹" : "Ranking" }}
+                  <img v-if="isHovering" :src="rankingIcon" alt="Ranking" />
+                </div>
               </div>
             </template>
           </v-hover>
         </RouterLink>
-
       </div>
 
       <div class="button-tap-down">
@@ -53,11 +54,13 @@
             <v-col>
               <RouterLink to="/share">
                 <v-btn class="share text-2" size="x-large">공유마당</v-btn>
-             </RouterLink>
+              </RouterLink>
             </v-col>
             <v-col>
               <RouterLink to="/peripheral">
-                <v-btn class="peripherals text-2" size="x-large">주변기기</v-btn>
+                <v-btn class="peripherals text-2" size="x-large"
+                  >주변기기</v-btn
+                >
               </RouterLink>
             </v-col>
             <v-col>
@@ -68,13 +71,10 @@
             </v-col>
           </v-row>
         </v-container>
-
       </div>
     </div>
   </main>
 </template>
-
-
 
 <style>
 .banner {
@@ -99,7 +99,6 @@
   text-align: center;
   color: #fff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
 }
 
 .bannerComment {
@@ -109,15 +108,10 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-
 }
-
-
 </style>
 
-
 <style scoped>
-
 .estimate {
   width: 31.375rem;
   height: 5.0625rem;
@@ -126,18 +120,19 @@
   border-radius: 0.5rem;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   margin-left: 5%;
-
 }
 
-.share, .peripherals ,.used-market, .simulation {
+.share,
+.peripherals,
+.used-market,
+.simulation {
   width: 15.625rem;
   height: 6.25rem;
   flex-shrink: 0;
 
   border-radius: 0.9375rem;
-  color:white;
-  background: rgba(112, 110, 110, 0.70);
-
+  color: white;
+  background: rgba(112, 110, 110, 0.7);
 }
 
 .flex-center {
@@ -145,28 +140,25 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-
 }
 
 .rangking {
   width: 6.25rem;
   height: 3.75rem;
   flex-shrink: 0;
-  background-color: #F9D13E;
-  color : white;
+  background-color: #f9d13e;
+  color: white;
 
   border-radius: 0.5rem;
   margin-left: 100%;
 }
 
-
 .button-tap-up {
   height: 12rem;
-
 }
 
 .text-1 {
-  color: var(--Color, #FFF);
+  color: var(--Color, #fff);
   font-family: Plus Jakarta Sans;
   font-size: 1rem;
   font-style: normal;
@@ -175,7 +167,7 @@
 }
 
 .text-2 {
-  color: var(--Color, #FFF);
+  color: var(--Color, #fff);
   text-align: center;
   font-family: Inter;
   font-size: 1.5rem;
@@ -183,6 +175,4 @@
   font-weight: 700;
   line-height: normal;
 }
-
 </style>
-

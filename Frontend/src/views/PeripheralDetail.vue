@@ -30,7 +30,15 @@
       <img :src="anohter4" alt="딴거4번" />
     </div>
     <hr />
-    <div class="review"></div>
+    <div class="review">
+      <h3>유저 리뷰</h3>
+      <div>
+        <div></div>
+        <div class="inputform">
+          <input type="text" name="" id="" placeholder="리뷰 남기기" />
+        </div>
+      </div>
+    </div>
     <div>
       <v-btn @click="goList">목록으로</v-btn>
     </div>
@@ -114,10 +122,24 @@ const goList = () => {
 }
 
 .anohter img {
-  height: 225px;
+  width: 24%;
 }
 
 .review {
   width: 100%;
+}
+
+.outputform {
+}
+.inputform {
+  display: flex;
+  height: 2rem;
+  justify-content: center;
+}
+
+.inputform input {
+  border: solid 1px #000;
+  width: 60%;
+  padding: 0px 5px;
 }
 </style>
