@@ -43,10 +43,4 @@ public class MainboardEntity {
 
     @Column(name = "m2_count")
     private Integer m2Count;
-
-    @OneToMany(mappedBy = "mainboard")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "mainboard")
-    List<QuoteEntity> quote;
 }

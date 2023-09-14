@@ -58,10 +58,4 @@ public class ChassisEntity {
 
     @Column(name="max_cooler_depth", columnDefinition = "DECIMAL(7,2)")
     private BigDecimal maxCoolerDepth;
-
-    @OneToMany(mappedBy = "chassis")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "chassis")
-    List<QuoteEntity> quote;
 }

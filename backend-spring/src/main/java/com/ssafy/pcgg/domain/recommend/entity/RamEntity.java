@@ -36,10 +36,4 @@ public class RamEntity {
 
     @Column(name = "heat_sink")
     private Boolean heatSink;
-
-    @OneToMany(mappedBy = "ram")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "ram")
-    List<QuoteEntity> quote;
 }
