@@ -5,33 +5,42 @@
         <span class="text">PC.GG</span>
       </RouterLink>
       <div class="nav-tap">
-        <RouterLink to="/login" class="login">
-          <span class="text"> Login</span>
-        </RouterLink>
-        <RouterLink to="/">
-          <img
-            alt="profileIcon"
-            class="profile"
-            src="@/assets/icon/profileIcon.png"
-          />
-        </RouterLink>
-        <RouterLink to="/">
-          <img alt="bellIcon" class="bell" src="@/assets/icon/bellIcon.png" />
-        </RouterLink>
-        <RouterLink to="/">
-          <img
-            alt="hambergerIcon"
-            class="hamberger"
-            src="@/assets/icon/hambergerIcon.png"
-          />
-        </RouterLink>
+        <div v-if="store.logon != true">
+          <RouterLink to="/login" class="login">
+            <span class="text"> Login</span>
+          </RouterLink>
+        </div>
+        <div v-else class="sloth">
+          <RouterLink to="/login" class="login" @click="isLogout()">
+            <span class="text"> Logout</span>
+          </RouterLink>
+          <RouterLink to="/">
+            <img alt="profileIcon" class="profile" :src="profileIcon" />
+          </RouterLink>
+          <RouterLink to="/">
+            <img alt="bellIcon" class="bell" :src="bellIcon" />
+          </RouterLink>
+          <RouterLink to="/">
+            <img alt="hambergerIcon" class="hamberger" :src="hambergerIcon" />
+          </RouterLink>
+        </div>
       </div>
     </nav>
   </div>
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink } from "vue-router";
+import { bellIcon } from "@/assets/Icon";
+import { profileIcon } from "@/assets/Icon";
+import { hambergerIcon } from "@/assets/Icon";
+import { useAppStore } from "@/store/app";
+
+const store = useAppStore();
+
+const isLogout = () => {
+  store.logout();
+};
 </script>
 
 <style scoped>
@@ -62,6 +71,7 @@ nav {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  text-decoration: none;
 }
 
 .logo .text {
@@ -103,10 +113,10 @@ nav .nav-tap {
 .login {
   display: flex;
   text-align: center;
-  width: 3.75rem;
   height: 1.1875rem;
   flex-direction: column;
   justify-content: center;
+  text-decoration: none;
 }
 
 .login .text {
@@ -118,5 +128,9 @@ nav .nav-tap {
   font-weight: 500;
   line-height: 150%; /* 1.59375rem */
   letter-spacing: -0.03188rem;
+}
+
+.sloth {
+  display: flex;
 }
 </style>

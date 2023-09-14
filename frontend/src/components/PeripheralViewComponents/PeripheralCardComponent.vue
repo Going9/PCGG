@@ -8,7 +8,7 @@
     >
       <img :src="card" alt="Card Image" />
       <div class="card-body">
-        <h3 class="card-title">매우 비싼 키보드</h3>
+        <h3 class="card-title">매우 비싼 {{ store.peripheralCategory }}</h3>
         <p class="card-text">가성비 엉망</p>
       </div>
     </div>
@@ -16,10 +16,13 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, ref } from "vue";
+import { onUpdated, ref } from "vue";
 import router from "@/router";
 import temp1 from "@/assets/temp1.png";
-import store from "@/store";
+import { useAppStore } from "@/store/app";
+
+const store = useAppStore();
+
 const goDetail = () => {
   router.push({ name: "PeripheralDetail" });
 };
@@ -46,18 +49,14 @@ const page = ref(1);
 
 const callRecommend = () => {
   console.log("call Recommend");
-  store.isRecommendPreipheral(store.perpheralCategory);
+  store.isRecommendPreipheral(store.peripheralCategory);
 };
 
 const callList = () => {
   console.log("call List");
-  store.isPeripheralList(store.perpheralCategory, page.value);
+  store.isPeripheralList(store.peripheralCategory, page.value);
   page.value += 1;
 };
-
-onMounted(() => {
-  console.log(store.perpheralCategory);
-});
 
 onUpdated(() => {
   callRecommend();
