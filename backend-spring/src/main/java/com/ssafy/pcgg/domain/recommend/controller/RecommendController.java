@@ -1,5 +1,6 @@
 package com.ssafy.pcgg.domain.recommend.controller;
 
+import com.ssafy.pcgg.domain.recommend.dto.DesktopRecommendDto;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,15 +14,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/recommends")
 public class RecommendController {
+
     private final RecommendService recommendService;
 
     //데스크탑추천
     @GetMapping("/desktop")
-    public ResponseEntity<?> getDesktopRecommend(){
+    public ResponseEntity<?> getDesktopRecommend(@RequestBody DesktopRecommendDto desktopRecommendDto){
         Map<String,Object> resultMap = null;
         HttpStatus httpStatus;
         try{
-//            resultMap = recommendService.bussinessLogic();
+            resultMap = recommendService.desktopRecommend(desktopRecommendDto);
             httpStatus = HttpStatus.OK;
         }catch(Exception e){
             resultMap = new HashMap<>();
@@ -65,11 +67,11 @@ public class RecommendController {
 
     //추천결과 상세ㅗㅈ회
     @GetMapping("{category}/{resultNo}")
-    public ResponseEntity<?> getRecommendDetail(@PathVariable String category, @PathVariable int resultNo){
+    public ResponseEntity<?> getRecommendDetail(@PathVariable String category, @PathVariable Integer quoteId){
         Map<String,Object> resultMap = null;
         HttpStatus httpStatus;
         try{
-//            resultMap = recommendService.bussinessLogic();
+            resultMap = recommendService.quoteDetail(category, quoteId);
             httpStatus = HttpStatus.OK;
         }catch(Exception e){
             resultMap = new HashMap<>();

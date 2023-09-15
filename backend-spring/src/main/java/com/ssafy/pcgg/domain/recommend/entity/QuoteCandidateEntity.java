@@ -1,8 +1,10 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 @Table(name = "quote_candidate")
 public class QuoteCandidateEntity {
 
