@@ -25,10 +25,9 @@ export const useAppStore = defineStore("app", {
       this.logon = false;
     },
     triggerActivation() {
-      console.log(this.triggerOne);
       this.triggerOne = !this.triggerOne;
     },
-    isSignup() {
+    changePageLoginSignup() {
       this.triggerTwo = !this.triggerTwo;
     },
     isPeripheralRecommend() {
