@@ -12,17 +12,17 @@
           <img
             alt="profileIcon"
             class="profile"
-            src="@/assets/icon/profileIcon.png"
+            src="@/assets/Icon/profileIcon.png"
           />
         </RouterLink>
         <RouterLink to="/">
-          <img alt="bellIcon" class="bell" src="@/assets/icon/bellIcon.png" />
+          <img alt="bellIcon" class="bell" src="@/assets/Icon/bellIcon.png" />
         </RouterLink>
         <RouterLink to="/">
           <img
             alt="hambergerIcon"
             class="hamberger"
-            src="@/assets/icon/hambergerIcon.png"
+            src="@/assets/Icon/hambergerIcon.png"
           />
         </RouterLink>
       </div>
