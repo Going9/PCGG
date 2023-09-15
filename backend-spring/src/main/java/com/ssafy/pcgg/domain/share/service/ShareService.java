@@ -1,0 +1,108 @@
+package com.ssafy.pcgg.domain.share.service;
+
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ssafy.pcgg.domain.recommend.entity.ChassisEntity;
+import com.ssafy.pcgg.domain.recommend.entity.CoolerEntity;
+import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
+import com.ssafy.pcgg.domain.recommend.entity.GpuEntity;
+import com.ssafy.pcgg.domain.recommend.entity.MainboardEntity;
+import com.ssafy.pcgg.domain.recommend.entity.PowerEntity;
+import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
+import com.ssafy.pcgg.domain.recommend.entity.RamEntity;
+import com.ssafy.pcgg.domain.recommend.entity.SsdEntity;
+import com.ssafy.pcgg.domain.recommend.repository.ChassisRepository;
+import com.ssafy.pcgg.domain.recommend.repository.CoolerRepository;
+import com.ssafy.pcgg.domain.recommend.repository.CpuRepository;
+import com.ssafy.pcgg.domain.recommend.repository.GpuRepository;
+import com.ssafy.pcgg.domain.recommend.repository.MainboardRepository;
+import com.ssafy.pcgg.domain.recommend.repository.PowerRepository;
+import com.ssafy.pcgg.domain.recommend.repository.QuoteRepository;
+import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
+import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
+import com.ssafy.pcgg.domain.share.dto.ShardAddQuoteRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.entity.Share;
+import com.ssafy.pcgg.domain.share.repository.ShareRepository;
+import com.ssafy.pcgg.domain.user.UserEntity;
+import com.ssafy.pcgg.domain.user.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class ShareService {
+
+	private final ShareRepository shareRepository;
+	private final QuoteRepository quoteRepository;
+	private final CpuRepository cpuRepository;
+	private final MainboardRepository mainboardRepository;
+	private final SsdRepository ssdRepository;
+	private final RamRepository ramRepository;
+	private final GpuRepository gpuRepository;
+	private final ChassisRepository chassisRepository;
+	private final PowerRepository powerRepository;
+	private final CoolerRepository coolerRepository;
+	private final UserRepository userRepository;
+
+	@Transactional
+	public Long writeShare(ShareAddRequestDto shareAddRequestDto) {
+		//1. 견적 생성
+		ShardAddQuoteRequestDto quoteRequestDto = shareAddRequestDto.getShardAddQuoteRequestDto();
+
+		System.out.println("33");
+		//1.1 견적Dto에서 받은 부품별 객체를 받아서
+		CpuEntity cpuEntity = cpuRepository.findById(quoteRequestDto.getCpuId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 cpu가 존재하지 않습니다."));
+		MainboardEntity mainboardEntity = mainboardRepository.findById(quoteRequestDto.getMainboardId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 mainboard가 존재하지 않습니다."));
+		SsdEntity ssdEntity = ssdRepository.findById(quoteRequestDto.getSsdId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 ssd가 존재하지 않습니다."));
+		RamEntity ramEntity = ramRepository.findById(quoteRequestDto.getRamId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 ram가 존재하지 않습니다."));
+		GpuEntity gpuEntity = gpuRepository.findById(quoteRequestDto.getGpuId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 gpu가 존재하지 않습니다."));
+		ChassisEntity chassisEntity = chassisRepository.findById(quoteRequestDto.getChassisId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 chassis가 존재하지 않습니다."));
+		PowerEntity powerEntity = powerRepository.findById(quoteRequestDto.getPowerId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 power가 존재하지 않습니다."));
+		CoolerEntity coolerEntity = coolerRepository.findById(quoteRequestDto.getCoolerId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 cooler가 존재하지 않습니다."));
+
+		System.out.println("44");
+		//1.2 견적엔티티(QuoteEntity)를 생성하여
+		QuoteEntity quoteEntity = QuoteEntity.builder()
+			.cpu(cpuEntity)
+			.mainboard(mainboardEntity)
+			.ssd(ssdEntity)
+			.ram(ramEntity)
+			.gpu(gpuEntity)
+			.chassis(chassisEntity)
+			.power(powerEntity)
+			.cooler(coolerEntity)
+			.build();
+
+		QuoteEntity quote = quoteRepository.save(quoteEntity);
+
+		UserEntity userEntity = userRepository.findById(shareAddRequestDto.getUserId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 사용자가 존재하지 않습니다."));
+
+		//2. 공유마당 게시글 생성
+		Share share = Share.builder()
+			.user(userEntity)
+			.quote(quote)
+			.title(shareAddRequestDto.getTitle())
+			.content(shareAddRequestDto.getContent())
+			.summary(shareAddRequestDto.getSummary())
+			.createdAt(LocalDateTime.now())
+			.build();
+
+		Share share1 = shareRepository.save(share);
+
+		//3. 생성된 테이블의 id값을 리턴
+		return share1.getId();
+	}
+}
