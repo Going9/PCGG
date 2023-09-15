@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { onUpdated, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import router from "@/router";
 import temp1 from "@/assets/temp1.png";
 import { useAppStore } from "@/store/app";
@@ -45,7 +45,7 @@ const temps = [
   temp1,
 ];
 
-const page = ref(1);
+const page = ref(0);
 
 const callRecommend = () => {
   console.log("call Recommend");
@@ -58,7 +58,14 @@ const callList = () => {
   page.value += 1;
 };
 
+onMounted(() => {
+  page.value = 0;
+  callRecommend();
+  callList();
+});
+
 onUpdated(() => {
+  page.value = 0;
   callRecommend();
   callList();
 });

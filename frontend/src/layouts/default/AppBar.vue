@@ -20,10 +20,10 @@
           <RouterLink to="/">
             <img alt="bellIcon" class="bell" :src="bellIcon" />
           </RouterLink>
-          <RouterLink to="/">
-            <img alt="hambergerIcon" class="hamberger" :src="hambergerIcon" />
-          </RouterLink>
         </div>
+        <RouterLink to="/">
+          <img alt="hambergerIcon" class="hamberger" :src="hambergerIcon" />
+        </RouterLink>
       </div>
     </nav>
   </div>
@@ -107,7 +107,6 @@ nav .nav-tap {
   padding: var(--Number, 0rem);
   justify-content: center;
   align-items: center;
-  gap: 1.9375rem;
 }
 
 .login {

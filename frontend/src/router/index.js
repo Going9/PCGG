@@ -23,7 +23,7 @@ const routes = [
       {
         path: "/peripheral",
         name: "Peripheral",
-        component: () => import("@/views/PeripheralViews.vue"),
+        component: () => import("@/views/PeripheralView.vue"),
       },
       {
         path: "/peripheraldetail",
@@ -39,6 +39,11 @@ const routes = [
         path: "/share",
         name: "share",
         component: () => import("@/views/ShareView.vue"),
+      },
+      {
+        path: "/simulation",
+        name: "Simulation",
+        component: () => import("@/views/SimulationView.vue"),
       },
     ],
   },
