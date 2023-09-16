@@ -1,7 +1,12 @@
 package com.ssafy.pcgg.domain.share.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,7 @@ import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
 import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
 import com.ssafy.pcgg.domain.share.dto.ShardAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
 import com.ssafy.pcgg.domain.share.repository.ShareRepository;
 import com.ssafy.pcgg.domain.user.UserEntity;
@@ -104,5 +110,49 @@ public class ShareService {
 
 		//3. 생성된 테이블의 id값을 리턴
 		return share1.getId();
+	}
+
+	/**
+	 * 공유마당 상세 조회
+	 */
+	public ShareResponseDto getShare(Long shareId){
+		Share share =  shareRepository.findById(shareId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
+
+		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
+			.id(share.getId())
+			.userId(share.getUser().getUserId())
+			.quoteId(share.getQuote().getId())
+			.title(share.getTitle())
+			.content(share.getContent())
+			.summary(share.getSummary())
+			.createdAt(share.getCreatedAt())
+			.build();
+
+		return shareResponseDto;
+	}
+
+	/**
+	* 공유마당 목록 조회
+	*/
+	public Slice<ShareResponseDto> getAllShare(int pages){
+		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Slice<Share> shareResponseDtoList = shareRepository.findSliceBy(pageRequest);
+
+		return shareResponseDtoList.map(this::convertToDto);
+	}
+
+	private ShareResponseDto convertToDto(Share share){
+		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
+			.id(share.getId())
+			.userId(share.getUser().getUserId())
+			.quoteId(share.getQuote().getId())
+			.title(share.getTitle())
+			.content(share.getContent())
+			.summary(share.getSummary())
+			.createdAt(share.getCreatedAt())
+			.build();
+
+		return shareResponseDto;
 	}
 }

@@ -1,7 +1,5 @@
 package com.ssafy.pcgg.domain.share.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Slice;
@@ -14,14 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
-import com.ssafy.pcgg.domain.share.dto.SearchPartResponseDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.service.ShareService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +32,7 @@ public class ShareController {
 	private final ShareService shareService;
 
 	/* 연결 테스트를 위한 부분으로 추후에 삭제 예정 */
-	@GetMapping("/")
+	@GetMapping("/test")
 	public String testC() {
 		return "connected!";
 	}
@@ -56,6 +51,22 @@ public class ShareController {
 		Long quoteId = shareService.writeShare(addRequestDto);
 
 		return ResponseEntity.ok().body(quoteId);
+	}
+
+	@Operation(summary = "공유마당 게시글 상세조회", description = "공유마당 게시글을 조회합니다.")
+	@GetMapping("/{articleId}")
+	public ResponseEntity<?> getShareDetail(@PathVariable Long articleId) {
+		logger.info("getShareDetail(), articleId = {}", articleId);
+		ShareResponseDto shareResponseDto = shareService.getShare(articleId);
+		return ResponseEntity.ok().body(shareResponseDto);
+	}
+
+	@Operation(summary = "공유마당 게시글 목록 조회", description = "공유마당 게시글 목록을 조회합니다.")
+	@GetMapping("/")
+	public ResponseEntity<Slice<ShareResponseDto>> getShares( @RequestParam(value = "pages", defaultValue = "0") int pages) {
+		logger.info("getShareDetail(), page = {}", pages);
+		Slice<ShareResponseDto> shareResponseDto = shareService.getAllShare(pages);
+		return ResponseEntity.ok().body(shareResponseDto);
 	}
 
 }
