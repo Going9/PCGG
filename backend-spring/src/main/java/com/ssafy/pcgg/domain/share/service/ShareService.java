@@ -132,6 +132,7 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
+			// .mark(0)
 			.build();
 
 		return shareResponseDto;
@@ -156,6 +157,7 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
+			// .mark(0)
 			.build();
 
 		return shareResponseDto;
