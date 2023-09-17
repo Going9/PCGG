@@ -139,6 +139,16 @@ public class ShareService {
 	}
 
 	/**
+	 * 공유마당 삭제
+	 */
+	public void deleteShare(Long shareId){
+		Share share =  shareRepository.findById(shareId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
+		// TODO: 작성자와 삭제 요청자의 id의 일치 여부
+		shareRepository.delete(share);
+	}
+
+	/**
 	* 공유마당 목록 조회
 	*/
 	public Slice<ShareResponseDto> getAllShare(int pages){

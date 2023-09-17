@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,10 +64,18 @@ public class ShareController {
 		return ResponseEntity.ok().body(shareResponseDto);
 	}
 
+	@Operation(summary = "공유마당 게시글 삭제", description = "공유마당 게시글을 삭제합니다.")
+	@DeleteMapping("/{articleId}")
+	public ResponseEntity<?> deleteShare(@PathVariable Long articleId) {
+		logger.info("deleteShare(), articleId = {}", articleId);
+		shareService.deleteShare(articleId);
+		return ResponseEntity.ok().body(articleId);
+	}
+
 	@Operation(summary = "공유마당 게시글 목록 조회", description = "공유마당 게시글 목록을 조회합니다.")
 	@GetMapping("/")
 	public ResponseEntity<Slice<ShareResponseDto>> getShares(@RequestParam(value = "pages", defaultValue = "0") int pages) {
-		logger.info("getShareDetail(), page = {}", pages);
+		logger.info("getShares(), page = {}", pages);
 		Slice<ShareResponseDto> shareResponseDto = shareService.getAllShare(pages);
 		return ResponseEntity.ok().body(shareResponseDto);
 	}
@@ -74,7 +83,7 @@ public class ShareController {
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요", description = "공유마당 게시글에 좋아요/싫어요를 누릅니다.")
 	@PutMapping("/{articleId}/mark")
 	public ResponseEntity<?> markLikes(@PathVariable Long articleId, @RequestBody ShareMarkRequestDto markRequestDto) {
-		logger.info("getShareDetail(), articleId = {}", articleId);
+		logger.info("markLikes(), articleId = {}", articleId);
 		shareService.markLikes(articleId, markRequestDto);
 		return ResponseEntity.ok().body(markRequestDto.getMark());
 	}
