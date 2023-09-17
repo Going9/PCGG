@@ -51,8 +51,8 @@
         </v-card-text>
       </v-card> -->
 
-      <v-btn block color="blue" size="large" variant="tonal" @click="login">
-        Log In
+      <v-btn block color="blue" size="large" variant="tonal" @click="loginEvent">
+        log in
       </v-btn>
 
       <v-card-text class="text-center">
@@ -71,9 +71,12 @@
 
 <script setup>
 import { ref } from "vue";
-import { useAppStore } from "@/store/app";
+import { userStore } from "@/store/userStore";
+import { login } from "@/api/userAPI";
+import router from "@/router";
+import vueCookies from "vue-cookies";
 
-const store = useAppStore();
+const store = userStore();
 const visible = ref(false);
 const email = ref("");
 const password = ref("");
@@ -82,8 +85,22 @@ const goToSignupPage = () => {
   store.changePageLoginSignup();
 };
 
-const login = () => {
-  console.log(email.value);
-  console.log(password.value);
+const loginEvent = () => {
+  const userInput = {
+    email: email.value,
+    password: password.value
+  };
+
+  login(
+    userInput,
+    ({ token }) => {
+      store.login();
+      console.log(vueCookies.get("accessToken"));
+      router.push({ name : "Home" });
+    },
+    error => {
+      console.log(error);
+    }
+  )
 };
 </script>

@@ -77,7 +77,7 @@
       </div>
 
       <div>
-        <v-btn @click="goToLoginPage">go to login</v-btn>
+        <Signup/>
       </div>
     </div>
     <!-- 회원가입 컴포넌트 end -->
@@ -86,15 +86,16 @@
 
 <script setup>
 import router from "@/router";
-import { useAppStore } from "@/store/app";
+import { userStore } from "@/store/userStore";
 import { loginbackImg } from "@/assets/image";
 import { loginscreenImg } from "@/assets/image";
 import { findbackImg } from "@/assets/image";
 import { findscreenImg } from "@/assets/image";
 import { signupscreenImg } from "@/assets/image";
 import Login from "@/components/LoginViewComponents/Login.vue";
+import Signup from "@/components/LoginViewComponents/Signup.vue";
 
-const store = useAppStore();
+const store = userStore();
 
 const triggerShot = () => {
   store.triggerActivation();
