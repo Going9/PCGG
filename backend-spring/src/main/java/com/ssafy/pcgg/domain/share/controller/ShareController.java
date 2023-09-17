@@ -34,12 +34,6 @@ public class ShareController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final ShareService shareService;
 
-	/* 연결 테스트를 위한 부분으로 추후에 삭제 예정 */
-	@GetMapping("/test")
-	public String testC() {
-		return "connected!";
-	}
-
 	@Operation(summary = "공유마당 게시글 작성", description = "공유마당 게시글을 작성합니다.")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "OK"),

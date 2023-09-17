@@ -8,6 +8,6 @@ import com.ssafy.pcgg.domain.share.entity.ShareLike;
 import com.ssafy.pcgg.domain.user.UserEntity;
 
 @Repository
-public interface ShareLikeRepository  extends JpaRepository<ShareLike, Long> {
+public interface ShareLikeRepository extends JpaRepository<ShareLike, Long> {
 	ShareLike findByShareAndUser(Share share, UserEntity userEntity);
 }
