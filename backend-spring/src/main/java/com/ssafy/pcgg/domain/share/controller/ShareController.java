@@ -7,12 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.service.ShareService;
 
@@ -63,10 +65,18 @@ public class ShareController {
 
 	@Operation(summary = "공유마당 게시글 목록 조회", description = "공유마당 게시글 목록을 조회합니다.")
 	@GetMapping("/")
-	public ResponseEntity<Slice<ShareResponseDto>> getShares( @RequestParam(value = "pages", defaultValue = "0") int pages) {
+	public ResponseEntity<Slice<ShareResponseDto>> getShares(@RequestParam(value = "pages", defaultValue = "0") int pages) {
 		logger.info("getShareDetail(), page = {}", pages);
 		Slice<ShareResponseDto> shareResponseDto = shareService.getAllShare(pages);
 		return ResponseEntity.ok().body(shareResponseDto);
+	}
+
+	@Operation(summary = "공유마당 게시글 좋아요/싫어요", description = "공유마당 게시글에 좋아요/싫어요를 누릅니다.")
+	@PutMapping("/{articleId}/mark")
+	public ResponseEntity<?> markLikes(@PathVariable Long articleId, @RequestBody ShareMarkRequestDto markRequestDto) {
+		logger.info("getShareDetail(), articleId = {}", articleId);
+		shareService.markLikes(articleId, markRequestDto);
+		return ResponseEntity.ok().body(markRequestDto.getMark());
 	}
 
 }

@@ -30,8 +30,11 @@ import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
 import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
 import com.ssafy.pcgg.domain.share.dto.ShardAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
+import com.ssafy.pcgg.domain.share.entity.ShareLike;
+import com.ssafy.pcgg.domain.share.repository.ShareLikeRepository;
 import com.ssafy.pcgg.domain.share.repository.ShareRepository;
 import com.ssafy.pcgg.domain.user.UserEntity;
 import com.ssafy.pcgg.domain.user.UserRepository;
@@ -53,6 +56,8 @@ public class ShareService {
 	private final PowerRepository powerRepository;
 	private final CoolerRepository coolerRepository;
 	private final UserRepository userRepository;
+
+	private final ShareLikeRepository shareLikeRepository;
 
 	@Transactional
 	public Long writeShare(ShareAddRequestDto shareAddRequestDto) {
@@ -154,5 +159,32 @@ public class ShareService {
 			.build();
 
 		return shareResponseDto;
+	}
+
+	/**
+	 * 공유마당 좋아요/싫어요
+	 */
+	@Transactional
+	public void markLikes(Long articleId, ShareMarkRequestDto markRequestDto){
+		UserEntity userEntity = userRepository.findById(markRequestDto.getUserId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 유저가 존재하지 않습니다."));
+		Share share = shareRepository.findById(articleId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
+
+		ShareLike shareLike = shareLikeRepository.findByShareAndUser(share, userEntity);
+
+		if(shareLike == null){
+			shareLike = ShareLike.builder()
+				.share(share)
+				.user(userEntity)
+				.mark(markRequestDto.getMark())
+				.build();
+			shareLikeRepository.save(shareLike);
+		} else if(shareLike.getMark() == markRequestDto.getMark()) {
+			shareLikeRepository.delete(shareLike);
+		} else{
+			shareLike.updateMark(markRequestDto.getMark());
+			shareLikeRepository.save(shareLike);
+		}
 	}
 }

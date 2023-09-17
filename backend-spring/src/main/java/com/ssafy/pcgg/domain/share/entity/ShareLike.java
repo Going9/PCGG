@@ -38,7 +38,11 @@ public class ShareLike {
 	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private UserEntity user;
 
-	@Column(name = "good")
-	private Integer good;
+	@Column(name = "mark")
+	private Integer mark;
+
+	public void updateMark(Integer mark){
+		this.mark = mark;
+	}
 
 }
