@@ -110,5 +110,20 @@ public class RecommendController {
         }
         return new ResponseEntity<>(resultMap, httpStatus);
     }
-    
+
+    //저장한 추천 목록 조회
+    @PutMapping("desktop")
+    public ResponseEntity<?> deleteAndCreateQuoteCandidate(){
+        Map<String,Object> resultMap = null;
+        HttpStatus httpStatus;
+        try{
+            resultMap = recommendService.deleteAndCreateQuoteCandidate();
+            httpStatus = (HttpStatus) resultMap.get("status");
+        }catch(Exception e){
+            resultMap = new HashMap<>();
+            resultMap.put("message","unexpected ERROR");
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, httpStatus);
+    }
 }
