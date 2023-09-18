@@ -1,101 +1,117 @@
 <template>
-  <div>
-    <div class="logincontainer">
-      <transition name="fade1">
-        <img
-          v-if="store.triggerTwo"
-          :src="loginbackImg"
-          alt="oh,no!"
-          class="bgimg"
-        />
-      </transition>
-      <transition name="fade2">
-        <img
-          v-if="!store.triggerTwo"
-          :src="findbackImg"
-          alt="oh,no!"
-          class="bgimg"
-        />
-      </transition>
+  <div class="logincontainer">
+    <!-- 로그인 화면 배경사진 start -->
+    <transition name="fade1">
+      <img
+        v-if="store.triggerTwo"
+        :src="loginbackImg"
+        alt="oh,no!"
+        class="bgimg"
+      />
+    </transition>
+    <!-- 로그인 화면 배경사진 end -->
 
-      <div :class="store.triggerTwo ? 'formone' : 'formone flipaddon-front'">
-        <div :class="store.triggerOne ? 'temp' : 'formmove'">
-          <transition name="fade1" class="moveanimation">
-            <div v-if="store.triggerOne">
-              <p>로그인폼</p>
-              <v-btn @click="moveToMain">login</v-btn>
-              <v-btn @click="goToSignup">계정찾기</v-btn>
-            </div>
-          </transition>
-          <transition name="fade2" class="moveanimation">
-            <div v-if="!store.triggerOne">
-              <p>여기에 회원가입폼</p>
-            </div>
-          </transition>
-        </div>
-
-        <!-- 스크린 옮기기 -->
-        <div :class="store.triggerOne ? 'temp' : 'screenmove'">
-          <transition name="fade1" class="moveanimation">
-            <img
-              v-if="store.triggerOne"
-              :src="loginscreenImg"
-              alt="Image"
-              class="screen"
-              @click="triggerShot"
-            />
-          </transition>
-          <transition name="fade2" class="moveanimation">
-            <img
-              v-if="!store.triggerOne"
-              :src="signupscreenImg"
-              alt="Image"
-              class="screen"
-              @click="triggerShot"
-            />
-          </transition>
-        </div>
+    <!-- 로그인 & 계정찾기 컴포넌트 start -->
+    <div :class="store.triggerTwo ? 'formone' : 'formone flipaddon-front'">
+      <!-- 폼 start -->
+      <div :class="store.triggerOne ? 'temp' : 'formmove'">
+        <!-- 로그인 폼 start -->
+        <transition name="fade1" class="moveanimation">
+          <Login v-if="store.triggerOne" />
+        </transition>
+        <!-- 로그인 폼 end -->
+        <!-- 계정찾기 폼 start -->
+        <transition name="fade2" class="moveanimation">
+          <div v-if="!store.triggerOne">
+            <p>여기에 계정찾기 폼</p>
+          </div>
+        </transition>
+        <!-- 계정찾기 폼 end -->
       </div>
-      <div :class="store.triggerTwo ? 'formtwo' : 'formtwo flipaddon-back'">
-        <div>
-          <img :src="findscreenImg" alt="Image" class="forgotscreen" />
-        </div>
+      <!-- 폼 end -->
 
-        <div>
-          <v-btn @click="goToSignup">찾았니??</v-btn>
-        </div>
+      <!-- 스크린 옮기기 start -->
+      <div :class="store.triggerOne ? 'temp' : 'screenmove'">
+        <!-- 로그인 스크린 start -->
+        <transition name="fade1" class="moveanimation">
+          <img
+            v-if="store.triggerOne"
+            :src="loginscreenImg"
+            alt="Image"
+            class="screen"
+            @click="triggerShot"
+          />
+        </transition>
+        <!-- 로그인 스크린 end -->
+        <!-- 계정찾기 스크린 start -->
+        <transition name="fade2" class="moveanimation">
+          <img
+            v-if="!store.triggerOne"
+            :src="signupscreenImg"
+            alt="Image"
+            class="screen"
+            @click="triggerShot"
+          />
+        </transition>
+        <!-- 계정찾기 스크린 end -->
+      </div>
+      <!-- 스크린 옮기기 end -->
+    </div>
+    <!-- 로그인 & 계정찾기 컴포넌트 end -->
+
+    <!-- 회원가입 화면 배경사진 start -->
+    <transition name="fade2">
+      <img
+        v-if="!store.triggerTwo"
+        :src="findbackImg"
+        alt="oh,no!"
+        class="bgimg"
+      />
+    </transition>
+    <!-- 회원가입 화면 배경사진 end -->
+
+    <!-- 회원가입 컴포넌트 start -->
+    <div :class="store.triggerTwo ? 'formtwo' : 'formtwo flipaddon-back'">
+      <div>
+        <img :src="findscreenImg" alt="Image" class="forgotscreen" />
+      </div>
+
+      <div>
+        <Signup/>
       </div>
     </div>
+    <!-- 회원가입 컴포넌트 end -->
   </div>
 </template>
 
 <script setup>
 import router from "@/router";
-import { useAppStore } from "@/store/app";
+import { userStore } from "@/store/userStore";
 import { loginbackImg } from "@/assets/image";
 import { loginscreenImg } from "@/assets/image";
 import { findbackImg } from "@/assets/image";
 import { findscreenImg } from "@/assets/image";
 import { signupscreenImg } from "@/assets/image";
+import Login from "@/components/LoginViewComponents/Login.vue";
+import Signup from "@/components/LoginViewComponents/Signup.vue";
 
-const store = useAppStore();
+const store = userStore();
+
+const triggerShot = () => {
+  store.triggerActivation();
+};
+
+const goToLoginPage = () => {
+  store.changePageLoginSignup();
+};
 
 function isLogin() {
   store.login();
-  console.log(store.logon);
 }
 
 function moveToMain() {
   isLogin();
   router.push({ name: "Home" });
-}
-
-function triggerShot() {
-  store.triggerActivation();
-}
-
-function goToSignup() {
-  store.isSignup();
 }
 </script>
 
@@ -143,14 +159,13 @@ function goToSignup() {
 .formone div,
 .formtwo div {
   height: 100%;
-  width: 50%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center; /* 수직 중앙 정렬 */
   justify-content: center; /* 수평 중앙 정렬 */
   backface-visibility: hidden;
   transform: translateZ(15px) perspective(100px);
-  transform-style: preserve-3d;
   z-index: 1;
 }
 

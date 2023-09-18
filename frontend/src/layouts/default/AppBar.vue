@@ -5,24 +5,26 @@
         <span class="text">PC.GG</span>
       </RouterLink>
       <div class="nav-tap">
-        <div v-if="store.logon != true">
-          <RouterLink to="/login" class="login">
-            <span class="text"> Login</span>
-          </RouterLink>
-        </div>
-        <div v-else class="sloth">
-          <RouterLink to="/login" class="login" @click="isLogout()">
-            <span class="text"> Logout</span>
-          </RouterLink>
-          <RouterLink to="/">
-            <img alt="profileIcon" class="profile" :src="profileIcon" />
-          </RouterLink>
-          <RouterLink to="/">
-            <img alt="bellIcon" class="bell" :src="bellIcon" />
-          </RouterLink>
-        </div>
+        <RouterLink to="/login" class="login">
+          <span class="text"> Login</span>
+        </RouterLink>
         <RouterLink to="/">
-          <img alt="hambergerIcon" class="hamberger" :src="hambergerIcon" />
+          <img
+            alt="profileIcon"
+            class="profile"
+            src="@/assets/Icon/profileIcon.png"
+            @click="testEvent"
+          />
+        </RouterLink>
+        <RouterLink to="/">
+          <img alt="bellIcon" class="bell" src="@/assets/Icon/bellIcon.png" />
+        </RouterLink>
+        <RouterLink to="/">
+          <img
+            alt="hambergerIcon"
+            class="hamberger"
+            src="@/assets/Icon/hambergerIcon.png"
+          />
         </RouterLink>
       </div>
     </nav>
@@ -30,17 +32,25 @@
 </template>
 
 <script setup>
-import { RouterLink } from "vue-router";
-import { bellIcon } from "@/assets/Icon";
-import { profileIcon } from "@/assets/Icon";
-import { hambergerIcon } from "@/assets/Icon";
-import { useAppStore } from "@/store/app";
+import { RouterLink, RouterView } from "vue-router";
+import { test } from "@/api/userAPI";
 
-const store = useAppStore();
+const testEvent = () => {
+  console.log("-------------------------------")
+  const cookies = document.cookie;
+  const cookieArray = cookies.split(';');
+  console.log(cookieArray);
+  console.log("-------------------------------")
 
-const isLogout = () => {
-  store.logout();
-};
+  test(
+    ({ data }) => {
+      console.log(data);
+    },
+    error => {
+      console.log(error);
+    }
+  )
+} 
 </script>
 
 <style scoped>
