@@ -27,13 +27,23 @@ const routes = [
       },
       {
         path: '/recommendation',
-        name: 'Recommendation',
+        name: 'RecommendationView',
         component: () => import('@/views/RecommendationView.vue'),
       },
       {
         path: '/share',
-        name: 'share',
+        name: 'Share',
         component: () => import('@/views/ShareView.vue'),
+      },
+      {
+        path: '/share/createsharepost',
+        name: 'CreateSharePost',
+        component: () => import('@/views/CreateSharePostView.vue'),
+      },
+      {
+        path: '/share/sharedetail',
+        name: 'ShareDetail',
+        component: () => import('@/views/ShareDetailView.vue'),
       },
 
 

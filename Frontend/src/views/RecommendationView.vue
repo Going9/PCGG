@@ -1,7 +1,6 @@
 <template>
   <main>
     <div class="container">
-      <!-- 상단 배너 -->
       <div class="banner">
         <img alt="BannerImg" class="bannerImg" :src="rankingbannerImg" />
         <div class="box">
@@ -10,19 +9,15 @@
           </div>
         </div>
       </div>
-      <!-- 메인 캐러셀 -->
       <div class="maincarouselbox">
         <Carousel3D />
       </div>
-      <!-- 서브 캐러셀 -->
-      <!-- v-if를 통한 가시성 조절 -->
       <div class="subcarouselbox" ref="subCarouselBox">
         <div v-if="isIntersecting">
           <div class="subCarouselComment">
             <span>닉네임님에게 추천하는 상품</span>
           </div>
           <div>
-            <!-- 가시성 조절을 위한 v-if -->
             <DoubleCarousel />
           </div>
         </div>
@@ -44,16 +39,16 @@ let isIntersecting = ref(false);
 const onIntersect = debounce((entries) => {
   const entry = entries[0];
   console.log(entry.intersectionRatio);
-  if (entry.intersectionRatio > 0.5) {
+  if (entry.intersectionRatio > 0.8 && entry.intersectionRatio != 1) {
     isIntersecting.value = true;
   } else {
     isIntersecting.value = false;
   }
-}, 150); // 디바운스 시간 설정
+}, 300);
 
 onMounted(() => {
   const options = {
-    threshold: 0.5,
+    threshold: 0.8,
   };
 
   const observer = new IntersectionObserver(onIntersect, options);
@@ -72,6 +67,7 @@ onMounted(() => {
 
 <style scoped>
 .container {
+  width: 100%;
   height: 2800px;
 }
 .maincarouselbox {
@@ -80,6 +76,8 @@ onMounted(() => {
 }
 
 .subcarouselbox {
+  width: 100%;
+  height: 500px;
   margin: 25%;
 }
 
