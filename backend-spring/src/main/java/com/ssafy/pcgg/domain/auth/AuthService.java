@@ -2,6 +2,8 @@ package com.ssafy.pcgg.domain.auth;
 
 import com.ssafy.pcgg.domain.auth.dto.AuthLoginRequest;
 import com.ssafy.pcgg.domain.auth.dto.AuthLoginResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,7 +19,7 @@ public class AuthService {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    public AuthLoginResponse login(AuthLoginRequest authLoginRequest) {
+    public AuthLoginResponse login(HttpServletResponse response, AuthLoginRequest authLoginRequest) {
         String email = authLoginRequest.getEmail();
         String password = authLoginRequest.getPassword();
 
@@ -30,6 +32,10 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String accessToken = tokenProvider.createToken(authentication);
+
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        response.addCookie(cookie);
+
         return new AuthLoginResponse(accessToken);
     }
 }
