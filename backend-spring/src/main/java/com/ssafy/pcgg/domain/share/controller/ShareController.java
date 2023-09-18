@@ -42,10 +42,10 @@ public class ShareController {
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@PostMapping("/")
-	public ResponseEntity<?> writeShare(@RequestBody ShareAddRequestDto addRequestDto) {
-		logger.info("writeShare(), userId = {}", addRequestDto.getUserId());
+	public ResponseEntity<Long> addShare(@RequestBody ShareAddRequestDto addRequestDto) {
+		logger.info("addShare(), userId = {}", addRequestDto.getUserId());
 
-		Long quoteId = shareService.writeShare(addRequestDto);
+		Long quoteId = shareService.addShare(addRequestDto);
 
 		return ResponseEntity.ok().body(quoteId);
 	}

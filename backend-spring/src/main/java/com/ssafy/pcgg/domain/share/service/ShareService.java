@@ -1,8 +1,6 @@
 package com.ssafy.pcgg.domain.share.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -28,7 +26,7 @@ import com.ssafy.pcgg.domain.recommend.repository.PowerRepository;
 import com.ssafy.pcgg.domain.recommend.repository.QuoteRepository;
 import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
 import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
-import com.ssafy.pcgg.domain.share.dto.ShardAddQuoteRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
@@ -60,31 +58,29 @@ public class ShareService {
 	private final ShareLikeRepository shareLikeRepository;
 
 	@Transactional
-	public Long writeShare(ShareAddRequestDto shareAddRequestDto) {
+	public Long addShare(ShareAddRequestDto shareAddRequestDto) {
 		//1. 견적 생성
-		ShardAddQuoteRequestDto quoteRequestDto = shareAddRequestDto.getShardAddQuoteRequestDto();
+		ShareAddQuoteRequestDto quoteRequestDto = shareAddRequestDto.getShareAddQuoteRequestDto();
 
-		System.out.println("33");
 		//1.1 견적Dto에서 받은 부품별 객체를 받아서
 		CpuEntity cpuEntity = cpuRepository.findById(quoteRequestDto.getCpuId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 cpu가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 cpu가 존재하지 않습니다."));
 		MainboardEntity mainboardEntity = mainboardRepository.findById(quoteRequestDto.getMainboardId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 mainboard가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 mainboard가 존재하지 않습니다."));
 		SsdEntity ssdEntity = ssdRepository.findById(quoteRequestDto.getSsdId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 ssd가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 ssd가 존재하지 않습니다."));
 		RamEntity ramEntity = ramRepository.findById(quoteRequestDto.getRamId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 ram가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 ram이 존재하지 않습니다."));
 		GpuEntity gpuEntity = gpuRepository.findById(quoteRequestDto.getGpuId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 gpu가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 gpu가 존재하지 않습니다."));
 		ChassisEntity chassisEntity = chassisRepository.findById(quoteRequestDto.getChassisId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 chassis가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 chassis가 존재하지 않습니다."));
 		PowerEntity powerEntity = powerRepository.findById(quoteRequestDto.getPowerId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 power가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 power가 존재하지 않습니다."));
 		CoolerEntity coolerEntity = coolerRepository.findById(quoteRequestDto.getCoolerId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 cooler가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 cooler가 존재하지 않습니다."));
 
-		System.out.println("44");
-		//1.2 견적엔티티(QuoteEntity)를 생성하여
+		//1.2 견적엔티티(QuoteEntity)를 생성
 		QuoteEntity quoteEntity = QuoteEntity.builder()
 			.cpu(cpuEntity)
 			.mainboard(mainboardEntity)
@@ -99,7 +95,7 @@ public class ShareService {
 		QuoteEntity quote = quoteRepository.save(quoteEntity);
 
 		UserEntity userEntity = userRepository.findById(shareAddRequestDto.getUserId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 사용자가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 사용자가 존재하지 않습니다."));
 
 		//2. 공유마당 게시글 생성
 		Share share = Share.builder()
@@ -111,10 +107,10 @@ public class ShareService {
 			.createdAt(LocalDateTime.now())
 			.build();
 
-		Share share1 = shareRepository.save(share);
+		Share newShare = shareRepository.save(share);
 
-		//3. 생성된 테이블의 id값을 리턴
-		return share1.getId();
+		//3. 생성된 공유마당 게시글의 id(pk)값을 리턴
+		return newShare.getId();
 	}
 
 	/**
@@ -122,7 +118,7 @@ public class ShareService {
 	 */
 	public ShareResponseDto getShare(Long shareId){
 		Share share =  shareRepository.findById(shareId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
 
 		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
 			.id(share.getId())
@@ -143,7 +139,7 @@ public class ShareService {
 	 */
 	public void deleteShare(Long shareId){
 		Share share =  shareRepository.findById(shareId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
 		// TODO: 작성자와 삭제 요청자의 id의 일치 여부
 		shareRepository.delete(share);
 	}
@@ -179,9 +175,9 @@ public class ShareService {
 	@Transactional
 	public void markLikes(Long articleId, ShareMarkRequestDto markRequestDto){
 		UserEntity userEntity = userRepository.findById(markRequestDto.getUserId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
 		Share share = shareRepository.findById(articleId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
 
 		ShareLike shareLike = shareLikeRepository.findByShareAndUser(share, userEntity);
 

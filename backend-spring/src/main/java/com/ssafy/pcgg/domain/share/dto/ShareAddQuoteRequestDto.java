@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ShardAddQuoteRequestDto {
+public class ShareAddQuoteRequestDto {
 	private Integer cpuId;
 	private Integer mainboardId;
 	private Integer ssdId;

@@ -26,7 +26,7 @@ public class ShareCommentService {
 	private final ShareCommentRepository shareCommentRepository;
 	private final UserRepository userRepository;
 
-	public Long writeComment(Long articleId, CommentRequestDto addRequestDto){
+	public Long addComment(Long articleId, CommentRequestDto addRequestDto){
 		Share share = shareRepository.findById(articleId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
 		UserEntity userEntity = userRepository.findById(addRequestDto.getUserId())
@@ -62,7 +62,7 @@ public class ShareCommentService {
 		return commentResponseDto;
 	}
 
-	public Long updateComments(Long commentId, CommentRequestDto commentRequestDto){
+	public Long updateComment(Long commentId, CommentRequestDto commentRequestDto){
 		ShareComment shareComment = shareCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 댓글이 존재하지 않습니다."));
 
@@ -77,7 +77,7 @@ public class ShareCommentService {
 		return commentId;
 	}
 
-	public void deleteComments(Long commentId){
+	public void deleteComment(Long commentId){
 		// TODO: 댓글 작성자와 삭제 요청자의 일치 여부 확인
 
 		ShareComment shareComment = shareCommentRepository.findById(commentId)

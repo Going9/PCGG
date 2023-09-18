@@ -1,7 +1,5 @@
 package com.ssafy.pcgg.domain.share.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,5 +11,5 @@ public class ShareAddRequestDto {
 	private String content;
 	private String imageSource;
 	private String summary;
-	private ShardAddQuoteRequestDto shardAddQuoteRequestDto;
+	private ShareAddQuoteRequestDto shareAddQuoteRequestDto;
 }

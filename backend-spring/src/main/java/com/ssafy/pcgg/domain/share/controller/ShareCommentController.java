@@ -33,33 +33,33 @@ public class ShareCommentController {
 
 	@Operation(summary = "공유마당 댓글 작성", description = "공유마당 게시글에 댓글을 작성합니다.")
 	@PostMapping("/{articleId}/comments")
-	public ResponseEntity<Long> addComments(@PathVariable Long articleId, @RequestBody CommentRequestDto addRequestDto) {
-		logger.info("addComments(), articleId = {}", articleId);
-		Long commentId = shareCommentService.writeComment(articleId, addRequestDto);
+	public ResponseEntity<Long> addComment(@PathVariable Long articleId, @RequestBody CommentRequestDto addRequestDto) {
+		logger.info("addComment(), articleId = {}", articleId);
+		Long commentId = shareCommentService.addComment(articleId, addRequestDto);
 		return ResponseEntity.ok().body(commentId);
 	}
 
 	@Operation(summary = "공유마당 댓글 조회", description = "공유마당 게시글의 댓글들을 조회합니다.")
 	@GetMapping("/{articleId}/comments")
 	public ResponseEntity<Slice<CommentResponseDto>> getComments(@PathVariable Long articleId, @RequestParam(value = "pages", defaultValue = "0") int pages) {
-		logger.info("addComments(), pages = {}", pages);
+		logger.info("getComments(), pages = {}", pages);
 		Slice<CommentResponseDto> commentResponseDtos = shareCommentService.getAllComments(pages, articleId);
 		return ResponseEntity.ok().body(commentResponseDtos);
 	}
 
 	@Operation(summary = "공유마당 댓글 수정", description = "공유마당 게시글에 댓글을 수정합니다.")
 	@PutMapping("/comments/{commentId}")
-	public ResponseEntity<Void> updateComments(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
-		logger.info("updateComments(), commentId = {}", commentId);
-		shareCommentService.updateComments(commentId, commentRequestDto);
+	public ResponseEntity<Void> updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
+		logger.info("updateComment(), commentId = {}", commentId);
+		shareCommentService.updateComment(commentId, commentRequestDto);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "공유마당 댓글 삭제", description = "공유마당 게시글에 댓글을 삭제합니다.")
 	@DeleteMapping("/comments/{commentId}")
-	public ResponseEntity<Void> deleteComments(@PathVariable Long commentId) {
-		logger.info("deleteComments(), commentId = {}", commentId);
-		shareCommentService.deleteComments(commentId);
+	public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+		logger.info("deleteComment(), commentId = {}", commentId);
+		shareCommentService.deleteComment(commentId);
 		return ResponseEntity.ok().build();
 	}
 
