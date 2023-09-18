@@ -13,6 +13,7 @@
             alt="profileIcon"
             class="profile"
             src="@/assets/Icon/profileIcon.png"
+            @click="testEvent"
           />
         </RouterLink>
         <RouterLink to="/">
@@ -32,6 +33,24 @@
 
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+import { test } from "@/api/userAPI";
+
+const testEvent = () => {
+  console.log("-------------------------------")
+  const cookies = document.cookie;
+  const cookieArray = cookies.split(';');
+  console.log(cookieArray);
+  console.log("-------------------------------")
+
+  test(
+    ({ data }) => {
+      console.log(data);
+    },
+    error => {
+      console.log(error);
+    }
+  )
+} 
 </script>
 
 <style scoped>
