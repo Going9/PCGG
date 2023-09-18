@@ -62,6 +62,21 @@ public class ShareCommentService {
 		return commentResponseDto;
 	}
 
+	public Long updateComments(Long commentId, CommentRequestDto commentRequestDto){
+		ShareComment shareComment = shareCommentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 댓글이 존재하지 않습니다."));
+
+		// TODO: 댓글 작성자와 수정 요청자의 일치 여부 확인
+		if(shareComment.getUser().getUserId() != commentRequestDto.getUserId()){
+			throw new RuntimeException("수정 권한이 없는 사용자입니다.");
+		}
+
+		shareComment.updateContent(commentRequestDto.getContent());
+		shareCommentRepository.save(shareComment);
+
+		return commentId;
+	}
+
 	public void deleteComments(Long commentId){
 		// TODO: 댓글 작성자와 삭제 요청자의 일치 여부 확인
 

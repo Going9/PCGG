@@ -49,4 +49,8 @@ public class ShareComment {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
+	public void updateContent(String content){
+		this.content = content;
+	}
+
 }

@@ -47,6 +47,14 @@ public class ShareCommentController {
 		return ResponseEntity.ok().body(commentResponseDtos);
 	}
 
+	@Operation(summary = "공유마당 댓글 수정", description = "공유마당 게시글에 댓글을 수정합니다.")
+	@PutMapping("/comments/{commentId}")
+	public ResponseEntity<Void> updateComments(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
+		logger.info("updateComments(), commentId = {}", commentId);
+		shareCommentService.updateComments(commentId, commentRequestDto);
+		return ResponseEntity.ok().build();
+	}
+
 	@Operation(summary = "공유마당 댓글 삭제", description = "공유마당 게시글에 댓글을 삭제합니다.")
 	@DeleteMapping("/comments/{commentId}")
 	public ResponseEntity<Void> deleteComments(@PathVariable Long commentId) {
