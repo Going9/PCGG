@@ -52,7 +52,7 @@
           </v-container>
       </div>
     </div>
-
+    <router-view />
   </main>
 </template>
 

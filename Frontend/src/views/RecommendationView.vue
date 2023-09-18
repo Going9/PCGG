@@ -68,7 +68,8 @@ onMounted(() => {
 <style scoped>
 .container {
   width: 100%;
-  height: 2800px;
+  /* height: rem; */
+  height: 120rem;
 }
 .maincarouselbox {
   margin-top: 2%;
@@ -78,29 +79,7 @@ onMounted(() => {
 .subcarouselbox {
   width: 100%;
   height: 500px;
-  margin: 25%;
-}
-
-.subCarouselComment {
-  margin: 5% 0;
-  text-align: center;
-  font-family: Inter;
-  font-size: 3rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-</style>
-
-<style scoped>
-.container {
-  height: 2800px;
-}
-.maincarouselbox {
-  margin-top: 2%;
-}
-
-.subcarouselbox {
+  /* margin: 25%; */
   margin: 0 0 25%;
 }
 
@@ -114,3 +93,4 @@ onMounted(() => {
   line-height: normal;
 }
 </style>
+

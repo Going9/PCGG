@@ -32,18 +32,24 @@ const routes = [
       },
       {
         path: '/share',
-        name: 'Share',
-        component: () => import('@/views/ShareView.vue'),
-      },
-      {
-        path: '/share/createsharepost',
-        name: 'CreateSharePost',
-        component: () => import('@/views/CreateSharePostView.vue'),
-      },
-      {
-        path: '/share/sharedetail',
-        name: 'ShareDetail',
-        component: () => import('@/views/ShareDetailView.vue'),
+        children: [
+          {
+            path: "",
+            name: "Share",
+            component: () => import('@/views/ShareView.vue'),
+          },
+          {
+            path: 'createsharepost',
+            name: 'CreateSharePost',
+            component: () => import('@/views/CreateSharePostView.vue'),
+          },
+          {
+            path: 'sharedetail',
+            name: 'ShareDetail',
+            component: () => import('@/views/ShareDetailView.vue'),
+          },
+
+        ]
       },
 
 
