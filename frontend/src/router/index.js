@@ -40,11 +40,6 @@ const routes = [
         name: "share",
         component: () => import("@/views/ShareView.vue"),
       },
-      {
-        path: "/simulation",
-        name: "Simulation",
-        component: () => import("@/views/SimulationView.vue"),
-      },
     ],
   },
 ];
