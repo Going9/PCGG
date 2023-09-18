@@ -1,7 +1,6 @@
 package com.ssafy.pcgg.domain.share.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -9,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.pcgg.domain.share.dto.CommentResponseDto;
-import com.ssafy.pcgg.domain.share.dto.CommentsAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.CommentRequestDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
 import com.ssafy.pcgg.domain.share.entity.ShareComment;
 import com.ssafy.pcgg.domain.share.repository.ShareCommentRepository;
@@ -27,7 +26,7 @@ public class ShareCommentService {
 	private final ShareCommentRepository shareCommentRepository;
 	private final UserRepository userRepository;
 
-	public Long writeComment(Long articleId, CommentsAddRequestDto addRequestDto){
+	public Long writeComment(Long articleId, CommentRequestDto addRequestDto){
 		Share share = shareRepository.findById(articleId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
 		UserEntity userEntity = userRepository.findById(addRequestDto.getUserId())
