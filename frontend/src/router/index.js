@@ -23,7 +23,7 @@ const routes = [
       {
         path: "/peripheral",
         name: "Peripheral",
-        component: () => import("@/views/PeripheralViews.vue"),
+        component: () => import("@/views/PeripheralView.vue"),
       },
       {
         path: "/peripheraldetail",
