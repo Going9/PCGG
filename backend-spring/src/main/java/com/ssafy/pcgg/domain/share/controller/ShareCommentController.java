@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class ShareCommentController {
 
 	@Operation(summary = "공유마당 댓글 작성", description = "공유마당 게시글에 댓글을 작성합니다.")
 	@PostMapping("/{articleId}/comments")
-	public ResponseEntity<?> addComments(@PathVariable Long articleId, @RequestBody CommentsAddRequestDto addRequestDto) {
+	public ResponseEntity<Long> addComments(@PathVariable Long articleId, @RequestBody CommentsAddRequestDto addRequestDto) {
 		logger.info("addComments(), articleId = {}", articleId);
 		Long commentId = shareCommentService.writeComment(articleId, addRequestDto);
 		return ResponseEntity.ok().body(commentId);
@@ -44,6 +45,14 @@ public class ShareCommentController {
 		logger.info("addComments(), pages = {}", pages);
 		Slice<CommentResponseDto> commentResponseDtos = shareCommentService.getAllComments(pages, articleId);
 		return ResponseEntity.ok().body(commentResponseDtos);
+	}
+
+	@Operation(summary = "공유마당 댓글 삭제", description = "공유마당 게시글에 댓글을 삭제합니다.")
+	@DeleteMapping("/comments/{commentId}")
+	public ResponseEntity<Void> deleteComments(@PathVariable Long commentId) {
+		logger.info("deleteComments(), commentId = {}", commentId);
+		shareCommentService.deleteComments(commentId);
+		return ResponseEntity.ok().build();
 	}
 
 }

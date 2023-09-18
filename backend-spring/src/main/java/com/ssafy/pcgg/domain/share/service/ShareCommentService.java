@@ -62,4 +62,13 @@ public class ShareCommentService {
 
 		return commentResponseDto;
 	}
+
+	public void deleteComments(Long commentId){
+		// TODO: 댓글 작성자와 삭제 요청자의 일치 여부 확인
+
+		ShareComment shareComment = shareCommentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 댓글이 존재하지 않습니다."));
+
+		shareCommentRepository.delete(shareComment);
+	}
 }
