@@ -81,6 +81,7 @@ nav {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  text-decoration: none;
 }
 
 .logo .text {
@@ -116,16 +117,15 @@ nav .nav-tap {
   padding: var(--Number, 0rem);
   justify-content: center;
   align-items: center;
-  gap: 1.9375rem;
 }
 
 .login {
   display: flex;
   text-align: center;
-  width: 3.75rem;
   height: 1.1875rem;
   flex-direction: column;
   justify-content: center;
+  text-decoration: none;
 }
 
 .login .text {
@@ -137,5 +137,9 @@ nav .nav-tap {
   font-weight: 500;
   line-height: 150%; /* 1.59375rem */
   letter-spacing: -0.03188rem;
+}
+
+.sloth {
+  display: flex;
 }
 </style>

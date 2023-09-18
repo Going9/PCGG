@@ -38,11 +38,7 @@
         </div>
       </div>
     </div>
-    <KeyboardComponentVue v-if="toggle === 'keyboard'" />
-    <MouseComponentVue v-if="toggle === 'mouse'" />
-    <MonitorComponentVue v-if="toggle === 'monitor'" />
-    <PrinterComponentVue v-if="toggle === 'printer'" />
-    <EtcComponentVue v-if="toggle === 'etc'" />
+    <PeripheralComponentVue />
     <footer>
       <div class="footer-back"></div>
     </footer>
@@ -50,20 +46,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { peripheralIcon } from "@/assets/Icon";
 import { searchIcon } from "@/assets/Icon";
-import KeyboardComponentVue from "../components/PeripheralViewComponents/KeyboardComponent.vue";
-import MouseComponentVue from "../components/PeripheralViewComponents/MouseComponent.vue";
-import MonitorComponentVue from "../components/PeripheralViewComponents/MonitorComponent.vue";
-import PrinterComponentVue from "../components/PeripheralViewComponents/PrinterComponent.vue";
-import EtcComponentVue from "../components/PeripheralViewComponents/EtcComponent.vue";
+import PeripheralComponentVue from "../components/PeripheralViewComponents/PeripheralComponent.vue";
+import { useAppStore } from "@/store/app";
 
-const toggle = ref("keyboard");
+const store = useAppStore();
+
+const toggle = ref(null);
 
 const setToggle = (value) => {
   toggle.value = value;
-  console.log(toggle);
+  store.isPeripheralCategory(value);
+  console.log(store.peripheralCategory);
 };
 
 const buttonItems = [
@@ -83,6 +79,10 @@ const goSearch = () => {
   // 검색 후 입력 내용 초기화
   searchQuery.value = "";
 };
+
+onMounted(() => {
+  toggle.value = store.peripheralCategory;
+});
 </script>
 
 <style scoped>
