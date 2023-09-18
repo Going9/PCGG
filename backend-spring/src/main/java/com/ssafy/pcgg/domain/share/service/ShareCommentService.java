@@ -1,7 +1,14 @@
 package com.ssafy.pcgg.domain.share.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.pcgg.domain.share.dto.CommentResponseDto;
 import com.ssafy.pcgg.domain.share.dto.CommentsAddRequestDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
 import com.ssafy.pcgg.domain.share.entity.ShareComment;
@@ -30,10 +37,29 @@ public class ShareCommentService {
 			.share(share)
 			.user(userEntity)
 			.content(addRequestDto.getContent())
+			.createdAt(LocalDateTime.now())
 			.build();
 
 		ShareComment comment = shareCommentRepository.save(shareComment);
 
 		return comment.getId();
+	}
+
+	public Slice<CommentResponseDto> getAllComments(int pages, Long articleId) {
+		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Slice<ShareComment> shareComments = shareCommentRepository.findByShareId(articleId, pageRequest);
+		return shareComments.map(this::convertToDto);
+	}
+
+	private CommentResponseDto convertToDto(ShareComment shareComment){
+		CommentResponseDto commentResponseDto = CommentResponseDto.builder()
+			.id(shareComment.getId())
+			.shareId(shareComment.getShare().getId())
+			.userId(shareComment.getUser().getUserId())
+			// .userName(shareComment.getUser().getNickname())	//추후 UserEntity에 nickname 추가시, 수정예정
+			.content(shareComment.getContent())
+			.build();
+
+		return commentResponseDto;
 	}
 }

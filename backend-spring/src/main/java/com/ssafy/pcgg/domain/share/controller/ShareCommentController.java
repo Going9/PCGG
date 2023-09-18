@@ -2,14 +2,17 @@ package com.ssafy.pcgg.domain.share.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.pcgg.domain.share.dto.CommentResponseDto;
 import com.ssafy.pcgg.domain.share.dto.CommentsAddRequestDto;
 import com.ssafy.pcgg.domain.share.service.ShareCommentService;
 import com.ssafy.pcgg.domain.share.service.ShareService;
@@ -31,9 +34,16 @@ public class ShareCommentController {
 	@PostMapping("/{articleId}/comments")
 	public ResponseEntity<?> addComments(@PathVariable Long articleId, @RequestBody CommentsAddRequestDto addRequestDto) {
 		logger.info("addComments(), articleId = {}", articleId);
-
 		Long commentId = shareCommentService.writeComment(articleId, addRequestDto);
 		return ResponseEntity.ok().body(commentId);
+	}
+
+	@Operation(summary = "공유마당 댓글 조회", description = "공유마당 게시글의 댓글들을 조회합니다.")
+	@GetMapping("/{articleId}/comments")
+	public ResponseEntity<Slice<CommentResponseDto>> getComments(@PathVariable Long articleId, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+		logger.info("addComments(), pages = {}", pages);
+		Slice<CommentResponseDto> commentResponseDtos = shareCommentService.getAllComments(pages, articleId);
+		return ResponseEntity.ok().body(commentResponseDtos);
 	}
 
 }

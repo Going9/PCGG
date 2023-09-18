@@ -1,5 +1,9 @@
 package com.ssafy.pcgg.domain.share.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.ssafy.pcgg.domain.user.UserEntity;
 
 import jakarta.persistence.Column;
@@ -40,5 +44,9 @@ public class ShareComment {
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String content;
+
+	@CreationTimestamp
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
 }
