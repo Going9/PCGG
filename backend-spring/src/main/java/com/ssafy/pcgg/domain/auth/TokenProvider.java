@@ -31,7 +31,7 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expire-time-sec}") long expireTimeSec) {
         this.secret = secret;
-        this.expireTimeMs = expireTimeSec * 1000;   // expireTimeSec = 1(1초) * 60(1분) * 60(1시간) * 24(하루)
+        this.expireTimeMs = expireTimeSec * 1000;   // expireTimeSec = 86400 = 1(1초) * 60(1분) * 60(1시간) * 24(하루)
     }
 
     // secret으로 key를 설정
