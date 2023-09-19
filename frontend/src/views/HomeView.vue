@@ -67,7 +67,11 @@ import { mainbannerImg } from "@/assets/image";
               <v-btn class="used-market text-2" size="x-large">중고 장터</v-btn>
             </v-col>
             <v-col>
-              <v-btn class="simulation text-2" size="x-large">시뮬레이션</v-btn>
+              <RouterLink to="/simulation">
+                <v-btn class="simulation text-2" size="x-large"
+                  >시뮬레이션</v-btn
+                >
+              </RouterLink>
             </v-col>
           </v-row>
         </v-container>
