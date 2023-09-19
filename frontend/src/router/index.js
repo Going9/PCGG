@@ -28,7 +28,7 @@ const routes = [
       {
         path: "/peripheraldetail",
         name: "PeripheralDetail",
-        component: () => import("@/views/PeripheralDetail.vue"),
+        component: () => import("@/views/PeripheralDetailView.vue"),
       },
       {
         path: "/recommendation",

@@ -25,9 +25,7 @@
           </v-btn>
         </v-btn-toggle>
       </div>
-      <v-btn icon="$vuetify" variant="tonal">
-        <img :src="saveIcon" alt="save" class="saveIcon" />
-      </v-btn>
+      <img :src="saveIcon" alt="save" class="saveIcon" />
       <div>
         <v-btn variant="tonal" class="simulation">시뮬레이션</v-btn>
       </div>
@@ -52,27 +50,28 @@
       </div>
     </div>
 
-    <div class="partlist">
-      <div>temp</div>
+    <div class="partlistarea">
+      <PartListComponentVue />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { simulationbannerImg } from "@/assets/image";
 import { saveIcon } from "@/assets/Icon";
 import { searchIcon } from "@/assets/Icon";
-import { useAppStore } from "@/store/app";
+import { useSimulationStore } from "@/store/simulationStore";
+import PartListComponentVue from "../components/SimulationViewComponents/PartListComponent.vue";
 
-const store = useAppStore();
+const store = useSimulationStore();
 
 const toggle = ref(null);
 
 const setToggle = (value) => {
   toggle.value = value;
-  store.isPeripheralCategory(value);
-  console.log(store.peripheralCategory);
+  store.isPartCategory(value);
+  console.log(store.partCategory);
 };
 
 const buttonItems = [
@@ -96,6 +95,10 @@ const goSearch = () => {
   // 검색 후 입력 내용 초기화
   searchQuery.value = "";
 };
+
+onMounted(() => {
+  toggle.value = store.partCategory;
+});
 </script>
 
 <style scoped>
@@ -160,7 +163,7 @@ const goSearch = () => {
 }
 
 .active-button {
-  font-size: 14px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   color: #fff;
@@ -174,7 +177,7 @@ const goSearch = () => {
 }
 
 .inactive-button {
-  font-size: 14px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   color: #fff;
@@ -185,7 +188,7 @@ const goSearch = () => {
 }
 
 .simulation {
-  font-size: 14px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   color: #fff;
@@ -195,12 +198,11 @@ const goSearch = () => {
   width: 100%;
 }
 
-.simulation:active {
-  font-size: 14px;
+.simulation:hover {
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   color: #fff;
-  background: #d9d9d9;
   border-radius: 30px !important;
   text-shadow: 2px 2px 5px #00000080;
   height: 50px;
@@ -247,5 +249,11 @@ const goSearch = () => {
   width: 2.5rem; /* 이미지의 크기 조정 (원하는 크기로 설정) */
   height: 2.5rem;
   cursor: pointer; /* 마우스 커서 모양을 포인터로 변경하여 클릭 가능한 것처럼 보이게 함 */
+}
+
+.partlistarea {
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 </style>

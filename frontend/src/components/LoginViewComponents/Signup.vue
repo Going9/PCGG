@@ -1,8 +1,6 @@
 <template>
   <div>
-
     <v-card class="mx-auto pa-4" elevation="8" width="100%" rounded="lg">
-
       <v-text-field
         density="compact"
         placeholder="Email address"
@@ -22,7 +20,13 @@
         v-model="password"
       ></v-text-field>
 
-      <v-btn block color="blue" size="large" variant="tonal" @click="signupEvent">
+      <v-btn
+        block
+        color="blue"
+        size="large"
+        variant="tonal"
+        @click="signupEvent"
+      >
         sign up
       </v-btn>
 
@@ -57,7 +61,7 @@ const goToLoginPage = () => {
 const signupEvent = () => {
   const userInput = {
     email: email.value,
-    password: password.value
+    password: password.value,
   };
 
   signup(
@@ -69,9 +73,9 @@ const signupEvent = () => {
       }
       alert(msg);
     },
-    error => {
+    (error) => {
       console.log(error);
     }
-  )
+  );
 };
 </script>
