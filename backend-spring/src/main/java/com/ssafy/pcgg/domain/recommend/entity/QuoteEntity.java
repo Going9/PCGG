@@ -1,9 +1,17 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "quote")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuoteEntity {
 
     @Id
