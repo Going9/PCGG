@@ -139,13 +139,13 @@
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   border: 1px solid rgba(187, 181, 181, 0.667);
   border-radius: 2rem;
 }
 
 .select .input {
-  margin: 5% 0;
+  margin: 5% 6%;
   width: 80%;
 
 }

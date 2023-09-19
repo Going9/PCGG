@@ -1,34 +1,65 @@
 <script setup>
    import { profileExampleImg } from '@/assets/image'
+   import { ref } from 'vue'
+   import router from '@/router';
+
+    const goDetail = () => {
+      router.push({ name: "ShareDetail" });
+    };
+
+   const share_like = ref(-1)
+
+   function Changelike() {
+    if (share_like.value == 1){
+      share_like.value = -1
+    }else{
+      share_like.value = 1
+    }
+
+   }
+
 </script>
 
 <template>
-  <div class="container">
+  <div
+  class="container">
     <div class="card-up">
       <div class="heartIcon">
         <v-icon
+          @click = "Changelike"
           size="large"
+          :color="share_like > 0 ? 'red' : 'grey'"
           icon="mdi-heart">
         </v-icon>
       </div>
-      <span>
-        게시글 내용
-      </span>
+      <div
+      @click ="goDetail"
+      class="content">
+        <span>
+          가벼운 컴퓨터 작업 기준 가성비 세팅입니다.
+        </span>
+      </div>
     </div>
 
-    <div class="card-down">
+    <div
+    @click ="goDetail"
+    class="card-down">
       <v-container
        style="{{ padding: 0rem; }}">
         <v-row class="custom-padding">
-          <v-col class="custom-padding">
+          <v-col
+           cols="10"
+           class="custom-padding">
             <v-col class="custom-padding">
-              제목 :
+              제목 : 가성비 세팅
             </v-col>
             <v-col class="custom-padding">
-              추천인 :
+              추천인 : 유저 닉네임
             </v-col>
           </v-col>
-          <v-col class="profileImage">
+          <v-col
+          cols="2"
+          class="profileImage">
             <img :src="profileExampleImg" alt="profileExample">
           </v-col>
         </v-row>
@@ -51,7 +82,7 @@
     border-radius:2.5rem;
 }
  .card-up {
-    outline: 1px pink solid;
+    /* outline: 1px pink solid; */
     margin: 1% 1% 0;
     position: relative;
     height: 60%;
@@ -64,7 +95,7 @@
  }
 
  .card-down {
-  outline: 1px blue solid;
+  /* outline: 1px blue solid; */
   height: 40%;
   padding: auto;
   border-radius: 0 0 0.3125rem 0.3125rem;
@@ -72,6 +103,9 @@
   background-color: #a8a8a870;
  }
 
+ .content {
+  margin : 1rem;
+ }
  .container {
   height: 100%;
   width: 100%;
@@ -87,7 +121,7 @@
     align-items: center;
  }
  .custom-padding {
-  padding: 0.2rem 0.2rem 0rem 0.2rem;
+  padding: 0.1rem 0rem 0rem 0.1rem;
  }
  v-container {
   padding: 0rem;
