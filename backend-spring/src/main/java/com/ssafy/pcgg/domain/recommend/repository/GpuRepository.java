@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.GpuEntity;
 
 @Repository
-public interface GpuRepository extends JpaRepository<GpuEntity, Integer> {
+public interface GpuRepository extends JpaRepository<GpuEntity, Long> {
 }

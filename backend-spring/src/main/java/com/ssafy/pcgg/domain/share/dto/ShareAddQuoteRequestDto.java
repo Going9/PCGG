@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ShareAddQuoteRequestDto {
-	private Integer cpuId;
-	private Integer mainboardId;
-	private Integer ssdId;
-	private Integer ramId;
-	private Integer gpuId;
-	private Integer chassisId;
-	private Integer powerId;
-	private Integer coolerId;
+	private Long cpuId;
+	private Long mainboardId;
+	private Long ssdId;
+	private Long ramId;
+	private Long gpuId;
+	private Long chassisId;
+	private Long powerId;
+	private Long coolerId;
 }

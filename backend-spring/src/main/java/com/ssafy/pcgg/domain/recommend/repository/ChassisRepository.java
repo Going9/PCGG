@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.ChassisEntity;
 
 @Repository
-public interface ChassisRepository extends JpaRepository<ChassisEntity, Integer> {
+public interface ChassisRepository extends JpaRepository<ChassisEntity, Long> {
 }

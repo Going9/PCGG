@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.CoolerEntity;
 
 @Repository
-public interface CoolerRepository extends JpaRepository<CoolerEntity, Integer> {
+public interface CoolerRepository extends JpaRepository<CoolerEntity, Long> {
 }

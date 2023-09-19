@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
 
 @Repository
-public interface QuoteRepository extends JpaRepository<QuoteEntity, Integer> {
+public interface QuoteRepository extends JpaRepository<QuoteEntity, Long> {
 }

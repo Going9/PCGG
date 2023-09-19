@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.MainboardEntity;
 
 @Repository
-public interface MainboardRepository extends JpaRepository<MainboardEntity, Integer> {
+public interface MainboardRepository extends JpaRepository<MainboardEntity, Long> {
 }

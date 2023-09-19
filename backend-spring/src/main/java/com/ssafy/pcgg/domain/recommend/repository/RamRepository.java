@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.RamEntity;
 
 @Repository
-public interface RamRepository extends JpaRepository<RamEntity, Integer> {
+public interface RamRepository extends JpaRepository<RamEntity, Long> {
 }
