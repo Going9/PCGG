@@ -1,12 +1,5 @@
 import axios from "axios";
-import { userStore } from "@/store/userStore";
-
-import { ref } from "vue";
-// const accessToken = ref("");
-const store = userStore();
-const accessToken = store.getAccessToken;
-// const accessToken = "Bearer".concat(" ", userStore().getAccessToken);
-// accessToken.value = userStore().getAccessToken;
+import { setInterceptors } from "./interceptors";
 
 function apiSpringInstance() {
   const instance = axios.create({
@@ -25,10 +18,9 @@ function apiSpringAuthInstance() {
     baseURL: import.meta.env.VITE_ENV_VUE_APP_API_BASE_URL,
     headers: {
       "Content-Type": "application/json;charset=utf-8",
-      Authorization: toString(accessToken),
     },
   });
-  return instance;
+  return setInterceptors(instance);
 }
 
 export { apiSpringInstance, apiSpringAuthInstance };
