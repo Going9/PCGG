@@ -44,9 +44,9 @@ const routes = [
             component: () => import('@/views/ShareView.vue'),
           },
           {
-            path: 'createsharepost',
-            name: 'CreateSharePost',
-            component: () => import('@/views/CreateSharePostView.vue'),
+            path: 'createshare',
+            name: 'CreateShare',
+            component: () => import('@/views/CreateShareView.vue'),
           },
           {
             path: 'sharedetail',

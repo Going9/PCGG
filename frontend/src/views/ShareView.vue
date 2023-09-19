@@ -1,12 +1,8 @@
 <script setup>
-  import PostComponent from '@/components/ShareViewComponents/PostComponent.vue';
+  import PostComponent from '@/components/ShareViewComponents/PostComponent.vue'
   import SearchComponent from '@/components/Common/SearchBarComponent.vue'
   import { RouterLink } from 'vue-router';
-  import router from '@/router';
 
-  const goDetail = () => {
-    router.push({ name: "ShareDetail" });
-};
 </script>
 
 <template>
@@ -25,7 +21,7 @@
       <SearchComponent/>
     </div>
       <div class="writebox">
-        <RouterLink to="/share/createsharepost">
+        <RouterLink to="/share/createshare">
           <v-btn color="#4599FC">견적 공유하기</v-btn>
         </RouterLink>
       </div>
@@ -40,7 +36,6 @@
               lg="3"
               md="4"
               sm="6"
-              @click ="goDetail"
               v-for="postNum in 20"
               :key="postNum"
               style="{{margin-top: 1%; }}" class="post">
@@ -71,7 +66,7 @@
  }
  .resultbox {
     margin: 1% 6%;
-    outline: 1px red solid;
+    /* outline: 1px red solid; */
     /* background-color: bisque; */
     height: 1200px;
 
