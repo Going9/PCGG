@@ -29,6 +29,8 @@ public class UserService {
         }
 
         String password = userSignupRequest.getPassword();
+        String name = userSignupRequest.getName();
+        String nickname = userSignupRequest.getNickname();
 
         AuthorityEntity authorityEntity = AuthorityEntity.builder()
                 .authorityName("ROLE_USER")
@@ -37,6 +39,8 @@ public class UserService {
         UserEntity userEntity = UserEntity.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
+                .name(name)
+                .nickname(nickname)
                 .activated(true)
                 .authorities(Collections.singleton(authorityEntity))
                 .build();
