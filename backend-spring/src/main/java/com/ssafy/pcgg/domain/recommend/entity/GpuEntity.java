@@ -5,14 +5,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "part_gpu")
 public class GpuEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 100)
     private String name;
@@ -39,10 +38,4 @@ public class GpuEntity {
 
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal thickness;
-
-    @OneToMany(mappedBy = "gpu")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "gpu")
-    List<QuoteEntity> quote;
 }

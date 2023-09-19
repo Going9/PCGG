@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "part_ram")
 public class RamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 50)
     private String name;
@@ -36,10 +35,4 @@ public class RamEntity {
 
     @Column(name = "heat_sink")
     private Boolean heatSink;
-
-    @OneToMany(mappedBy = "ram")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "ram")
-    List<QuoteEntity> quote;
 }

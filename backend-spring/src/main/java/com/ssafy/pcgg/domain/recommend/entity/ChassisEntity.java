@@ -6,14 +6,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "part_case")
 public class ChassisEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Null
     @Column(length = 100)
@@ -58,10 +57,4 @@ public class ChassisEntity {
 
     @Column(name="max_cooler_depth", columnDefinition = "DECIMAL(7,2)")
     private BigDecimal maxCoolerDepth;
-
-    @OneToMany(mappedBy = "chassis")
-    List<QuoteCandidateEntity> quoteCandidate;
-
-    @OneToMany(mappedBy = "chassis")
-    List<QuoteEntity> quote;
 }
