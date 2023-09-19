@@ -113,6 +113,14 @@ import { mainbannerImg } from "@/assets/image";
   font-weight: 700;
   line-height: normal;
 }
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 </style>
 
 <style scoped>
@@ -137,13 +145,6 @@ import { mainbannerImg } from "@/assets/image";
   border-radius: 0.9375rem;
   color: white;
   background: rgba(112, 110, 110, 0.7);
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
 .rangking {

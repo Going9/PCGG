@@ -31,14 +31,30 @@ const routes = [
         component: () => import("@/views/PeripheralDetail.vue"),
       },
       {
-        path: "/recommendation",
-        name: "Recommendation",
-        component: () => import("@/views/RecommendationView.vue"),
+        path: '/recommendation',
+        name: 'RecommendationView',
+        component: () => import('@/views/RecommendationView.vue'),
       },
       {
-        path: "/share",
-        name: "share",
-        component: () => import("@/views/ShareView.vue"),
+        path: '/share',
+        children: [
+          {
+            path: "",
+            name: "Share",
+            component: () => import('@/views/ShareView.vue'),
+          },
+          {
+            path: 'createsharepost',
+            name: 'CreateSharePost',
+            component: () => import('@/views/CreateSharePostView.vue'),
+          },
+          {
+            path: 'sharedetail',
+            name: 'ShareDetail',
+            component: () => import('@/views/ShareDetailView.vue'),
+          },
+
+        ]
       },
     ],
   },
