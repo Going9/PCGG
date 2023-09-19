@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.pcgg.domain.share.dto.CommentResponseDto;
 import com.ssafy.pcgg.domain.share.dto.CommentRequestDto;
@@ -26,6 +27,7 @@ public class ShareCommentService {
 	private final ShareCommentRepository shareCommentRepository;
 	private final UserRepository userRepository;
 
+	@Transactional
 	public Long addComment(Long articleId, CommentRequestDto addRequestDto){
 		Share share = shareRepository.findById(articleId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
@@ -44,6 +46,7 @@ public class ShareCommentService {
 		return comment.getId();
 	}
 
+	@Transactional(readOnly=true)
 	public Slice<CommentResponseDto> getAllComments(int pages, Long articleId) {
 		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
 		Slice<ShareComment> shareComments = shareCommentRepository.findByShareId(articleId, pageRequest);
@@ -62,6 +65,7 @@ public class ShareCommentService {
 		return commentResponseDto;
 	}
 
+	@Transactional
 	public Long updateComment(Long commentId, CommentRequestDto commentRequestDto){
 		ShareComment shareComment = shareCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 댓글이 존재하지 않습니다."));
@@ -77,6 +81,7 @@ public class ShareCommentService {
 		return commentId;
 	}
 
+	@Transactional
 	public void deleteComment(Long commentId){
 		// TODO: 댓글 작성자와 삭제 요청자의 일치 여부 확인
 

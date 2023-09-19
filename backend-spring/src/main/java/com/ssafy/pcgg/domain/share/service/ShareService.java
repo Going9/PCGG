@@ -116,6 +116,7 @@ public class ShareService {
 	/**
 	 * 공유마당 상세 조회
 	 */
+	@Transactional(readOnly = true)
 	public ShareResponseDto getShare(Long shareId){
 		Share share =  shareRepository.findById(shareId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
@@ -137,6 +138,7 @@ public class ShareService {
 	/**
 	 * 공유마당 삭제
 	 */
+	@Transactional
 	public void deleteShare(Long shareId){
 		Share share =  shareRepository.findById(shareId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
@@ -147,6 +149,7 @@ public class ShareService {
 	/**
 	* 공유마당 목록 조회
 	*/
+	@Transactional(readOnly = true)
 	public Slice<ShareResponseDto> getAllShare(int pages){
 		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
 		Slice<Share> shareResponseDtoList = shareRepository.findSliceBy(pageRequest);

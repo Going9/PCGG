@@ -52,7 +52,7 @@ public class ShareController {
 
 	@Operation(summary = "공유마당 게시글 상세조회", description = "공유마당 게시글을 조회합니다.")
 	@GetMapping("/{articleId}")
-	public ResponseEntity<?> getShareDetail(@PathVariable Long articleId) {
+	public ResponseEntity<ShareResponseDto> getShareDetail(@PathVariable Long articleId) {
 		logger.info("getShareDetail(), articleId = {}", articleId);
 		ShareResponseDto shareResponseDto = shareService.getShare(articleId);
 		return ResponseEntity.ok().body(shareResponseDto);
@@ -60,7 +60,7 @@ public class ShareController {
 
 	@Operation(summary = "공유마당 게시글 삭제", description = "공유마당 게시글을 삭제합니다.")
 	@DeleteMapping("/{articleId}")
-	public ResponseEntity<?> deleteShare(@PathVariable Long articleId) {
+	public ResponseEntity<Long> deleteShare(@PathVariable Long articleId) {
 		logger.info("deleteShare(), articleId = {}", articleId);
 		shareService.deleteShare(articleId);
 		return ResponseEntity.ok().body(articleId);
@@ -76,7 +76,7 @@ public class ShareController {
 
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요", description = "공유마당 게시글에 좋아요/싫어요를 누릅니다.")
 	@PutMapping("/{articleId}/mark")
-	public ResponseEntity<?> markLikes(@PathVariable Long articleId, @RequestBody ShareMarkRequestDto markRequestDto) {
+	public ResponseEntity<Integer> markLikes(@PathVariable Long articleId, @RequestBody ShareMarkRequestDto markRequestDto) {
 		logger.info("markLikes(), articleId = {}", articleId);
 		shareService.markLikes(articleId, markRequestDto);
 		return ResponseEntity.ok().body(markRequestDto.getMark());
