@@ -16,9 +16,14 @@ const routes = [
           import(/* webpackChunkName: "home" */ "@/views/HomeView.vue"),
       },
       {
+        path: "/login",
+        name: "Login",
+        component: () => import("@/views/LoginView.vue"),
+      },
+      {
         path: "/peripheral",
         name: "Peripheral",
-        component: () => import("@/views/PeripheralViews.vue"),
+        component: () => import("@/views/PeripheralView.vue"),
       },
       {
         path: "/peripheraldetail",
@@ -27,17 +32,30 @@ const routes = [
       },
       {
         path: '/recommendation',
-        name: 'Recommendation',
+        name: 'RecommendationView',
         component: () => import('@/views/RecommendationView.vue'),
       },
       {
         path: '/share',
-        name: 'share',
-        component: () => import('@/views/ShareView.vue'),
+        children: [
+          {
+            path: "",
+            name: "Share",
+            component: () => import('@/views/ShareView.vue'),
+          },
+          {
+            path: 'createshare',
+            name: 'CreateShare',
+            component: () => import('@/views/CreateShareView.vue'),
+          },
+          {
+            path: 'sharedetail',
+            name: 'ShareDetail',
+            component: () => import('@/views/ShareDetailView.vue'),
+          },
+
+        ]
       },
-
-
-
     ],
   },
 ];

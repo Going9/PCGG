@@ -1,4 +1,8 @@
 <script setup>
+  import PostComponent from '@/components/ShareViewComponents/PostComponent.vue'
+  import SearchComponent from '@/components/Common/SearchBarComponent.vue'
+  import { RouterLink } from 'vue-router';
+
 </script>
 
 <template>
@@ -13,22 +17,48 @@
         </div>
       </div>
     </div>
-    <div class="searchbox">
-
+    <div class="searchbox flex-center">
+      <SearchComponent/>
     </div>
-    <div class="writebox">
-      <v-btn color="#4599FC">견적 공유하기</v-btn>
-    </div>
-    <div class="resultbox">
-      <div v-for="postNum in 20"
-        :key="postNum"
-        style="{{margin-top: 1% }}" class="post">
+      <div class="writebox">
+        <RouterLink to="/share/createshare">
+          <v-btn color="#4599FC">견적 공유하기</v-btn>
+        </RouterLink>
+      </div>
+      <div class="mainbox flex-center">
+        <div class="resultbox">
+          <v-container>
+            <v-row>
+              <v-col
+              cols="12"
+              xxl="1"
+              xl="2"
+              lg="3"
+              md="4"
+              sm="6"
+              v-for="postNum in 20"
+              :key="postNum"
+              style="{{margin-top: 1%; }}" class="post">
+              <PostComponent
+              style="{{  width: 20%; height: 100%; }}"
+              />
+            </v-col>
+          </v-row>
+          </v-container>
       </div>
     </div>
+    <router-view />
   </main>
 </template>
 
 <style scoped>
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
  .writebox {
     margin: 1% 6%;
     display: flex;
@@ -36,7 +66,7 @@
  }
  .resultbox {
     margin: 1% 6%;
-    outline: 1px red solid;
+    /* outline: 1px red solid; */
     /* background-color: bisque; */
     height: 1200px;
 
@@ -55,7 +85,6 @@
   height: 12.25rem;
   flex-shrink: 0;
   background: #FFF;
-  border : 1px solid black;
 
  }
 </style>
