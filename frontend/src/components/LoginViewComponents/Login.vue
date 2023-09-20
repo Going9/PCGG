@@ -51,7 +51,13 @@
         </v-card-text>
       </v-card> -->
 
-      <v-btn block color="blue" size="large" variant="tonal" @click="loginEvent">
+      <v-btn
+        block
+        color="blue"
+        size="large"
+        variant="tonal"
+        @click="loginEvent"
+      >
         log in
       </v-btn>
 
@@ -72,9 +78,7 @@
 <script setup>
 import { ref } from "vue";
 import { userStore } from "@/store/userStore";
-import { login } from "@/api/userAPI";
-import router from "@/router";
-import vueCookies from "vue-cookies";
+// import router from "@/router";
 
 const store = userStore();
 const visible = ref(false);
@@ -86,21 +90,17 @@ const goToSignupPage = () => {
 };
 
 const loginEvent = () => {
-  const userInput = {
+  const loginInput = {
     email: email.value,
-    password: password.value
+    password: password.value,
   };
 
-  login(
-    userInput,
-    ({ token }) => {
-      store.login();
-      console.log(vueCookies.get("accessToken"));
-      router.push({ name : "Home" });
-    },
-    error => {
-      console.log(error);
-    }
-  )
+  store.login(loginInput);
+
+  // 라우팅을 여기서 삭제하고 userStore로 옮겨서 해결
+  // 여기서 하면 왜 안되는지 모르겠음 // async, await 문제는 아닌듯?
+  // if (store.isLogin == true) {
+  //   router.push({ name: "Home" });
+  // }
 };
 </script>
