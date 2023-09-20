@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.PowerEntity;
 
 @Repository
-public interface PowerRepository extends JpaRepository<PowerEntity, Integer> {
+public interface PowerRepository extends JpaRepository<PowerEntity, Long> {
 }

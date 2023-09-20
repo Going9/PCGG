@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.SsdEntity;
 
 @Repository
-public interface SsdRepository extends JpaRepository<SsdEntity, Integer> {
+public interface SsdRepository extends JpaRepository<SsdEntity, Long> {
 }
