@@ -37,10 +37,10 @@
 
 <script setup>
 import { ref } from "vue";
-import { useAppStore } from "@/store/app";
+import { usePeripehralStore } from "@/store/peripheralStore";
 import PeripheralCardComponentVue from "./PeripheralCardComponent.vue";
 
-const store = useAppStore();
+const store = usePeripehralStore();
 
 const toggle = ref(null);
 
@@ -63,7 +63,7 @@ const buttonItems = [
   height: 100%;
   width: 90%;
   padding: 5px;
-  background-color: #d9d9d966;
+  background-color: #d9d9d925;
   flex-direction: column;
   border-radius: 10px;
 }
@@ -88,7 +88,7 @@ const buttonItems = [
 }
 
 .recommend::-webkit-scrollbar-thumb {
-  background-color: #fff;
+  background-color: #4599fc;
   border-radius: 15px;
 }
 

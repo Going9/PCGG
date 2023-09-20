@@ -5,6 +5,7 @@ import profileIcon from "./profileIcon.png";
 import rankingIcon from "./Ranking.png";
 import searchIcon from "./search.png";
 import sendIcon from "./send.png";
+import saveIcon from "./saveIcon.png";
 
 export {
   bellIcon,
@@ -14,4 +15,5 @@ export {
   rankingIcon,
   searchIcon,
   sendIcon,
+  saveIcon,
 };

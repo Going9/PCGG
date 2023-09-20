@@ -1,6 +1,5 @@
 // Utilities
 // 먼저 피니아에서 스토어를 가져와 줘야한다고 함
-import axios from "axios";
 import { defineStore } from "pinia";
 
 // defineStore의 첫번째 인자는 스토어의 이름. 보통 파일 이름과 같이 하면 된다고 함. 이 이름이 나중에 데브툴에서 보이는 이름이라는 듯
@@ -10,10 +9,6 @@ export const useAppStore = defineStore("app", {
     logon: false,
     triggerOne: true,
     triggerTwo: true,
-    peripheralSwitch: true,
-    peripheralCategory: "keyboard",
-    recommendPeripheral: [],
-    peripheralList: [],
   }),
   // getters도 vuex랑 큰 차이점 모르겠음
   getters: {
@@ -33,32 +28,6 @@ export const useAppStore = defineStore("app", {
     },
     changePageLoginSignup() {
       this.triggerTwo = !this.triggerTwo;
-    },
-    isPeripheralRecommend() {
-      this.peripheralSwitch = !this.peripheralSwitch;
-    },
-    isPeripheralCategory(value) {
-      this.peripheralCategory = value;
-    },
-    isRecommendPreipheral(value) {
-      axios
-        .get(`api.v1.${value}`)
-        .then((Response) => {
-          this.recommendPeripheral.push(Response);
-        })
-        .catch((Error) => {
-          console.log(Error);
-        });
-    },
-    isPeripheralList(value, page) {
-      axios
-        .get(`api.v1.${value}.${page}`)
-        .then((Response) => {
-          this.peripheralList.push(Response);
-        })
-        .catch((Error) => {
-          console.log(Error);
-        });
     },
   },
   // 위 3개가 끝임.
