@@ -31,7 +31,7 @@
           </v-btn>
         </v-btn-toggle>
       </div>
-      <PeripheralCardComponentVue class="list" :categoryVariable="toggle" />
+      <PeripheralCardComponentVue :categoryVariable="toggle" />
     </div>
   </div>
 </template>
@@ -77,9 +77,6 @@ const buttonItems = [
   font-size: x-large;
 }
 
-.recommend {
-}
-
 .recommend::-webkit-scrollbar {
   height: 10px;
   background-color: #d9d9d9;
@@ -98,11 +95,8 @@ const buttonItems = [
 
 .products-list {
   display: flex;
-  justify-content: center; /* 텍스트를 수평으로 가운데 정렬 */
-  align-items: center; /* 텍스트를 수직으로 가운데 정렬 */
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
-}
-
-.list {
 }
 </style>
