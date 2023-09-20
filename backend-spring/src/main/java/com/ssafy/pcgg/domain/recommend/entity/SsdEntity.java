@@ -36,4 +36,7 @@ public class SsdEntity {
 
     @Column(name="writing_speed")
     private Integer writingSpeed;
+
+    @Column(length = 20)
+    private String manufacturer;
 }

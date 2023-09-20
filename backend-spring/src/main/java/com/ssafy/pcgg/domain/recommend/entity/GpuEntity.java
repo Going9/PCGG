@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -39,4 +40,8 @@ public class GpuEntity {
 
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal thickness;
+
+    @Setter
+    @Column(name = "class", columnDefinition = "tinyint")
+    private Integer classColumn;
 }

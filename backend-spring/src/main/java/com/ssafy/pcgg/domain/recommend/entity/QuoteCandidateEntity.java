@@ -60,6 +60,6 @@ public class QuoteCandidateEntity {
 
     @Setter
     @NotNull
-    @Column(length = 10)
+    @Column(length = 10, name = "`usage`")
     private String usage;
 }
