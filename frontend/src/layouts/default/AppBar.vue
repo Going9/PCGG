@@ -1,12 +1,34 @@
 <template>
   <div class="container">
-    <nav>
+    <!-- 로그인 Before -->
+    <nav v-if="!store.isLogin">
       <RouterLink to="/" class="logo">
         <span class="text">PC.GG</span>
       </RouterLink>
       <div class="nav-tap">
         <RouterLink to="/login" class="login">
-          <span class="text"> Login</span>
+          <span v-if="!store.isLogin" class="text"> Login</span>
+        </RouterLink>
+        <RouterLink to="/">
+          <img
+            alt="hambergerIcon"
+            class="hamberger"
+            src="@/assets/Icon/hambergerIcon.png"
+          />
+        </RouterLink>
+      </div>
+    </nav>
+
+    <!-- 로그인 After -->
+    <nav v-if="store.isLogin">
+      <RouterLink to="/" class="logo">
+        <span class="text">PC.GG</span>
+      </RouterLink>
+      <div class="nav-tap">
+        <RouterLink to="/" class="logout">
+          <span v-if="store.isLogin" class="text" @click="logoutEvent">
+            Logout</span
+          >
         </RouterLink>
         <RouterLink to="/">
           <img
@@ -34,23 +56,26 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import { test } from "@/api/userAPI";
+import { userStore } from "@/store/userStore";
+import router from "@/router";
+
+const store = userStore();
 
 const testEvent = () => {
-  console.log("-------------------------------")
-  const cookies = document.cookie;
-  const cookieArray = cookies.split(';');
-  console.log(cookieArray);
-  console.log("-------------------------------")
-
   test(
     ({ data }) => {
       console.log(data);
     },
-    error => {
+    (error) => {
       console.log(error);
     }
-  )
-} 
+  );
+};
+
+const logoutEvent = () => {
+  store.logout();
+  router.push({ name: "Home" });
+};
 </script>
 
 <style scoped>
@@ -119,7 +144,8 @@ nav .nav-tap {
   align-items: center;
 }
 
-.login {
+.login,
+.logout {
   display: flex;
   text-align: center;
   height: 1.1875rem;
@@ -128,7 +154,8 @@ nav .nav-tap {
   text-decoration: none;
 }
 
-.login .text {
+.login .text,
+.logout .text {
   color: var(--Color, #fff);
   text-align: right;
   font-family: Plus Jakarta Sans;

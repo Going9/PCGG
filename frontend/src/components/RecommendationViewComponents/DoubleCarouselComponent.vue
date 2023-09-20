@@ -3,19 +3,14 @@
     <Carousel
       :transition="200"
       id="thumbnails"
-      :items-to-show="4"
+      :items-to-show="3"
       :wrap-around="true"
       v-model="upCurrentSlide"
       ref="carousel"
     >
       <Slide v-for="slide in 10" :key="slide">
         <div class="carousel__item" @click="upSlideTo(slide - 1)">
-          {{ slide }}
-          <img
-            src="@/assets/image/laptopImg.jpg"
-            alt="laptopImg"
-            width="300"
-            height="200"
+          <UpItemInfo
           />
         </div>
       </Slide>
@@ -24,20 +19,14 @@
     <Carousel
       :transition="200"
       id="thumbnails"
-      :items-to-show="4"
+      :items-to-show="3"
       :wrap-around="true"
       v-model="downCurrentSlide"
       ref="carousel"
     >
       <Slide v-for="slide in 10" :key="slide">
         <div class="carousel__item" @click="downSlideTo(slide - 1)">
-          {{ slide }}
-          <img
-            src="@/assets/image/laptopImg.jpg"
-            alt="laptopImg"
-            width="300"
-            height="200"
-          />
+          <DownItemInfo/>
         </div>
       </Slide>
     </Carousel>
@@ -45,6 +34,8 @@
 </template>
 
 <script>
+import DownItemInfo from "@/components/RecommendationViewComponents/DownCarouselComponent.vue"
+import UpItemInfo from "@/components/RecommendationViewComponents/UpCarouselComponent.vue"
 import { defineComponent } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 
@@ -55,6 +46,9 @@ export default defineComponent({
   components: {
     Carousel,
     Slide,
+    // BestSeller,
+    UpItemInfo,
+    DownItemInfo,
   },
   data: () => ({
     upCurrentSlide: 0,

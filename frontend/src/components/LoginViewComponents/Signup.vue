@@ -20,6 +20,22 @@
         v-model="password"
       ></v-text-field>
 
+      <v-text-field
+        density="compact"
+        placeholder="name"
+        prepend-inner-icon="mdi-emoticon-outline"
+        variant="outlined"
+        v-model="name"
+      ></v-text-field>
+
+      <v-text-field
+        density="compact"
+        placeholder="nickname"
+        prepend-inner-icon="mdi-star-face"
+        variant="outlined"
+        v-model="nickname"
+      ></v-text-field>
+
       <v-btn
         block
         color="blue"
@@ -53,6 +69,8 @@ const store = userStore();
 const visible = ref(false);
 const email = ref("");
 const password = ref("");
+const name = ref("");
+const nickname = ref("");
 
 const goToLoginPage = () => {
   store.changePageLoginSignup();
@@ -62,6 +80,8 @@ const signupEvent = () => {
   const userInput = {
     email: email.value,
     password: password.value,
+    name: name.value,
+    nickname: nickname.value,
   };
 
   signup(
