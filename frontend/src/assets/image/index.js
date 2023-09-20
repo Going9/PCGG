@@ -10,6 +10,8 @@ import loginbackImg from "./loginBG.png";
 import loginscreenImg from "./loginscreen.png";
 import signupscreenImg from "./signupscreen.png";
 import simulationbannerImg from "./simulation-banner.png";
+import cpuImgOne from "./cpu1.png";
+import cpuImgTwo from "./cpu2.png";
 
 export {
   profileExampleImg,
@@ -24,4 +26,6 @@ export {
   loginscreenImg,
   signupscreenImg,
   simulationbannerImg,
+  cpuImgOne,
+  cpuImgTwo,
 };

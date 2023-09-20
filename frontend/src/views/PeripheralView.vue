@@ -50,9 +50,9 @@ import { onMounted, ref } from "vue";
 import { peripheralIcon } from "@/assets/Icon";
 import { searchIcon } from "@/assets/Icon";
 import PeripheralComponentVue from "../components/PeripheralViewComponents/PeripheralComponent.vue";
-import { useAppStore } from "@/store/app";
+import { usePeripehralStore } from "@/store/peripheralStore";
 
-const store = useAppStore();
+const store = usePeripehralStore();
 
 const toggle = ref(null);
 
@@ -142,9 +142,11 @@ onMounted(() => {
   color: #fff;
   background: #d9d9d9;
   border-radius: 30px !important;
+  text-shadow: 2px 2px 5px #00000080;
   height: 50px;
   width: 18%;
-  background-color: #4599fc; /* 활성화된 버튼의 색상 설정 */
+  background-color: #4599fc;
+  box-shadow: inset 2px 2px 5px #00000080;
 }
 
 .inactive-button {

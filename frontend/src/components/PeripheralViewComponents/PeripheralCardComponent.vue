@@ -19,9 +19,9 @@
 import { onMounted, onUpdated, ref } from "vue";
 import router from "@/router";
 import temp1 from "@/assets/temp1.png";
-import { useAppStore } from "@/store/app";
+import { usePeripehralStore } from "@/store/peripheralStore";
 
-const store = useAppStore();
+const store = usePeripehralStore();
 
 const goDetail = () => {
   router.push({ name: "PeripheralDetail" });
@@ -49,13 +49,10 @@ const page = ref(0);
 
 const callRecommend = () => {
   console.log("call Recommend");
-  store.isRecommendPreipheral(store.peripheralCategory);
 };
 
 const callList = () => {
   console.log("call List");
-  store.isPeripheralList(store.peripheralCategory, page.value);
-  page.value += 1;
 };
 
 onMounted(() => {
