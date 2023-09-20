@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
 
 @Repository
-public interface CpuRepository extends JpaRepository<CpuEntity, Integer> {
+public interface CpuRepository extends JpaRepository<CpuEntity, Long> {
 }
