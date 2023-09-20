@@ -1,11 +1,11 @@
-delete from authority;
+--delete from authority;
 insert into authority (authority_name) values ('ROLE_ADMIN');
 insert into authority (authority_name) values ('ROLE_USER');
 
-INSERT INTO user (email, password, activated) values ('user1@email.com', '1111', true);
-INSERT INTO user (email, password, activated) values ('user2@email.com', '2222', true);
+INSERT INTO user (activated, email, password, name, nickname) values (1, 'ssafy1', '$2a$10$0k4ub.MV3ZCdI8xBB0H/sOb2OtMuqMJ2YjMb8/Fa7xEzAj.7CCH3m', 'test', 'test');
+INSERT INTO user (activated, email, password, name, nickname) values (1, 'ssafy2', '$2a$10$0k4ub.MV3ZCdI8xBB0H/sOb2OtMuqMJ2YjMb8/Fa7xEzAj.7CCH3m', 'test', 'test');
 
-INSERT INTO user_authority (id, authority_name) values (1, 'ROLE_USER'), (2, 'ROLE_USER');;
+INSERT INTO user_authority (id, authority_name) values (1, 'ROLE_USER'), (2, 'ROLE_USER');
 
 INSERT INTO peripheral_keyboard (name, lprice, hprice, brand, image_source, link, extinct) VALUES ('키보드1', 10000, null, 'aa', 'image path url1', 'link1', 0);
 INSERT INTO peripheral_keyboard (name, lprice, hprice, brand, image_source, link, extinct) VALUES ('키보드2', 10000, null, 'aa', 'image path url2', 'link2', 0);
