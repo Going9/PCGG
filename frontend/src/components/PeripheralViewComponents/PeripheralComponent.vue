@@ -10,6 +10,7 @@
     </div>
     <PeripheralCardComponentVue class="recommend" :categoryVariable="toggle" />
     <!-- 분리선 -->
+    <v-divider class="border-opacity-100" style="margin-top: 2rem"></v-divider>
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
@@ -30,7 +31,7 @@
           </v-btn>
         </v-btn-toggle>
       </div>
-      <PeripheralCardComponentVue class="list" :categoryVariable="toggle" />
+      <PeripheralCardComponentVue :categoryVariable="toggle" />
     </div>
   </div>
 </template>
@@ -76,12 +77,6 @@ const buttonItems = [
   font-size: x-large;
 }
 
-.recommend {
-  padding-top: 2%;
-  display: flex;
-  overflow-x: auto;
-}
-
 .recommend::-webkit-scrollbar {
   height: 10px;
   background-color: #d9d9d9;
@@ -100,13 +95,8 @@ const buttonItems = [
 
 .products-list {
   display: flex;
-  justify-content: center; /* 텍스트를 수평으로 가운데 정렬 */
-  align-items: center; /* 텍스트를 수직으로 가운데 정렬 */
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
-}
-
-.list {
-  display: flex;
-  flex-wrap: wrap;
 }
 </style>
