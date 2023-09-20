@@ -22,7 +22,6 @@ public class UserEntity {
 
     @NotNull
     @Column(nullable = false, unique = true)
-//    @Column(unique = true)
     private String email;
 
     @NotNull
@@ -38,7 +37,7 @@ public class UserEntity {
     private String nickname;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean activated;
 
     // 참조 테이블로 Refactoring 필요
