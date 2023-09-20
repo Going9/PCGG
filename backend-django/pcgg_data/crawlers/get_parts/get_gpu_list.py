@@ -136,33 +136,54 @@ def get_gpu_list(url: str):
 
                 # 데이터 파싱해서 변수에 저장
                 for item in spec_items:
-                    pass
+                    try:
+                        if "정격파워" in item:
+                            needed_power = int(item.split()[1].replace("W", ""))
+
+                        elif "가로" in item:
+                            width = float(item.split()[1].replace("mm", ""))
+
+                        elif "두께" in item:
+                            if "~" in item.split()[1]:
+                                thickness = float(item.split()[1].split("~")[1].replace("mm", ""))
+
+                            else:
+                                thickness = float(item.split()[1].replace("mm", ""))
+
+                    except Exception as e:
+                        print(e)
+                        print(item)
 
                 # gpu 모델 업데이트
-                gpu_info = Gpu(
-                    name=parsed_name,
-                    price=price,
-                    socket_info=socket_info,
-                    ddr4=ddr4,
-                    ddr5=ddr5,
-                    integrated_graphics=integrated_graphics,
-                    cooler_included=cooler_included,
-                    image_source=file_url,
-                    single_score=single_score,
-                    multi_score=multi_score,
-                    changed_date=timezone.now(),
-                    extinct=False
-                )
-                gpu_info.save()
+                try:
+                    gpu_info = Gpu(
+                        name=parsed_name,
+                        price=price,
+                        needed_power=needed_power,
+                        width=width,
+                        thickness=thickness,
+                        image_source=file_url,
+                        score=score,
+                        changed_date=timezone.now(),
+                        extinct=False
+                    )
+                    gpu_info.save()
 
-                # 가격 추적 모델도 업데이트
-                price_history = PriceHistory(
-                    type="gpu",
-                    part_id=gpu_info.id,
-                    start_date=timezone.now(),
-                    price=price
-                )
-                price_history.save()
+                except Exception as e:
+                    print(e)
+
+                try:
+                    # 가격 추적 모델도 업데이트
+                    price_history = PriceHistory(
+                        type="gpu",
+                        part_id=gpu_info.id,
+                        start_date=timezone.now(),
+                        price=price
+                    )
+                    price_history.save()
+
+                except Exception as e:
+                    print(e)
 
         # 스크롤 끝까지 내리고
         driver.execute_script(
@@ -175,9 +196,13 @@ def get_gpu_list(url: str):
         if not success:
             break
 
-    update_database(crawled_gpus, existing_gpus, Gpu)
+    try:
+        update_database(crawled_gpus, existing_gpus, Gpu)
+
+    except Exception as e:
+        print(e)
 
     driver.quit()
 
 
-get_gpu_list(url="https://prod.danawa.com/list/?cate=112747")
+get_gpu_list(url="https://prod.danawa.com/list/?cate=112753")
