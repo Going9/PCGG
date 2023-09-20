@@ -10,6 +10,7 @@
     </div>
     <PeripheralCardComponentVue class="recommend" :categoryVariable="toggle" />
     <!-- 분리선 -->
+    <v-divider class="border-opacity-100" style="margin-top: 2rem"></v-divider>
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
@@ -77,9 +78,6 @@ const buttonItems = [
 }
 
 .recommend {
-  padding-top: 2%;
-  display: flex;
-  overflow-x: auto;
 }
 
 .recommend::-webkit-scrollbar {
@@ -106,7 +104,5 @@ const buttonItems = [
 }
 
 .list {
-  display: flex;
-  flex-wrap: wrap;
 }
 </style>
