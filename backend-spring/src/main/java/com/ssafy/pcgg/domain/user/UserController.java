@@ -4,6 +4,7 @@ import com.ssafy.pcgg.domain.user.dto.UserListResponse;
 import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<String> singup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
         userService.signup(userSignupRequest);
-        return ResponseEntity.ok("회원가입");
+        return ResponseEntity.status(201).body("회원가입");
     }
 
     @GetMapping
