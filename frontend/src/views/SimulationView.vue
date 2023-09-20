@@ -62,7 +62,7 @@ import { simulationbannerImg } from "@/assets/image";
 import { saveIcon } from "@/assets/Icon";
 import { searchIcon } from "@/assets/Icon";
 import { useSimulationStore } from "@/store/simulationStore";
-import PartListComponentVue from "../components/SimulationViewComponents/PartListComponent.vue";
+import PartListComponentVue from "@/components/SimulationViewComponents/PartListComponent.vue";
 
 const store = useSimulationStore();
 

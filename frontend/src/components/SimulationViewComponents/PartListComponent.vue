@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref } from "vue";
-import PartItemComponentVue from "./PartItemComponent.vue";
+import PartItemComponentVue from "@/components/SimulationViewComponents/PartItemComponent.vue";
 
 const toggle = ref(null);
 
