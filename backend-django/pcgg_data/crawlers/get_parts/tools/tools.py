@@ -38,6 +38,7 @@ def get_product_list(driver: webdriver):
 
     return product_list
 
+
 def move_to_next_page(driver: webdriver, current_page):
     try:
         # 다음 페이지가 존재할 때

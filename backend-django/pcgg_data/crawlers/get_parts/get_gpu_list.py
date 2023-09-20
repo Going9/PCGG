@@ -20,6 +20,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 
 def get_gpu_list(url: str):
+    global gpu_info
     service, driver = get_driver(url)
 
     # 코드 네임 전체 보기 클릭

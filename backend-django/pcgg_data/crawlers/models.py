@@ -4,9 +4,6 @@ from django.db import models
 
 
 # Create your models here.
-class Cat(models.Model):
-    name = models.CharField(max_length=100, null=True)
-
 class BasicInfo(models.Model):
     name = models.CharField(max_length=100, null=True)
     price = models.IntegerField(null=True)
@@ -73,7 +70,8 @@ class Ssd(BasicInfo):
     pcie_ver = models.IntegerField(null=True)
     reading_speed = models.IntegerField(null=True)
     writing_speed = models.IntegerField(null=True)
-    capacity = models.IntegerField(null=True)
+    capacity = models.FloatField(null=True)
+    manufacturer = models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.name
