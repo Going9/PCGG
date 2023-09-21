@@ -12,7 +12,7 @@ django.setup()
 
 import re
 import time
-from crawlers.models import Ram, PriceHistory, Ram
+from crawlers.models import PriceHistory, Ram
 from selenium.webdriver.common.by import By
 from django.utils import timezone
 from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_current_page, move_to_next_page, \
