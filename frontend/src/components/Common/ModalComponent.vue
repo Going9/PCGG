@@ -1,5 +1,7 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
+import SearchBarComponent from './SearchBarComponent.vue';
+import ResultListComponent from './ModalComponent/ResultListComponent.vue';
 
 const props = defineProps({
   isModal: Boolean,
@@ -44,13 +46,15 @@ const closeModal = () => {
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
+        <SearchBarComponent/>
+        <ResultListComponent/>
 
       </v-card>
     </v-dialog>
   </v-row>
 </template>
 
-<style>
+<style scoped>
 .dialog-bottom-transition-enter-active,
 .dialog-bottom-transition-leave-active {
   transition: transform .2s ease-in-out;
