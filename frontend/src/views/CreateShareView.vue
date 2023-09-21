@@ -1,4 +1,5 @@
 <script setup>
+import PartSelectionComponent from '@/components/Common/PartSelectionComponent.vue';
 </script>
 
 <template>
@@ -37,7 +38,8 @@
         </h2>
       </div>
       <div class="select">
-        <div class="select-input input">
+        <PartSelectionComponent/>
+        <!-- <div class="select-input input">
           <v-text-field
             label="CPU"
             :rules="rules"
@@ -71,8 +73,7 @@
             :rules="rules"
             hide-details="auto"
           ></v-text-field>
-        </div>
-
+        </div> -->
       </div>
 
       <div class="sub-title">
@@ -139,8 +140,8 @@
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
-  border: 1px solid rgba(187, 181, 181, 0.667);
+  align-items: center;
+  /* border: 1px solid rgba(187, 181, 181, 0.667); */
   border-radius: 2rem;
 }
 
