@@ -23,35 +23,34 @@ const routes = [
         component: () => import("@/views/PeripheralView.vue"),
       },
       {
-        path: "/peripheraldetail",
-        name: "PeripheralDetail",
-        component: () => import("@/views/PeripheralDetail.vue"),
+        path: "/recommendation",
+        name: "RecommendationView",
+        component: () => import("@/views/RecommendationView.vue"),
       },
       {
-        path: '/recommendation',
-        name: 'RecommendationView',
-        component: () => import('@/views/RecommendationView.vue'),
-      },
-      {
-        path: '/share',
+        path: "/share",
         children: [
           {
             path: "",
             name: "Share",
-            component: () => import('@/views/ShareView.vue'),
+            component: () => import("@/views/ShareView.vue"),
           },
           {
-            path: 'createshare',
-            name: 'CreateShare',
-            component: () => import('@/views/CreateShareView.vue'),
+            path: "createshare",
+            name: "CreateShare",
+            component: () => import("@/views/CreateShareView.vue"),
           },
           {
-            path: 'sharedetail',
-            name: 'ShareDetail',
-            component: () => import('@/views/ShareDetailView.vue'),
+            path: "sharedetail",
+            name: "ShareDetail",
+            component: () => import("@/views/ShareDetailView.vue"),
           },
-
-        ]
+        ],
+      },
+      {
+        path: "/simulation",
+        name: "Simulation",
+        component: () => import("@/views/SimulationView.vue"),
       },
     ],
   },
