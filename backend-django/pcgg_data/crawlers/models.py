@@ -113,6 +113,7 @@ class Case(BasicInfo):
     micro_atx = models.BooleanField(default=False, null=True)
     mini_itx = models.BooleanField(default=False, null=True)
 
+
     # 케이스 사이즈
     # cpu 쿨러 높이와 관련, 케이스의 정면 가로 길이
     width = models.DecimalField(max_digits=7, decimal_places=2, null=True)
