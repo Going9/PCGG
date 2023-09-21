@@ -8,11 +8,11 @@ import com.ssafy.pcgg.domain.recommend.repository.*;
 import com.ssafy.pcgg.domain.recommend.util.RecommendUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +21,7 @@ public class RecommendService {
     //LOW - 저사양,보급형, MIDDLE - 평범, GOOD - 준수, HIGH - 고사양
     private final Integer LOW=1, MIDDLE=2, GOOD=3, HIGH=4;
     private final RecommendUtil recommendUtil;
-    private final Logger logger;
+    private final Logger logger = LoggerFactory.getLogger(RecommendService.class.getName());
 
     private final QuoteCandidateRepository quoteCandidateRepository;
     private final UsageNsRepository usageNsRepository;
@@ -88,6 +88,8 @@ public class RecommendService {
 
     @Transactional
     public HttpStatus deleteAndCreateQuoteCandidate() {
+//        final int CPU=0, RAM=1, GPU=2, POWER=3;
+//        final int[] partIndex = {CPU, RAM, GPU, POWER};
         //생성 전 기존 리스트 제거
         //deleteCandidate
         quoteCandidateRepository.deleteAll();
@@ -100,7 +102,10 @@ public class RecommendService {
             List<List<?>> partList = recommendUtil.makePartList(usage);
 
             //경우의 수 만들고 저장
-            recommendUtil.generateScenario(partList);
+            recommendUtil.generateScenario((List<CpuEntity>) partList.get(0)
+                    , (List<RamEntity>) partList.get(1)
+                    , (List<GpuEntity>) partList.get(2)
+                    , (List<PowerEntity>) partList.get(3));
         }
         return HttpStatus.CREATED;
     }

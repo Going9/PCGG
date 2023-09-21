@@ -2,9 +2,14 @@ package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Setter
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "quote_candidate")
 public class QuoteCandidateEntity {
 
@@ -58,7 +63,6 @@ public class QuoteCandidateEntity {
     @Column(name = "total_price", nullable = true)
     private Integer totalPrice;
 
-    @Setter
     @NotNull
     @Column(length = 10, name = "`usage`")
     private String usage;
