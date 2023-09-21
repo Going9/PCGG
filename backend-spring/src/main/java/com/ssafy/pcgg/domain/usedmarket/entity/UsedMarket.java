@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.usedmarket.entity;
 
 import com.ssafy.pcgg.domain.BaseTimeEntity;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketUpdateDto;
 import com.ssafy.pcgg.domain.user.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,7 +51,13 @@ public class UsedMarket extends BaseTimeEntity {
     this.summary = summary;
     this.price = price;
     this.state = state;
+  }
 
+  public void update(UsedMarketUpdateDto usedMarketUpdateDto) {
+    this.title = usedMarketUpdateDto.getTitle();
+    this.content = usedMarketUpdateDto.getContent();
+    this.summary = usedMarketUpdateDto.getSummary();
+    this.price = usedMarketUpdateDto.getPrice();
   }
 
 

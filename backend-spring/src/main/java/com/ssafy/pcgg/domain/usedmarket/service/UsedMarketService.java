@@ -2,10 +2,13 @@ package com.ssafy.pcgg.domain.usedmarket.service;
 
 import com.ssafy.pcgg.domain.auth.CurrentUser;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCreateDto;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketUpdateDto;
 import com.ssafy.pcgg.domain.usedmarket.entity.UsedMarket;
-import com.ssafy.pcgg.domain.usedmarket.exception.UsedMarketException;
+import com.ssafy.pcgg.domain.usedmarket.exception.InvalidUserException;
+import com.ssafy.pcgg.domain.usedmarket.exception.UsedMarketNotFoundException;
 import com.ssafy.pcgg.domain.usedmarket.repository.UsedMarketRepository;
 import com.ssafy.pcgg.domain.user.UserEntity;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +27,27 @@ public class UsedMarketService {
   }
 
   @Transactional
-  public void deleteUsedMarketService(Long usedMarketId) {
+  public void deleteUsedMarketPost(Long usedMarketId, UserEntity user) {
       UsedMarket usedMarket = usedMarketRepository.findById(usedMarketId).orElseThrow(()
-          -> new UsedMarketException("해당 게시글이 없습니다."));
+          -> new UsedMarketNotFoundException("해당 게시글이 없습니다."));
+      if (!Objects.equals(usedMarket.getUser().getUserId(), user.getUserId())) {
+        throw new InvalidUserException("작성자만 삭제할 수 있습니다.");
+    }
       usedMarketRepository.delete(usedMarket);
   }
+
+  @Transactional
+  public void updateMarketPost(Long usedMarketId, UsedMarketUpdateDto usedMarketUpdateDto,
+      UserEntity user) {
+
+    UsedMarket usedMarket = usedMarketRepository.findById(usedMarketId).orElseThrow(()
+          -> new UsedMarketNotFoundException("해당 게시글이 없습니다."));
+
+    if (!Objects.equals(usedMarket.getUser().getUserId(), user.getUserId())) {
+      throw new InvalidUserException("작성자만 수정할 수 있습니다.");
+    }
+    usedMarket.update(usedMarketUpdateDto);
+  }
+
+
 }
