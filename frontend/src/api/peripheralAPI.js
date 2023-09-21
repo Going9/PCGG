@@ -6,8 +6,12 @@ const apiAuth = apiSpringAuthInstance();
 // 추천 api는?
 
 // 목록 조회 - 안쓸듯
-async function isCallPeripheralList(success, fail) {
-  await api.get("/peripheral").then(success).catch(fail);
+async function isCallPeripheralList(data, success, fail) {
+  const params = { pages: data.page };
+  await api
+    .get(`/peripherals/${data.category}`, { params })
+    .then(success)
+    .catch(fail);
 }
 
 // 상세 조회

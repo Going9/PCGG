@@ -20,10 +20,8 @@ export const usePeripehralStore = defineStore("peripheral", {
     async callList(value) {
       await isCallPeripheralList(
         value,
-        ({ peripheral }) => {
-          console.log(value);
-          console.log("success");
-          console.log(peripheral);
+        ({ data }) => {
+          console.log(data);
         },
         (error) => {
           console.log(error);
