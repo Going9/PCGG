@@ -6,6 +6,7 @@ import rankingIcon from "./Ranking.png";
 import searchIcon from "./search.png";
 import sendIcon from "./send.png";
 import saveIcon from "./saveIcon.png";
+import appendIcon from "./append.png";
 
 export {
   bellIcon,
@@ -16,4 +17,5 @@ export {
   searchIcon,
   sendIcon,
   saveIcon,
+  appendIcon,
 };
