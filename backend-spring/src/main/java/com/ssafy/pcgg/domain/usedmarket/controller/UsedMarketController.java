@@ -2,12 +2,14 @@ package com.ssafy.pcgg.domain.usedmarket.controller;
 
 import com.ssafy.pcgg.domain.auth.CurrentUser;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCreateDto;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketPostDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketUpdateDto;
 import com.ssafy.pcgg.domain.usedmarket.service.UsedMarketService;
 import com.ssafy.pcgg.domain.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,10 +38,15 @@ public class UsedMarketController {
 
   @PutMapping("/{usedMarketId}")
   public ResponseEntity<Long> updateUsedMarketPost(@PathVariable Long usedMarketId, @RequestBody UsedMarketUpdateDto usedMarketUpdateDto, @CurrentUser UserEntity user) {
-    usedMarketService.updateMarketPost(usedMarketId, usedMarketUpdateDto, user);
+    usedMarketService.updateUsedMarketPost(usedMarketId, usedMarketUpdateDto, user);
     return ResponseEntity.ok().build();
   }
 
+  @GetMapping("/{usedMarketId}")
+  public ResponseEntity<UsedMarketPostDto> getUsedMarketPost(@PathVariable Long usedMarketId) {
+    UsedMarketPostDto usedMarketPostDto = usedMarketService.getUsedMarketPost(usedMarketId);
+    return ResponseEntity.ok(usedMarketPostDto);
 
+  }
 
 }

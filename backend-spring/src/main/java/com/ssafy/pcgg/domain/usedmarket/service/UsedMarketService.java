@@ -2,6 +2,7 @@ package com.ssafy.pcgg.domain.usedmarket.service;
 
 import com.ssafy.pcgg.domain.auth.CurrentUser;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCreateDto;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketPostDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketUpdateDto;
 import com.ssafy.pcgg.domain.usedmarket.entity.UsedMarket;
 import com.ssafy.pcgg.domain.usedmarket.exception.InvalidUserException;
@@ -37,7 +38,7 @@ public class UsedMarketService {
   }
 
   @Transactional
-  public void updateMarketPost(Long usedMarketId, UsedMarketUpdateDto usedMarketUpdateDto,
+  public void updateUsedMarketPost(Long usedMarketId, UsedMarketUpdateDto usedMarketUpdateDto,
       UserEntity user) {
 
     UsedMarket usedMarket = usedMarketRepository.findById(usedMarketId).orElseThrow(()
@@ -49,5 +50,13 @@ public class UsedMarketService {
     usedMarket.update(usedMarketUpdateDto);
   }
 
+  @Transactional(readOnly = true)
+  public UsedMarketPostDto getUsedMarketPost(Long usedMarketId) {
+    UsedMarket usedMarket = usedMarketRepository.findById(usedMarketId).orElseThrow(()
+        -> new UsedMarketNotFoundException("해당 게시글이 없습니다."));
+    UsedMarketPostDto usedMarketPostDto = null;
+    usedMarketPostDto = new UsedMarketPostDto(usedMarket);
 
+    return usedMarketPostDto;
+  }
 }
