@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface GpuRepository extends JpaRepository<GpuEntity,Long> {
 
-    List<?> findAllByClass(Integer classNumber);
+    List<GpuEntity> findAllByClass(Integer classColumn);
 }

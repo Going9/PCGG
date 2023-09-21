@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RamRepository extends JpaRepository<RamEntity,Long> {
 
-    List<?> findAllByClass(Integer classNumber);
+    List<RamEntity> findAllByClass(Integer classColumn);
 }

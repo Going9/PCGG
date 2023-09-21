@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PowerRepository extends JpaRepository<PowerEntity,Long> {
 
-    List<?> findAllByClass(Integer classNumber);
+    List<PowerEntity> findAllByClass(Integer classColumn);
 }

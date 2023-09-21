@@ -1,11 +1,9 @@
 package com.ssafy.pcgg.domain.recommend.util;
 
 import com.ssafy.pcgg.domain.recommend.entity.*;
-import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
 import com.ssafy.pcgg.domain.recommend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +16,12 @@ public class RecommendUtil {
     private final Integer LOW=1, MIDDLE=2, GOOD=3, HIGH=4;
     private final QuoteCandidateRepository quoteCandidateRepository;
     private final UsageNsRepository usageNsRepository;
+    private final CpuRepository cpuRepository;
+    private final RamRepository ramRepository;
+    private final GpuRepository gpuRepository;
+    private final PowerRepository powerRepository;
+
+
 
     private final Logger logger;
 
@@ -33,8 +37,9 @@ public class RecommendUtil {
         }
     }
 
+    @Transactional
     public void classifyGpu(List<?> partList) {
-        int performance;
+        Integer performance;
         for(GpuEntity gpu : (List<GpuEntity>)partList) {
             //gpu 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             performance = 100;//gpu.getPerformance();
@@ -42,9 +47,11 @@ public class RecommendUtil {
             else if(performance<2000) gpu.setClassColumn(MIDDLE);
             else if(performance<3000) gpu.setClassColumn(GOOD);
             else if(performance<4000) gpu.setClassColumn(HIGH);
+            else if(performance==null) logger.error(gpu.getName()+"의 performance 값 없음");
         }
     }
 
+    @Transactional
     public void classifyRam(List<?> partList) {
         int capacity;
         int readSpeed;
@@ -58,6 +65,7 @@ public class RecommendUtil {
         }
     }
 
+    @Transactional
     public void classifyCpu(List<?> partList) {
         int performance;
         for(CpuEntity cpu : (List<CpuEntity>)partList){
@@ -70,51 +78,74 @@ public class RecommendUtil {
         }
     }
 
-//    @Transactional
-//    public HttpStatus deleteAndCreateQuoteCandidate() {
-//        //생성 전 기존 리스트 제거
-//        quoteCandidateRepository.deleteAll();
-//
-//        //견적용도별로 새로운 리스트 산출
-//        List<QuoteCandidateEntity> quoteList = new ArrayList<>();
-//        List<UsageNsEntity> usageList = usageNsRepository.findAll();
-//
-//        for(UsageNsEntity usage : usageList){
-//            QuoteCandidateEntity quoteCandidate = new QuoteCandidateEntity();
-//            switch(usage.getName()){
-//                case "가성비사무" -> {
-//                    pickCpu(LOW);
-//                    pickRam(MIDDLE);
-//                    pickGpu(LOW);
-//                    pickPower();
-//                    pickMainboard(MIDDLE);
-//                }
-//                case "고성능사무" -> {
-//                }
-//                case "캐주얼게임" -> {
-//                }
-//                case "중사양게임" -> {}
-//                case "고사양게임" -> {}
-//                case "3d디자인" -> {}
-//                case "영상편집" -> {}
-//                case "일반방송" -> {}
-//                case "캐주얼게임방송" -> {}
-//                case "고성능게임방송" -> {}
-//                case "저사양개발" -> {
-//
-//                }
-//                case "중사양개발" -> {
-//
-//                }
-//                case "고사양개발" -> {
-//
-//                }
-//                default -> resultMap.put("message","Failed while making 견적후보");
-//            }
-//            quoteCandidate.setUsage(usage.getName());
-//            quoteList.add(quoteCandidate);
-//        }
-//        quoteCandidateRepository.saveAll(quoteList);
-//        return resultMap;
-//    }
+    public List<List<?>> makePartList(UsageNsEntity usage) {
+        List<CpuEntity> cpuList;
+        List<RamEntity> ramList;
+        List<GpuEntity> gpuList;
+        List<PowerEntity> powerList;
+        int c,r,g,p;
+
+        switch(usage.getName()){
+            case "가성비사무","저사양개발"
+                    -> { c=LOW; r=LOW; g=LOW; p=LOW; }
+            case "고성능사무"
+                    -> { c=MIDDLE; r=MIDDLE; g=LOW; p=MIDDLE; }
+            case "캐주얼게임"
+                    -> { c=LOW; r=MIDDLE; g=LOW; p=LOW; }
+            case "중사양게임"
+                    -> { c=MIDDLE; r=MIDDLE; g=MIDDLE; p=MIDDLE; }
+            case "고사양게임"
+                    -> { c=HIGH; r=GOOD; g=HIGH; p=HIGH; }
+            case "일반영상편집"
+                    -> { c=GOOD; r=MIDDLE; g=MIDDLE; p=LOW; }
+            case "전문영상편집"
+                    -> { c=HIGH; r=HIGH; g=GOOD; p=MIDDLE; }
+            case "3d디자인"
+                    -> { c=HIGH; r=HIGH; g=HIGH; p=HIGH; }
+            case "일반방송"
+                    -> { c=GOOD; r=LOW; g=MIDDLE; p=MIDDLE; }
+            case "캐주얼게임방송"
+                    -> { c=MIDDLE; r=MIDDLE; g=GOOD; p=MIDDLE; }
+            case "고성능게임방송"
+                    -> { c=GOOD; r=HIGH; g=HIGH; p=HIGH; }
+            case "고사양개발"
+                    -> { c=GOOD; r=HIGH; g=GOOD; p=MIDDLE; }
+            default -> {
+                logger.error("용도 매칭되지 않음. usage_ns의 레코드 점검필요");
+                return null;
+            }
+        }
+        cpuList = pickCpu(c);
+        ramList = pickRam(r);
+        gpuList = pickGpu(g);
+        powerList = pickPower(p);
+        List<List<?>> partList = new ArrayList<>();
+
+        partList.add(cpuList);
+        partList.add(ramList);
+        partList.add(gpuList);
+        partList.add(powerList);
+        return partList;
+    }
+
+    public void generateScenario(List<List<?>> partList) {
+    }
+
+    public List<PowerEntity> pickPower(Integer classColumn) {
+        return powerRepository.findAllByClass(classColumn);
+    }
+
+    public List<GpuEntity> pickGpu(Integer classColumn) {
+        return gpuRepository.findAllByClass(classColumn);
+    }
+
+    public List<RamEntity> pickRam(Integer classColumn) {
+        return ramRepository.findAllByClass(classColumn);
+    }
+
+    public List<CpuEntity> pickCpu(Integer classColumn) {
+        return cpuRepository.findAllByClass(classColumn);
+    }
+
+
 }

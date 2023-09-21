@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CpuRepository extends JpaRepository<CpuEntity,Long> {
 
-    List<CpuEntity> findAllByClass(Integer classNumber);
+    List<CpuEntity> findAllByClass(Integer classColumn);
 }
