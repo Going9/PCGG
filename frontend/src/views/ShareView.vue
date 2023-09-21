@@ -1,12 +1,13 @@
 <script setup>
   import PostComponent from '@/components/ShareViewComponents/PostComponent.vue'
   import SearchComponent from '@/components/Common/SearchBarComponent.vue'
+  import ModalComponent from '@/components/Common/ModalComponent.vue';
   import { RouterLink } from 'vue-router';
-
 </script>
 
 <template>
   <main>
+    <ModalComponent class="modal"/>
     <div class="banner">
       <img alt="BannerImg" class="bannerImg" src="@/assets/image/share-banner.jpg" />
       <div class="box">
