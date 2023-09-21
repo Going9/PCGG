@@ -4,6 +4,7 @@ import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +21,7 @@ public class RecommendUtil {
     private final RamRepository ramRepository;
     private final GpuRepository gpuRepository;
     private final PowerRepository powerRepository;
-
-
-
-    private final Logger logger;
+    private final Logger logger = LoggerFactory.getLogger(RecommendUtil.class.getName());
 
     @Transactional
     public void classifyPower(List<?> partList) {
@@ -54,7 +52,7 @@ public class RecommendUtil {
     @Transactional
     public void classifyRam(List<?> partList) {
         int capacity;
-        int readSpeed;
+//        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
             //Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             capacity = 8;//ram.getCapacity();
@@ -128,7 +126,49 @@ public class RecommendUtil {
         return partList;
     }
 
-    public void generateScenario(List<List<?>> partList) {
+    @Transactional
+    public void generateScenario(List<CpuEntity> cpuList, List<RamEntity> ramList, List<GpuEntity> gpuList, List<PowerEntity> powerList) {
+        //만약 list들의 크기가 너무 크다면 pick단계에서 적절히 조절해야한다.
+        QuoteCandidateEntity tmpCandidate = new QuoteCandidateEntity();
+
+        for(CpuEntity cpu: cpuList){
+            tmpCandidate.setCpu(cpu);
+            for(RamEntity ram: ramList){
+                if(checkAddable(tmpCandidate, ram)){
+                    tmpCandidate.setRam(ram);
+                } //else continue
+                for(GpuEntity gpu: gpuList){
+                    if (checkAddable(tmpCandidate, gpu)) {
+                        tmpCandidate.setGpu(gpu);
+                    }
+                    for(PowerEntity power: powerList){
+                        if(checkAddable(tmpCandidate, power)){
+                            tmpCandidate.setPower(power);
+                            QuoteCandidateEntity quoteCandidateEntity = QuoteCandidateEntity.builder()
+                                    .cpu(tmpCandidate.getCpu())
+                                    .ram(tmpCandidate.getRam())
+                                    .gpu(tmpCandidate.getGpu())
+                                    .power(tmpCandidate.getPower())
+                                    .build();
+                            quoteCandidateRepository.save(quoteCandidateEntity);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean checkAddable(QuoteCandidateEntity tmpCandidate, RamEntity ram) {
+        //CPU와 호환여부 체크
+        return false;
+    }
+    private boolean checkAddable(QuoteCandidateEntity tmpCandidate, GpuEntity gpu) {
+        //CPU,RAM과 호환여부 체크
+        return false;
+    }
+    private boolean checkAddable(QuoteCandidateEntity tmpCandidate, PowerEntity power) {
+        //CPU,RAM,GPU와 호환여부 체크
+        return false;
     }
 
     public List<PowerEntity> pickPower(Integer classColumn) {
