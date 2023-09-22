@@ -8,14 +8,13 @@ import org.hibernate.annotations.PartitionKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "part_gpu")
 public class GpuEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Getter
     @Column(length = 100)

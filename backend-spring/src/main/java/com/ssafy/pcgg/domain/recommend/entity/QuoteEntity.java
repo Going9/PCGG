@@ -1,14 +1,22 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "quote")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuoteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ID;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="cpu_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))

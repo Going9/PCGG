@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -20,23 +21,32 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-//    @NotNull
-//    @Column(nullable = false, unique = true)
-    @Column(unique = true)
+    @NotNull
+    @Column(nullable = false, unique = true)
     private String email;
 
-//    @NotNull
-//    @Column(nullable = false)
+    @NotNull
+    @Column(nullable = false)
     private String password;
 
-//    @NotNull
-//    @Column(nullable = false)
+    @NotNull
+    @Column(nullable = false)
+    private String name;
+
+    @NotNull
+    @Column(nullable = false)
+    private String nickname;
+
+    @NotNull
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean activated;
 
     // 참조 테이블로 Refactoring 필요
     @Enumerated(EnumType.STRING)
     @Column(name = "social_type")
     private SocialType socialType;
+
+    @Column(name = "social_id")
     private String socialId;
 
     @ManyToMany
@@ -47,9 +57,11 @@ public class UserEntity {
     private Set<AuthorityEntity> authorities;
 
     @Builder
-    public UserEntity(String email, String password, boolean activated, Set<AuthorityEntity> authorities) {
+    public UserEntity(String email, String password, String name, String nickname, boolean activated, Set<AuthorityEntity> authorities) {
         this.email = email;
         this.password = password;
+        this.name = name;
+        this.nickname = nickname;
         this.activated = activated;
         this.authorities = authorities;
     }

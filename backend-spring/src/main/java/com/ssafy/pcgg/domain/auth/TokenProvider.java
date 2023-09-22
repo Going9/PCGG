@@ -1,5 +1,7 @@
 package com.ssafy.pcgg.domain.auth;
 
+import com.ssafy.pcgg.domain.user.UserEntity;
+import com.ssafy.pcgg.domain.user.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -26,12 +28,15 @@ public class TokenProvider implements InitializingBean {
     private final String secret;
     private final long expireTimeMs;
     private Key key;
+    private UserRepository userRepository;
 
-    public TokenProvider(
+    public TokenProvider (
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expire-time-sec}") long expireTimeSec) {
+            @Value("${jwt.expire-time-sec}") long expireTimeSec,
+            UserRepository userRepository) {
         this.secret = secret;
-        this.expireTimeMs = expireTimeSec * 1000;   // expireTimeSec = 1(1초) * 60(1분) * 60(1시간) * 24(하루)
+        this.expireTimeMs = expireTimeSec * 1000;   // expireTimeSec = 86400 = 1(1초) * 60(1분) * 60(1시간) * 24(하루)
+        this.userRepository = userRepository;
     }
 
     // secret으로 key를 설정
@@ -46,11 +51,15 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        UserEntity userEntity = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException());
+
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)    // Jwts에 AUTHORITIES_KEY의 이름으로 authorities저장
-                .signWith(key, SignatureAlgorithm.HS512)
+                .claim("userId", userEntity.getUserId())
                 .setExpiration(new Date(System.currentTimeMillis() + expireTimeMs))
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
