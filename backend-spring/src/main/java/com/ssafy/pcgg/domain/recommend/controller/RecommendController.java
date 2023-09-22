@@ -120,7 +120,7 @@ public class RecommendController {
         return null;
     }
 
-    //저장한 추천 목록 조회
+    //크롤링한 뒤 새로운 QuoteCandidate(견적후보) 생성
     @PutMapping("desktop")
     public ResponseEntity<?> classifyAndCreateCandidate(){
         Map<String,Object> resultMap = new HashMap<>();
