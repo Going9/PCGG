@@ -53,6 +53,47 @@
 </template>
 
 <style scoped>
+.banner {
+  position: relative; /* 부모 요소에 상대적 위치를 설정합니다. */
+  width: 100%;
+  height: 20rem;
+}
+
+.bannerImg {
+  padding-top: 1.5%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.box {
+  position: absolute; /* 부모 요소에 대해 절대 위치를 설정합니다. */
+  top: 50%; /* 상단 중앙에 정렬합니다. */
+  left: 50%; /* 좌측 중앙에 정렬합니다. */
+  transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변형을 적용합니다. */
+  width: 60.5625rem;
+  height: 8.6875rem;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.bannerComment {
+  text-align: center;
+  font-family: Inter;
+  font-size: 3rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 
 .flex-center {
   display: flex;
