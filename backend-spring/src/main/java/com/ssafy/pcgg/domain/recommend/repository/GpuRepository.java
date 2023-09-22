@@ -1,10 +1,11 @@
 package com.ssafy.pcgg.domain.recommend.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.ssafy.pcgg.domain.recommend.entity.GpuEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface GpuRepository extends JpaRepository<GpuEntity, Long> {
+import java.util.List;
+
+public interface GpuRepository extends JpaRepository<GpuEntity,Long> {
+
+    List<GpuEntity> findAllByClass(Integer classColumn);
 }
