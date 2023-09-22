@@ -59,6 +59,8 @@ const toggle = ref(null);
 const setToggle = (value) => {
   toggle.value = value;
   store.isPeripheralCategory(value);
+  const data = { category: toggle.value, page: 0 };
+  store.callList(data);
   console.log(store.peripheralCategory);
 };
 
@@ -82,6 +84,8 @@ const goSearch = () => {
 
 onMounted(() => {
   toggle.value = store.peripheralCategory;
+  const data = { category: toggle.value, page: 0 };
+  store.callList(data);
 });
 </script>
 
