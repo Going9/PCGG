@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -21,18 +20,18 @@ import java.util.Objects;
 
 @Aspect
 @Component
-public class ExtractClaimAspect {
+public class CurrentUserIdAspect {
 
     private final String secret;
     private final ParameterNameDiscoverer parameterNameDiscoverer;
 
-    public ExtractClaimAspect (@Value("${jwt.secret}") String secret, ParameterNameDiscoverer parameterNameDiscoverer) {
+    public CurrentUserIdAspect(@Value("${jwt.secret}") String secret, ParameterNameDiscoverer parameterNameDiscoverer) {
         this.secret = secret;
         this.parameterNameDiscoverer = parameterNameDiscoverer;
     }
 
-    @Before("@annotation(extractClaim) && args(userIdDto, request, ..)")
-    public void extractClaim(JoinPoint joinPoint, UserIdDto userIdDto, HttpServletRequest request, CurrentUserId currentUserId) {
+    @Before("@annotation(currentUserId) && args(userIdDto, request, ..)")
+    public void currentUserId(JoinPoint joinPoint, UserIdDto userIdDto, HttpServletRequest request, CurrentUserId currentUserId) {
         String token = Objects.requireNonNull(request.getHeader("Authorization")).replace("Bearer ", "");
 
         byte[] keyBytes = Decoders.BASE64.decode(secret);
@@ -61,7 +60,7 @@ public class ExtractClaimAspect {
 
 //        for (Object arg : joinPoint.getArgs()) {
 //            if (arg.getClass().isAssignableFrom(String.class)) {
-//                String paramName = ((ExtractClaim) joinPoint.getStaticPart().).value();
+//                String paramName = ((currentUserId) joinPoint.getStaticPart().).value();
 //                if (paramName.equals(arg)) {
 //                    return;
 //                }
@@ -71,7 +70,7 @@ public class ExtractClaimAspect {
 //        ((ServletRequestAttributes) RequestContextHolder
 //                .currentRequestAttributes())
 //                .getRequest()
-//                .setAttribute(extractClaim.value(), claimValue);
+//                .setAttribute(currentUserId.value(), claimValue);
     }
 
     private Method getMethod(JoinPoint joinPoint) {
