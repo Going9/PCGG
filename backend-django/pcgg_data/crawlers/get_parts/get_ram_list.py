@@ -20,6 +20,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 
 def get_ram_list(url: str):
+    print("램 크롤링 시작")
     service, driver = get_driver(url)
 
     # 데스크탑, DDR5, DDR4
@@ -99,7 +100,7 @@ def get_ram_list(url: str):
 
                 # 모델 저장에 필요한 변수들
                 memory_spec = ''
-                memory_clerk = 0
+                memory_clock = 0
                 heat_sink = False
 
                 # 데이터 파싱해서 변수에 저장
@@ -111,7 +112,7 @@ def get_ram_list(url: str):
                         memory_spec = "DDR5"
 
                     if "MHz" in item:
-                        memory_clerk = int(item.split("MHz")[0].strip())
+                        memory_clock = int(item.split("MHz")[0].strip())
 
                     elif "히트싱크" in item:
                         if "방열판" in item:
@@ -122,7 +123,7 @@ def get_ram_list(url: str):
                     name=parsed_name,
                     price=price,
                     memory_spec=memory_spec,
-                    memory_clerk=memory_clerk,
+                    memory_clock=memory_clock,
                     heat_sink=heat_sink,
                     capacity=ram_capacity,
                     image_source=file_url,
@@ -153,7 +154,5 @@ def get_ram_list(url: str):
 
     update_database(crawled_rams, existing_rams, Ram)
 
+    print("램 크롤링 완료")
     driver.quit()
-
-
-get_ram_list(url="https://prod.danawa.com/list/?cate=112752")

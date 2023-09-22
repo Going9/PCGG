@@ -1,4 +1,10 @@
+import asyncio
 import sys
+
+import boto3
+import requests
+from botocore.exceptions import NoCredentialsError
+from decouple import config
 
 sys.path.append('/')
 
@@ -12,17 +18,17 @@ django.setup()
 
 import re
 import time
+import selenium_async
 from crawlers.models import Ssd, PriceHistory
 from selenium.webdriver.common.by import By
 from django.utils import timezone
-from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_current_page, move_to_next_page, \
+from crawlers.get_parts.tools.test_tools import get_driver, get_product_list, save_current_page, move_to_next_page, \
     upload_to_storage, update_history, extract_product_info, update_database, get_name_and_price
 
 
-def get_ssd_list(url: str):
+def get_ssd_list(driver: selenium_async.WebDriver):
     print("ssd 크롤링 시작")
-    global ssd_info
-    service, driver = get_driver(url)
+    driver.get("https://prod.danawa.com/list/?cate=112760")
 
     # 2280, pcie5, pcie4, pcie3
     filter_options = ["202347", "859759", "402191", "213230"]
@@ -53,7 +59,32 @@ def get_ssd_list(url: str):
         for ssd in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(ssd, service)
+            link = ssd.find_element(
+                By.CSS_SELECTOR, ".prod_name a"
+            ).get_attribute("href")
+
+            driver.get(link)
+            time.sleep(2)
+            driver.implicitly_wait(10)
+
+            # 이름 저장
+            name = driver.find_element(
+                By.CSS_SELECTOR,
+                "#blog_content > div.summary_info > div.top_summary > h3 > span"
+            ).text
+
+            # 가격 저장
+            try:
+                price = driver.find_element(
+                    By.CSS_SELECTOR,
+                    "#blog_content > div.summary_info > div.detail_summary > div.summary_left > div.lowest_area > div.lowest_top > div.row.lowest_price > span.lwst_prc > a > em"
+                ).text
+                price = int(price.replace(',', ''))
+
+            except Exception as e:
+                print(e)
+                print(name)
+                price = 0
 
             # 제조사 추출
             try:
@@ -85,8 +116,55 @@ def get_ssd_list(url: str):
             parsed_name = re.sub(invalid_characters, '_', name)
             parsed_name = parsed_name.replace(" ", "_")
 
-            # 업로드한 이미지 주소
-            file_url = upload_to_storage(detail_page, "ssd", parsed_name)
+            # 이미지 클릭
+            driver.find_element(
+                By.CSS_SELECTOR, ".detail_summary .thumb_w a"
+            ).click()
+
+            # image_source에 저장
+            image_source = driver.find_element(
+                By.CSS_SELECTOR,
+                "#imgExtensionArea #imgExtensionViewArea img"
+            ).get_attribute("src")
+
+            driver.close()
+
+            # AWS 자격 증명 설정
+            access_key = config('S3_ACCESS_KEY_ID')
+            secret_key = config('S3_SECRET_ACCESS_KEY')
+            service_name = 's3'
+            endpoint_url = 'https://kr.object.ncloudstorage.com'
+
+            # S3 클라이언트 생성
+            s3 = boto3.client(service_name,
+                              endpoint_url=endpoint_url,
+                              aws_access_key_id=access_key,
+                              aws_secret_access_key=secret_key
+                              )
+
+            bucket_name = 'pcgg'
+            object_key = f'pcgg/{parsed_name}'
+
+            # 이미지를 파일로 저장
+            response = requests.get(image_source)
+
+            # 파일을 바이트 스트림으로 읽고 S3 버킷에 업로드
+            try:
+                s3.put_object(
+                    Bucket=bucket_name,
+                    Key=f'pcgg/{parsed_name}',
+                    Body=response.content,
+                    ACL='public-read',
+                    ContentType='image/jpeg'
+                )
+                file_url = f"https://kr.object.ncloudstorage.com/pcgg/{object_key}"
+
+
+            except NoCredentialsError:
+                print("AWS 자격 증명이 없습니다.")
+
+            except Exception as e:
+                print(f"파일 업로드 중 오류 발생: {e}")
 
             # 만약 크롤링한 데이터에도 있고 DB에도 있는 데이터라면
             try:
@@ -177,4 +255,8 @@ def get_ssd_list(url: str):
     driver.quit()
 
 
-get_ssd_list("https://prod.danawa.com/list/?cate=112760")
+async def main():
+    await asyncio.gather(
+        selenium_async.run_sync(get_ssd_list),
+    )
+asyncio.run(main())

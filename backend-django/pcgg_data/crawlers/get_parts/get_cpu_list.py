@@ -20,6 +20,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 
 def get_cpu_list(url: str):
+    print("CPU 크롤링 시작")
     service, driver = get_driver(url)
 
     # 코드 네임 전체 보기 클릭
@@ -163,7 +164,8 @@ def get_cpu_list(url: str):
 
     update_database(crawled_cpus, existing_cpus, Cpu)
 
+    print("CPU 크롤링 종료")
     driver.quit()
 
-
-get_cpu_list(url="https://prod.danawa.com/list/?cate=112747")
+#
+# get_cpu_list("https://prod.danawa.com/list/?cate=112747")

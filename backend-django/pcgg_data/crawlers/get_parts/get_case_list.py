@@ -20,6 +20,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 
 def get_case_list(url: str):
+    print("case crawling 시작")
     global case_info
     service, driver = get_driver(url)
 
@@ -85,7 +86,7 @@ def get_case_list(url: str):
                 depth = 0
                 max_power_depth = 0
                 max_gpu_depth = 0
-                max_cooler_width = 0
+                max_cooler_depth = 0
 
                 # 데이터 파싱해서 변수에 저장
                 for item in spec_items:
@@ -124,13 +125,13 @@ def get_case_list(url: str):
 
                         if "CPU쿨러 장착" in item:
                             if "~" in item.split()[2]:
-                                max_cooler_width = float(item.split()[2].split("~")[1].replace("mm", ""))
+                                max_cooler_depth = float(item.split()[2].split("~")[1].replace("mm", ""))
 
                             elif "최대" in item.split()[2]:
-                                max_cooler_width = float(item.split()[3].replace("mm", ""))
+                                max_cooler_depth = float(item.split()[3].replace("mm", ""))
 
                             else:
-                                max_cooler_width = float(item.split()[2].replace("mm", ""))
+                                max_cooler_depth = float(item.split()[2].replace("mm", ""))
 
                     except Exception as e:
                         print(e)
@@ -152,7 +153,7 @@ def get_case_list(url: str):
                         depth=depth,
                         max_power_depth=max_power_depth,
                         max_gpu_depth=max_gpu_depth,
-                        max_cooler_width=max_cooler_width
+                        max_cooler_depth=max_cooler_depth
                     )
                     case_info.save()
 
@@ -189,7 +190,6 @@ def get_case_list(url: str):
     except Exception as e:
         print(e)
 
+    print("case crawling 끝")
     driver.quit()
 
-
-get_case_list(url="https://prod.danawa.com/list/?cate=112775")

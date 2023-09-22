@@ -20,6 +20,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 
 def get_gpu_list(url: str):
+    print("gpu 크롤링 시작")
     global gpu_info
     service, driver = get_driver(url)
 
@@ -203,7 +204,7 @@ def get_gpu_list(url: str):
     except Exception as e:
         print(e)
 
+    print("gpu 크롤링 종료")
     driver.quit()
 
 
-get_gpu_list(url="https://prod.danawa.com/list/?cate=112753")

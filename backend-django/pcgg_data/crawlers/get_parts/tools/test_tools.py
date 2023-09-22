@@ -1,6 +1,8 @@
 import time
 import requests
 import boto3
+import selenium_async
+
 import crawlers
 
 
@@ -15,27 +17,21 @@ from crawlers.models import PriceHistory
 from django.utils import timezone
 
 
-def get_driver(url: str):
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-
-    service = ChromeService(
-        config("chrome_driver"))
-    driver = webdriver.Chrome(service=service, options=options)
+def get_driver(url: str, driver: selenium_async.WebDriver):
     driver.get(url)
     driver.implicitly_wait(10)
 
-    return service, driver
+    return driver
 
 
-def save_current_page(driver: webdriver) -> int:
+def save_current_page(driver: selenium_async.WebDriver) -> int:
     current_page = int(driver.find_element(
         By.CSS_SELECTOR, ".num.now_on").text)
 
     return current_page
 
 
-def get_product_list(driver: webdriver):
+def get_product_list(driver: selenium_async.WebDriver):
     wait = WebDriverWait(driver, 10)
     product_list = wait.until(EC.presence_of_all_elements_located(
         (By.CSS_SELECTOR, ".main_prodlist.main_prodlist_list > .product_list .prod_item.prod_layer:not(.product-pot)")))
@@ -43,7 +39,7 @@ def get_product_list(driver: webdriver):
     return product_list
 
 
-def move_to_next_page(driver: webdriver, current_page):
+def move_to_next_page(driver: selenium_async.WebDriver, current_page):
     try:
         # 다음 페이지가 존재할 때
         if driver.find_element(
@@ -76,15 +72,13 @@ def move_to_next_page(driver: webdriver, current_page):
     return True, current_page  # 페이지 이동 성공 시 True와 현재 페이지 반환
 
 
-def get_name_and_price(product, service):
+def get_name_and_price(product, detail_page: selenium_async.WebDriver):
     # 상세 링크 저장
-    wait = WebDriverWait(product, 10)
-    link = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".prod_name a"))).get_attribute("href")
+    link = product.find_element(
+        By.CSS_SELECTOR, ".prod_name a"
+    ).get_attribute("href")
 
     # 디테일 페이지로 이동
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    detail_page = webdriver.Chrome(service=service, options=options)
     detail_page.get(link)
     time.sleep(2)
     detail_page.implicitly_wait(30)

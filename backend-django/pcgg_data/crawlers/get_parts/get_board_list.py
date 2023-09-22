@@ -20,6 +20,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 
 def get_board_list(url: str):
+    print("board_list 시작")
     service, driver = get_driver(url)
 
     filter_options = ["748870", "801682", "212831"]
@@ -191,8 +192,9 @@ def get_board_list(url: str):
 
     update_database(crawled_boards, existing_boards, Board)
 
+    print("board_list 끝")
     driver.quit()
 
 
-board_url = "https://prod.danawa.com/list/?cate=112751&15main_11_02"
-get_board_list(board_url)
+# board_url = "https://prod.danawa.com/list/?cate=112751&15main_11_02"
+# get_board_list(board_url)

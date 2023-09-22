@@ -14,53 +14,34 @@ import re
 import time
 from crawlers.models import Cooler, PriceHistory
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 from django.utils import timezone
 from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_current_page, move_to_next_page, \
     upload_to_storage, update_history, extract_product_info, update_database, get_name_and_price
 
 
 def get_cooler_list(url: str):
+    print("쿨러 크롤링 시작")
     global cooler_info
     service, driver = get_driver(url)
 
     driver.implicitly_wait(10)
-    # 코드 네임 전체 보기 클릭
+    attribute_value = ["29607", "865960", "29610", "29609"]
+    for option in attribute_value:
+        driver.find_element(
+            By.CSS_SELECTOR, f"#searchAttributeValue{option}"
+        ).click()
+
+    # 옵션 전체 보기
     driver.find_element(
         By.CSS_SELECTOR, "#frmProductList > div.option_nav > div.nav_header > div.head_opt > button"
     ).click()
 
-    driver.implicitly_wait(10)
-
-
-    # 싱글타워, 듀얼타워, 일반, 슬림, 서버, 1700, am5, am4 "743326", "776764", "213365"
-    # attribute_value = ["29607", "865960", "29610", "29609", "743326", "776764", "213365"]
-    # for option in attribute_value:
-    #     driver.find_element(
-    #         By.CSS_SELECTOR, f"#searchAttributeValue{option}"
-    #     ).click()
-
-    driver.find_element(
-        By.CSS_SELECTOR, f"#searchAttributeValue29607"
-    ).click()
-
-    driver.find_element(
-        By.CSS_SELECTOR, f"#searchAttributeValue865960"
-    ).click()
-
-
-
-
-    # driver.find_element(
-    #     By.CSS_SELECTOR, "#extendSearchOptionpriceCompare > div > dl:nth-child(12) > dd > ul > li:nth-child(1) > label"
-    # ).click()
-    #
-    # driver.find_element(
-    #     By.CSS_SELECTOR, "#extendSearchOptionpriceCompare > div > dl:nth-child(11) > dd > ul > li:nth-child(2) > label"
-    # ).click()
-    #
-    # driver.find_element(
-    #     By.CSS_SELECTOR, "#extendSearchOptionpriceCompare > div > dl:nth-child(12) > dd > ul > li:nth-child(2) > label"
-    # ).click()
+    attribute_value = ["743326", "776764", "213365"]
+    for option in attribute_value:
+        driver.find_element(
+            By.CSS_SELECTOR, f"#searchAttributeValue{option}"
+        ).click()
 
     # 현재 페이지 번호 저장
     current_page = save_current_page(driver)
@@ -87,9 +68,12 @@ def get_cooler_list(url: str):
 
         # 개별 cooler 정보 추출
         for cooler in product_list:
-
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(cooler, service)
+            try:
+                name, price, detail_page = get_name_and_price(cooler, service)
+
+            except Exception as e:
+                continue
 
             # 이름 파싱
             # 파일명으로 사용할 수 없는 문자를 언더스코어로 대체
@@ -106,7 +90,12 @@ def get_cooler_list(url: str):
 
             # 그렇지 않고 크롤링한 데이터에는 있고 db에 없는 데이터라면
             except:
-                spec_items = extract_product_info(cooler)
+                # spec 정보 추출
+                try:
+                    spec_items = extract_product_info(cooler)
+
+                except:
+                    continue
 
                 # 모델 저장에 필요한 변수들
                 form = ""
@@ -118,7 +107,8 @@ def get_cooler_list(url: str):
                 # 데이터 파싱해서 변수에 저장
                 for item in spec_items:
                     try:
-                        form = form_set.get(item, None)
+                        if item in form_set:
+                            form = form_set.get(item, None)
 
                         if "A/S" in item:
                             free_warranty_period = item.split()[1].replace("년", "")
@@ -127,7 +117,7 @@ def get_cooler_list(url: str):
                             height = float(item.split()[1].replace("mm", ""))
 
                         elif "팬 개수" in item:
-                            fan_count = int(item.split()[1].replace("개", ""))
+                            fan_count = int(item.split()[2].replace("개", ""))
 
                         elif "최대 팬소음" in item:
                             max_fan_noise = float(item.split()[2].replace("dBA", ""))
@@ -185,7 +175,6 @@ def get_cooler_list(url: str):
     except Exception as e:
         print(e)
 
+    print("쿨러 크롤링 끝")
     driver.quit()
 
-
-get_cooler_list(url="https://prod.danawa.com/list/?cate=11236855")

@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'PCGG_data.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pcgg',
+        'NAME': 'pcgg_db',
         'USER': 'root',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'PASSWORD': 'ssafy',
+        'HOST': 'pcgg.kro.kr',
         'PORT': '3306'
     }
 }

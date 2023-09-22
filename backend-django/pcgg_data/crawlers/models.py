@@ -82,7 +82,7 @@ class Ssd(BasicInfo):
 
 class Ram(BasicInfo):
     memory_spec = models.CharField(max_length=10, null=True)
-    memory_clerk = models.IntegerField(null=True)
+    memory_clock = models.IntegerField(null=True)
     heat_sink = models.BooleanField(default=False, null=True)
     capacity = models.IntegerField(null=True)
 
@@ -125,7 +125,7 @@ class Case(BasicInfo):
         max_digits=7, decimal_places=2, null=True)  # 최대 파워 길이
     max_gpu_depth = models.DecimalField(
         max_digits=7, decimal_places=2, null=True)  # 최대 gpu 길이
-    max_cooler_width = models.DecimalField(
+    max_cooler_depth = models.DecimalField(
         max_digits=7, decimal_places=2, null=True)  # 최대 쿨러 높이
 
     def __str__(self):
