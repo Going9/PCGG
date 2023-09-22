@@ -18,8 +18,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RecommendService {
-    //LOW - 저사양,보급형, MIDDLE - 평범, GOOD - 준수, HIGH - 고사양
-    private final Integer LOW=1, MIDDLE=2, GOOD=3, HIGH=4;
     private final RecommendUtil recommendUtil;
     private final Logger logger = LoggerFactory.getLogger(RecommendService.class.getName());
 
@@ -36,7 +34,7 @@ public class RecommendService {
         try{
             classifyPart();
         } catch(ClassifyPartException e){
-            logger.error("message","부품 분류 중 오류 발생", e);
+            logger.error("부품 분류 중 오류 발생",e);
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
         //QuoteCandidate 삭제 후 생성
@@ -87,26 +85,32 @@ public class RecommendService {
     }
 
     @Transactional
-    public HttpStatus deleteAndCreateQuoteCandidate() {
+    public void deleteAndCreateQuoteCandidate() {
 //        final int CPU=0, RAM=1, GPU=2, POWER=3;
 //        final int[] partIndex = {CPU, RAM, GPU, POWER};
         //생성 전 기존 리스트 제거
         //deleteCandidate
-        quoteCandidateRepository.deleteAll();
 
         //견적용도별로 새로운 리스트 산출
-        //createCandidate
+        //createCandidatea
         List<UsageNsEntity> usageList = usageNsRepository.findAll();
         for(UsageNsEntity usage : usageList){
+            //용도별로 삭제 후 다시 insert
+            quoteCandidateRepository.deleteByUsage(usage);
             //부품별 미분류된 리스트 추출
-            List<List<?>> partList = recommendUtil.makePartList(usage);
+            List<List<?>> partList;
+            try{
+                partList = recommendUtil.makePartList(usage);
+            } catch(QuoteCandidateException e){
+                logger.error("용도 매칭되지 않음. usage_ns의 레코드 점검필요");
+                continue; //다음 용도로 continue
+            }
 
             //경우의 수 만들고 저장
+            //noinspection unchecked
             recommendUtil.generateScenario((List<CpuEntity>) partList.get(0)
                     , (List<RamEntity>) partList.get(1)
-                    , (List<GpuEntity>) partList.get(2)
-                    , (List<PowerEntity>) partList.get(3));
+                    , (List<GpuEntity>) partList.get(2));
         }
-        return HttpStatus.CREATED;
     }
 }
