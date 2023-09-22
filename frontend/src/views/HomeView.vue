@@ -80,7 +80,7 @@ import { mainbannerImg } from "@/assets/image";
   </main>
 </template>
 
-<style>
+<style scoped>
 .banner {
   position: relative; /* 부모 요소에 상대적 위치를 설정합니다. */
   width: 100%;
