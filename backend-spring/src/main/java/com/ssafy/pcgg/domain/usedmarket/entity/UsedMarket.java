@@ -1,6 +1,14 @@
 package com.ssafy.pcgg.domain.usedmarket.entity;
 
 import com.ssafy.pcgg.domain.BaseTimeEntity;
+import com.ssafy.pcgg.domain.recommend.entity.ChassisEntity;
+import com.ssafy.pcgg.domain.recommend.entity.CoolerEntity;
+import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
+import com.ssafy.pcgg.domain.recommend.entity.GpuEntity;
+import com.ssafy.pcgg.domain.recommend.entity.MainboardEntity;
+import com.ssafy.pcgg.domain.recommend.entity.PowerEntity;
+import com.ssafy.pcgg.domain.recommend.entity.RamEntity;
+import com.ssafy.pcgg.domain.recommend.entity.SsdEntity;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketUpdateDto;
 import com.ssafy.pcgg.domain.user.UserEntity;
 import jakarta.persistence.Column;

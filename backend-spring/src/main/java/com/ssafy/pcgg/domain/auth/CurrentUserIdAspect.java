@@ -45,6 +45,7 @@ public class CurrentUserIdAspect {
                 .getBody();
 
         String claimValue = claims.get(currentUserId.value()).toString();
+        System.out.println(claimValue);
 
         Method method = getMethod(joinPoint);
         if (method != null) {

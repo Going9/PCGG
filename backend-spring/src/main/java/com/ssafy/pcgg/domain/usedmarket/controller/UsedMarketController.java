@@ -1,11 +1,15 @@
 package com.ssafy.pcgg.domain.usedmarket.controller;
 
-import com.ssafy.pcgg.domain.auth.CurrentUser;
+import com.ssafy.pcgg.domain.auth.CurrentUserId;
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCreateDto;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketListDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketPostDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketUpdateDto;
 import com.ssafy.pcgg.domain.usedmarket.service.UsedMarketService;
 import com.ssafy.pcgg.domain.user.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -25,28 +30,39 @@ public class UsedMarketController {
   private final UsedMarketService usedMarketService;
 
   @PostMapping
-  public ResponseEntity<Long> createUsedMarketPost(@RequestBody UsedMarketCreateDto usedMarketCreateDto, @CurrentUser UserEntity user) {
-    Long result = usedMarketService.createUsedMarketPost(usedMarketCreateDto, user);
+  @CurrentUserId("userId")
+  public ResponseEntity<Long> createUsedMarketPost(UserIdDto userId, HttpServletRequest request, @RequestBody UsedMarketCreateDto usedMarketCreateDto) {
+    Long result = usedMarketService.createUsedMarketPost(userId, usedMarketCreateDto);
     return ResponseEntity.status(201).body(result);
   }
 
   @DeleteMapping("/{usedMarketId}")
-  public ResponseEntity<Void> deleteUsedMarket(@PathVariable Long usedMarketId, @CurrentUser UserEntity user) {
-    usedMarketService.deleteUsedMarketPost(usedMarketId, user);
+  @CurrentUserId("userId")
+  public ResponseEntity<Void> deleteUsedMarket(UserIdDto userId, HttpServletRequest request, @PathVariable Long usedMarketId) {
+    usedMarketService.deleteUsedMarketPost(userId, usedMarketId);
     return ResponseEntity.ok().build();
   }
 
   @PutMapping("/{usedMarketId}")
-  public ResponseEntity<Long> updateUsedMarketPost(@PathVariable Long usedMarketId, @RequestBody UsedMarketUpdateDto usedMarketUpdateDto, @CurrentUser UserEntity user) {
-    usedMarketService.updateUsedMarketPost(usedMarketId, usedMarketUpdateDto, user);
+  @CurrentUserId("userId")
+  public ResponseEntity<Long> updateUsedMarketPost(UserIdDto userId, HttpServletRequest request, @PathVariable Long usedMarketId, @RequestBody UsedMarketUpdateDto usedMarketUpdateDto) {
+    usedMarketService.updateUsedMarketPost(userId, usedMarketId, usedMarketUpdateDto);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("/{usedMarketId}")
+  @CurrentUserId("userIdDto")
   public ResponseEntity<UsedMarketPostDto> getUsedMarketPost(@PathVariable Long usedMarketId) {
     UsedMarketPostDto usedMarketPostDto = usedMarketService.getUsedMarketPost(usedMarketId);
     return ResponseEntity.ok(usedMarketPostDto);
-
   }
 
+  @GetMapping
+  public ResponseEntity<List<UsedMarketListDto>> getUsedMarketPosts(@RequestParam(value="page",
+      defaultValue="1") int page, @RequestParam(value="size", defaultValue="15") int size, @RequestParam(value="keyword", defaultValue="") String keyword) {
+      List<UsedMarketListDto> getTransactions = usedMarketService.getUsedMarketPosts(page, size, keyword);
+      return ResponseEntity.ok(getTransactions);
+
+
+  }
 }
