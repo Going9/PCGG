@@ -108,7 +108,9 @@ public class RecommendService {
 
             //경우의 수 만들고 저장
             //noinspection unchecked
-            recommendUtil.generateScenario((List<CpuEntity>) partList.get(0)
+            recommendUtil.generateScenario(
+                    usage
+                    , (List<CpuEntity>) partList.get(0)
                     , (List<RamEntity>) partList.get(1)
                     , (List<GpuEntity>) partList.get(2));
         }

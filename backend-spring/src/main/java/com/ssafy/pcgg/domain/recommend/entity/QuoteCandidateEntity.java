@@ -64,6 +64,7 @@ public class QuoteCandidateEntity {
     private Integer totalPrice;
 
     @NotNull
-    @Column(length = 10, name = "`usage`")
-    private String usage;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="`usage`")
+    private UsageNsEntity usage;
 }

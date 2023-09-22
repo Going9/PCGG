@@ -128,7 +128,7 @@ public class RecommendUtil {
     }
 
     @Transactional
-    public void generateScenario(List<CpuEntity> cpuList, List<RamEntity> ramList, List<GpuEntity> gpuList) {
+    public void generateScenario(UsageNsEntity usage, List<CpuEntity> cpuList, List<RamEntity> ramList, List<GpuEntity> gpuList) {
         //만약 list들의 크기가 너무 크다면 pick단계에서 적절히 조절해야한다.
         QuoteCandidateEntity tmpCandidate = new QuoteCandidateEntity();
         int count=0;
@@ -145,6 +145,7 @@ public class RecommendUtil {
 //                                if(checkAddable(tmpCandidate, power)){
 //                                    tmpCandidate.setPower(power);
                                     QuoteCandidateEntity quoteCandidateEntity = QuoteCandidateEntity.builder()
+                                            .usage(usage)
                                             .cpu(tmpCandidate.getCpu())
                                             .ram(tmpCandidate.getRam())
                                             .gpu(tmpCandidate.getGpu())
