@@ -1,5 +1,7 @@
-package com.ssafy.pcgg.domain.user;
+package com.ssafy.pcgg.domain.auth;
 
+import com.ssafy.pcgg.domain.user.UserEntity;
+import com.ssafy.pcgg.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

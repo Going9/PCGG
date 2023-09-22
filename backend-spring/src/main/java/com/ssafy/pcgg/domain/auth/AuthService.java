@@ -2,6 +2,9 @@ package com.ssafy.pcgg.domain.auth;
 
 import com.ssafy.pcgg.domain.auth.dto.AuthLoginRequest;
 import com.ssafy.pcgg.domain.auth.dto.AuthLoginResponse;
+import com.ssafy.pcgg.domain.user.UserEntity;
+import com.ssafy.pcgg.domain.user.UserRepository;
+import com.ssafy.pcgg.domain.user.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,10 +23,13 @@ public class AuthService {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
     public AuthLoginResponse login(HttpServletResponse response, AuthLoginRequest authLoginRequest) throws UnsupportedEncodingException {
         String email = authLoginRequest.getEmail();
         String password = authLoginRequest.getPassword();
 
+        // email 대신에 userId 를 활용해 보려 했으나 user 관련 객체에 모두 String 값(email)이 들어가야 해서 포기.
+        // 대신 토큰 내용에 userId 넣기로 결정 -> createToken
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(email, password);
 
@@ -54,4 +60,6 @@ public class AuthService {
 
         return new AuthLoginResponse(accessToken);
     }
+
+
 }
