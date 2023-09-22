@@ -58,7 +58,7 @@
   <tbody>
     <tr>
       <td align="center"><a href="https://lab.ssafy.com/eorms96"><img src="https://secure.gravatar.com/avatar/d2abf68ca33213685faa6c92a097f27b?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀장 : 이대근</b><br /><b>DB / PC견적추천</b></sub></a><br /></td>
-      <td align="center"><a href="https://lab.ssafy.com/ickyu777"><img src="https://secure.gravatar.com/avatar/cbfde9ced5f31bbf2e2c78bc12373d39?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀원 : 공익규</b><br /><b>{역할} </b></sub></a></td>
+      <td align="center"><a href="https://lab.ssafy.com/ickyu777"><img src="https://secure.gravatar.com/avatar/cbfde9ced5f31bbf2e2c78bc12373d39?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀원 : 공익규</b><br /><b>크롤링/ PC견적추천</b></sub></a></td>
       <td align="center"><a href="https://lab.ssafy.com/ninth6764"><img src="https://secure.gravatar.com/avatar/f7f2e3c4798ce5d866d7ac74f214cab7?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>FE 팀원 : 구본재</b><br /><b>메인, 견적랭킹, 공유 페이지, 공통 컴포넌트</b></sub></a><br /></td>
       <td align="center"><a href="https://lab.ssafy.com/thdl9893"><img src="https://secure.gravatar.com/avatar/1dd3239aff334f6cbfaecacf92108958?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀원 : 김소이</b><br /><b>주변기기추천/ 공유마당</b></sub></a><br /></td>
      <tr/>
