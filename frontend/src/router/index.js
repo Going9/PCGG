@@ -9,8 +9,7 @@ const routes = [
       {
         path: "",
         name: "Home",
-        component: () =>
-          import("@/views/HomeView.vue"),
+        component: () => import("@/views/HomeView.vue"),
       },
       {
         path: "/login",
@@ -46,6 +45,16 @@ const routes = [
             component: () => import("@/views/ShareDetailView.vue"),
           },
         ],
+      },
+      {
+        path: "/simulation",
+        name: "Simulation",
+        component: () => import("@/views/SimulationView.vue"),
+      },
+      {
+        path: "/estimaterecommend",
+        name: "EstimateRecommend",
+        component: () => import("@/views/EstimateView.vue"),
       },
       {
         path: "/simulation",
