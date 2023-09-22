@@ -62,7 +62,7 @@
       <td align="center"><a href="https://lab.ssafy.com/ninth6764"><img src="https://secure.gravatar.com/avatar/f7f2e3c4798ce5d866d7ac74f214cab7?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>FE 팀원 : 구본재</b><br /><b>{역할}</b></sub></a><br /></td>
       <td align="center"><a href="https://lab.ssafy.com/thdl9893"><img src="https://secure.gravatar.com/avatar/1dd3239aff334f6cbfaecacf92108958?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀원 : 김소이</b><br /><b>주변기기추천/ 공유마당</b></sub></a><br /></td>
      <tr/>
-      <td align="center"><a href="https://lab.ssafy.com/poi1229"><img src="https://secure.gravatar.com/avatar/2f2f0289c3a6be08891f7aa080d47ca7?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>FE 팀원 : 류성하</b><br /><b>주변기기, 시뮬레이션 페이지</b></sub></a><br /></td>
+      <td align="center"><a href="https://lab.ssafy.com/poi1229"><img src="https://secure.gravatar.com/avatar/2f2f0289c3a6be08891f7aa080d47ca7?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>FE 팀원 : 류성하</b><br /><b>주변기기/ 시뮬레이션 페이지</b></sub></a><br /></td>
       <td align="center"><a href="https://lab.ssafy.com/wnddnjs843"><img src="https://secure.gravatar.com/avatar/5a2d393458ff42eefa2d0a544d8a55e5?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE,FE 팀원 : 장중원</b><br /><b>{역할}</b></sub></a><br /></td>
       <td align="center"><a href="https://lab.ssafy.com/ischar"><img src="https://secure.gravatar.com/avatar/d9939c7c2ac8a72ca0161df2dd6be413?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀원 : 차재호</b><br /><b>인프라/ 중고거래</b></sub></a><br /></td>
     </tr>
