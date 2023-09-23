@@ -1,7 +1,10 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.PartitionKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +16,7 @@ public class GpuEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(length = 100)
     private String name;
 
@@ -38,4 +42,8 @@ public class GpuEntity {
 
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal thickness;
+
+    @Setter
+    @Column(name = "class", columnDefinition = "tinyint")
+    private Integer classColumn;
 }

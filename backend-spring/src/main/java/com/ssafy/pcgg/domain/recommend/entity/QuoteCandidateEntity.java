@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Setter
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "quote_candidate")
 public class QuoteCandidateEntity {
 
@@ -51,9 +56,14 @@ public class QuoteCandidateEntity {
     @JoinColumn(name="cooler_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CoolerEntity cooler;
 
-    @Column(name = "bench_score")
+    @Column(name = "bench_score", nullable = true)
     private Integer benchScore;
 
-    @Column(name = "total_price")
+    @Column(name = "total_price", nullable = true)
     private Integer totalPrice;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="`usage`")
+    private UsageNsEntity usage;
 }

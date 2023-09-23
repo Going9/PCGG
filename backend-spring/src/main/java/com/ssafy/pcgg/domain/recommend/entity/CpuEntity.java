@@ -1,11 +1,14 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name = "part_cpu")
 public class CpuEntity {
     @Id
@@ -38,4 +41,15 @@ public class CpuEntity {
 
     @Column(name = "cooler_included")
     private Boolean coolerIncluded;
+
+    @Getter
+    @Column(name = "single_score")
+    private int singleScore;
+
+    @Column(name = "multi_score")
+    private int multiScore;
+
+    @Setter
+    @Column(name = "class", columnDefinition = "tinyint")
+    private Integer classColumn;
 }
