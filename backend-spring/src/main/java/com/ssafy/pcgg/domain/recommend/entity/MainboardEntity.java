@@ -1,8 +1,11 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
+import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
+import com.ssafy.pcgg.domain.recommend.util.PerformanceRequirement;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDate;
 
 @Entity
@@ -29,11 +32,15 @@ public class MainboardEntity {
     private LocalDate changedDate;
 
     @Column(length=20)
+    private String socketInfo;
+
+    @Column(length=20)
     private String grade;
 
     @Column(name="memory_spec", length=10)
     private String memorySpec;
 
+    @Getter
     @Column(length=30)
     private String size;
 
