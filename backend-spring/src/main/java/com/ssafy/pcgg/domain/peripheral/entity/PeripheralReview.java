@@ -1,5 +1,9 @@
 package com.ssafy.pcgg.domain.peripheral.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.ssafy.pcgg.domain.user.UserEntity;
 
 import jakarta.persistence.Column;
@@ -17,15 +21,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "peripheral_rating")
+@Table(name = "peripheral_review")
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PeripheralRating {
+public class PeripheralReview {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +50,10 @@ public class PeripheralRating {
 
 	@Column(nullable = false)
 	private String review;
+
+	@CreationTimestamp
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
 	public void updateRating(Integer rating, String review){
 		this.rating = rating;
