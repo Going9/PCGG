@@ -1,8 +1,8 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDate;
 
 @Entity
@@ -15,6 +15,7 @@ public class MainboardEntity {
     @Column(length = 100)
     private String name;
 
+    @Getter
     private Integer price;
 
     @Column(name="image_source", length=100)
@@ -42,4 +43,7 @@ public class MainboardEntity {
 
     @Column(name = "m2_count")
     private Integer m2Count;
+
+    @Column(name = "`class`", columnDefinition = "tinyint")
+    private Integer classColumn;
 }

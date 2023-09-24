@@ -44,6 +44,6 @@ public class GpuEntity {
     private BigDecimal thickness;
 
     @Setter
-    @Column(name = "class", columnDefinition = "tinyint")
+    @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
 }
