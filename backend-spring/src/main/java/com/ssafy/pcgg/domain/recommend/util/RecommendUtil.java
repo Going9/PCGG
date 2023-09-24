@@ -184,19 +184,19 @@ public class RecommendUtil {
 
 
     public List<PowerEntity> pickPower(Integer classColumn) {
-        return powerRepository.findAllByClass(classColumn);
+        return powerRepository.findAllByClassColumn(classColumn);
     }
 
     public List<GpuEntity> pickGpu(Integer classColumn) {
-        return gpuRepository.findAllByClass(classColumn);
+        return gpuRepository.findAllByClassColumn(classColumn);
     }
 
     public List<RamEntity> pickRam(Integer classColumn) {
-        return ramRepository.findAllByClass(classColumn);
+        return ramRepository.findAllByClassColumn(classColumn);
     }
 
     public List<CpuEntity> pickCpu(Integer classColumn) {
-        return cpuRepository.findAllByClass(classColumn);
+        return cpuRepository.findAllByClassColumn(classColumn);
     }
 
 

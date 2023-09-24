@@ -52,7 +52,7 @@ public class RecommendService {
 
         //exception이 발생해도 다른 부품 분류 계속 진행
         try {
-            partList = cpuRepository.findAllByClass(null);
+            partList = cpuRepository.findAllByClassColumn(null);
             recommendUtil.classifyCpu(partList);
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
@@ -60,21 +60,21 @@ public class RecommendService {
         }
 
         try{
-            partList = ramRepository.findAllByClass(null);
+            partList = ramRepository.findAllByClassColumn(null);
             recommendUtil.classifyRam(partList);
         } catch(ClassifyPartException e){
             logger.error("ram 분류 중 에러 발생", e);
             exceptionCount++;
         }
         try{
-            partList = gpuRepository.findAllByClass(null);
+            partList = gpuRepository.findAllByClassColumn(null);
             recommendUtil.classifyGpu(partList);
         } catch(ClassifyPartException e){
             logger.error("gpu 분류 중 에러 발생", e);
             exceptionCount++;
         }
         try{
-            partList = powerRepository.findAllByClass(null);
+            partList = powerRepository.findAllByClassColumn(null);
             recommendUtil.classifyPower(partList);
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
