@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.pcgg.domain.auth.CurrentUserId;
+import com.ssafy.pcgg.domain.auth.TokenProvider;
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
 import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.service.ShareService;
@@ -23,6 +27,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "Shares", description = "공유마당 API")
@@ -52,10 +57,10 @@ public class ShareController {
 
 	@Operation(summary = "공유마당 게시글 상세조회", description = "공유마당 게시글을 조회합니다.")
 	@GetMapping("/{articleId}")
-	public ResponseEntity<ShareResponseDto> getShareDetail(@PathVariable Long articleId) {
+	public ResponseEntity<ShareDetailDto> getShareDetail(@PathVariable Long articleId) {
 		logger.info("getShareDetail(), articleId = {}", articleId);
-		ShareResponseDto shareResponseDto = shareService.getShare(articleId);
-		return ResponseEntity.ok().body(shareResponseDto);
+		ShareDetailDto shareDetailDto = shareService.getShare(articleId);
+		return ResponseEntity.ok().body(shareDetailDto);
 	}
 
 	@Operation(summary = "공유마당 게시글 삭제", description = "공유마당 게시글을 삭제합니다.")
@@ -72,6 +77,15 @@ public class ShareController {
 		logger.info("getShares(), page = {}", pages);
 		Slice<ShareResponseDto> shareResponseDto = shareService.getAllShare(pages);
 		return ResponseEntity.ok().body(shareResponseDto);
+	}
+
+	@Operation(summary = "공유마당 게시글 좋아요/싫어요 조회", description = "공유마당 게시글에 좋아요/싫어요 여부를 조회합니다.")
+	@GetMapping("/{articleId}/mark")
+	@CurrentUserId("userId")
+	public ResponseEntity<Integer> getMarkInfo(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId) {
+		logger.info("getShareDetail(), articleId = {}", articleId);
+		Integer mark = shareService.getMarkInfo(userId, articleId);
+		return ResponseEntity.ok().body(mark);
 	}
 
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요", description = "공유마당 게시글에 좋아요/싫어요를 누릅니다.")

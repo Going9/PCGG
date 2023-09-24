@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.recommend.entity.ChassisEntity;
 import com.ssafy.pcgg.domain.recommend.entity.CoolerEntity;
 import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
@@ -28,6 +29,7 @@ import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
 import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
 import com.ssafy.pcgg.domain.share.dto.ShareAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
 import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
@@ -117,11 +119,14 @@ public class ShareService {
 	 * 공유마당 상세 조회
 	 */
 	@Transactional(readOnly = true)
-	public ShareResponseDto getShare(Long shareId){
+	public ShareDetailDto getShare(Long shareId){
 		Share share =  shareRepository.findById(shareId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
 
-		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
+		long likeCnt = shareLikeRepository.countLikesForShareWithId(shareId, 1);
+		long disLikeCnt = shareLikeRepository.countLikesForShareWithId(shareId, -1);
+
+		ShareDetailDto shareDetailDto = ShareDetailDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
 			.quoteId(share.getQuote().getId())
@@ -129,10 +134,11 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
-			// .mark(0)
+			.likeCnt(likeCnt)
+			.dislikeCnt(disLikeCnt)
 			.build();
 
-		return shareResponseDto;
+		return shareDetailDto;
 	}
 
 	/**
@@ -166,10 +172,21 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
-			// .mark(0)
 			.build();
 
 		return shareResponseDto;
+	}
+
+	/**
+	 * 공유마당 좋아요/싫어요 확인
+	 */
+	public Integer getMarkInfo(UserIdDto userId, Long shareId){
+		Integer mark = 0;
+		if(userId.getUserId() != null){
+			mark = shareLikeRepository.findMarkByShareIdAndUserId(shareId, userId.getUserId());
+		}
+
+		return mark;
 	}
 
 	/**
