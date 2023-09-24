@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,6 +59,15 @@ public class PeripheralController {
 		logger.debug("addComment(), category = {}", category);
 		Long ratingId = peripheralService.addComment(userIdDto, category, ratingRequestDto);
 		return ResponseEntity.status(201).body(ratingId);
+	}
+
+	@Operation(summary = "주변기기 후기(평점) 삭제", description = "후기(평점)를 삭제합니다.")
+	@DeleteMapping("/{category}/comments/{commentId}")
+	@CurrentUserId("userIdDto")
+	public ResponseEntity<Void> deleteComment(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @PathVariable Long commentId) {
+		logger.debug("deleteComment(), category = {}, pages = {}", category);
+		peripheralService.deleteComment(userIdDto, commentId);
+		return ResponseEntity.ok().build();
 	}
 
 }

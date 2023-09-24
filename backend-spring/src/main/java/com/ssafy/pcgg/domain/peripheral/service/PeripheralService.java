@@ -91,4 +91,15 @@ public class PeripheralService {
 		return peripheralRatingRepository.save(peripheralRating).getId();
 	}
 
+	@Transactional
+	public void deleteComment(UserIdDto userIdDto, Long commentId){
+		PeripheralRating peripheralRating = peripheralRatingRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 후기(평점)이 없습니다."));
+
+		if(!Objects.equals(peripheralRating.getUser().getUserId(), userIdDto.getUserId())) {
+			throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+		}
+		peripheralRatingRepository.delete(peripheralRating);
+	}
+
 }
