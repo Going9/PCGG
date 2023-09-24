@@ -62,7 +62,7 @@ public class PeripheralService {
 	 * 주변기기 - 키보드, 모니터, 마우스, 프린터, 기타
 	 * 목록조회
 	 */
-	public Slice<PeripheralResponseDto> peripheralList(String category, int pages) {
+	public Slice<PeripheralResponseDto> getPeripherals(String category, int pages) {
 		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.ASC, "id"));
 
 		Slice<PeripheralResponseDto> peripheralResponseDtoSlice = null;

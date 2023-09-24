@@ -48,9 +48,9 @@ public class PeripheralController {
 		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	})
 	@GetMapping("/{category}")
-	public ResponseEntity<Slice<PeripheralResponseDto>> keyBoardList(@PathVariable String category, @RequestParam(value = "pages", defaultValue = "0") int pages) {
-		logger.debug("keyBoardList(), category = {}, pages = {}", category, pages);
-		Slice<PeripheralResponseDto> peripheralResponseDtoSlice = peripheralService.peripheralList(category, pages);
+	public ResponseEntity<Slice<PeripheralResponseDto>> getPeripherals(@PathVariable String category, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+		logger.debug("getPeripherals(), category = {}, pages = {}", category, pages);
+		Slice<PeripheralResponseDto> peripheralResponseDtoSlice = peripheralService.getPeripherals(category, pages);
 		return ResponseEntity.ok().body(peripheralResponseDtoSlice);
 	}
 
