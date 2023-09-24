@@ -1,6 +1,8 @@
 package com.ssafy.pcgg.domain.recommend.controller;
 
+import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +19,17 @@ public class RecommendController {
 
     //데스크탑추천
     @GetMapping("/desktop")
-    public ResponseEntity<?> getDesktopRecommend(){
-        Map<String,Object> resultMap;
+    public ResponseEntity<?> getDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
+        Map<String,Object> resultMap = new HashMap<>();
         HttpStatus httpStatus;
         try{
-//            resultMap = recommendService.bussinessLogic();
+            resultMap.put("resultList",recommendService.createRecommend(quoteRequestDto));
             httpStatus = HttpStatus.OK;
         }catch(Exception e){
-            resultMap = new HashMap<>();
             resultMap.put("message","unexpected ERROR");
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-//        return new ResponseEntity<>(resultMap, httpStatus);
-        return null;
+        return new ResponseEntity<>(resultMap, httpStatus);
 
     }
 
@@ -47,8 +47,8 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 //        return new ResponseEntity<>(resultMap, httpStatus);
+        //todo:미완성
         return null;
-
     }
 
     //부품 추천
@@ -65,6 +65,7 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 //        return new ResponseEntity<>(resultMap, httpStatus);
+        //todo:미완성
         return null;
     }
 
@@ -82,6 +83,7 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 //        return new ResponseEntity<>(resultMap, httpStatus);
+        //todo:미완성
         return null;
     }
 
@@ -99,6 +101,7 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 //        return new ResponseEntity<>(resultMap, httpStatus);
+        //todo:미완성
         return null;
 
     }
@@ -117,6 +120,7 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 //        return new ResponseEntity<>(resultMap, httpStatus);
+        //todo:미완성
         return null;
     }
 
