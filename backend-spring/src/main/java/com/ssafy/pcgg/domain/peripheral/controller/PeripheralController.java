@@ -87,4 +87,13 @@ public class PeripheralController {
 		return ResponseEntity.ok().body(peripheralService.getReviews(pages, peripheralId));
 	}
 
+	@Operation(summary = "주변기기 마이페이지 저장", description = "주변기기를 마이페이지에 저장합니다.")
+	@PostMapping("/{category}/{peripheralId}")
+	@CurrentUserId("userIdDto")
+	public ResponseEntity<Long> savePeripheral(UserIdDto userIdDto, HttpServletRequest request,
+		@PathVariable String category, @PathVariable Long peripheralId) {
+		logger.debug("savePeripheral(), category = {}, peripheralId = {}", category, peripheralId);
+		return ResponseEntity.status(201).body(peripheralService.savePeripheral(userIdDto, category, peripheralId));
+	}
+
 }

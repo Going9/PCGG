@@ -20,12 +20,14 @@ import com.ssafy.pcgg.domain.peripheral.dto.ReviewListDto;
 import com.ssafy.pcgg.domain.peripheral.dto.ReviewRequestDto;
 import com.ssafy.pcgg.domain.peripheral.dto.RatingResponseDto;
 import com.ssafy.pcgg.domain.peripheral.entity.PeripheralReview;
+import com.ssafy.pcgg.domain.peripheral.entity.PeripheralSaved;
 import com.ssafy.pcgg.domain.peripheral.entity.PeripheralTypeNs;
 import com.ssafy.pcgg.domain.peripheral.repository.EtcRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.KeyboardRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.MonitorRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.MouseRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.PeripheralReviewRepository;
+import com.ssafy.pcgg.domain.peripheral.repository.PeripheralSavedRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.PeripheralTypeNsRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.PrinterRepository;
 import com.ssafy.pcgg.domain.user.UserEntity;
@@ -44,6 +46,7 @@ public class PeripheralService {
 	private final UserRepository userRepository;
 	private final PeripheralTypeNsRepository peripheralTypeNsRepository;
 	private final PeripheralReviewRepository peripheralReviewRepository;
+	private final PeripheralSavedRepository peripheralSavedRepository;
 
 	/**
 	* 주변기기 - 키보드
@@ -81,7 +84,8 @@ public class PeripheralService {
 
 	@Transactional
 	public RatingResponseDto addReview(UserIdDto userIdDto, String category, ReviewRequestDto reviewRequestDto){
-		PeripheralTypeNs peripheralTypeNs = peripheralTypeNsRepository.findByName(category);
+		PeripheralTypeNs peripheralTypeNs = peripheralTypeNsRepository.findByName(category)
+			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
 		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
 
@@ -175,6 +179,22 @@ public class PeripheralService {
 	public String calculateAverageRating(Long peripheralId, String type){
 		Double value = peripheralReviewRepository.findAverageRatingByTypeNameAndPeripheralId(type, peripheralId);
 		return String.format("%.1f", value);
+	}
+
+	@Transactional
+	public Long savePeripheral(UserIdDto userIdDto, String category, Long peripheralId){
+		PeripheralTypeNs peripheralTypeNs = peripheralTypeNsRepository.findByName(category)
+			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
+
+		PeripheralSaved peripheralSaved = PeripheralSaved.builder()
+			.peripheralTypeNs(peripheralTypeNs)
+			.user(userEntity)
+			.peripheralId(peripheralId)
+			.build();
+
+		return peripheralSavedRepository.save(peripheralSaved).getId();
 	}
 
 }
