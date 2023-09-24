@@ -22,7 +22,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "peripheral_rating")
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,5 +46,10 @@ public class PeripheralRating {
 	private Integer rating;
 
 	private String comment;
+
+	public void updateRating(Integer rating, String comment){
+		this.rating = rating;
+		this.comment = comment;
+	}
 
 }

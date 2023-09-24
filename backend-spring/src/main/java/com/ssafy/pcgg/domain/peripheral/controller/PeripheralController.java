@@ -18,6 +18,7 @@ import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
 import com.ssafy.pcgg.domain.peripheral.dto.RatingRequestDto;
+import com.ssafy.pcgg.domain.peripheral.dto.RatingResponseDto;
 import com.ssafy.pcgg.domain.peripheral.service.PeripheralService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,19 +56,36 @@ public class PeripheralController {
 	@Operation(summary = "주변기기 후기(평점) 작성", description = "후기(평점)를 작성합니다.")
 	@PostMapping("/{category}/comments")
 	@CurrentUserId("userIdDto")
-	public ResponseEntity<?> addComment(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @RequestBody RatingRequestDto ratingRequestDto) {
+	public ResponseEntity<RatingResponseDto> addComment(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @RequestBody RatingRequestDto ratingRequestDto) {
 		logger.debug("addComment(), category = {}", category);
-		Long ratingId = peripheralService.addComment(userIdDto, category, ratingRequestDto);
-		return ResponseEntity.status(201).body(ratingId);
+		// Long ratingId = peripheralService.addComment(userIdDto, category, ratingRequestDto);
+		return ResponseEntity.status(201).body(peripheralService.addComment(userIdDto, category, ratingRequestDto));
 	}
 
 	@Operation(summary = "주변기기 후기(평점) 삭제", description = "후기(평점)를 삭제합니다.")
 	@DeleteMapping("/{category}/comments/{commentId}")
 	@CurrentUserId("userIdDto")
 	public ResponseEntity<Void> deleteComment(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @PathVariable Long commentId) {
-		logger.debug("deleteComment(), category = {}, pages = {}", category);
+		logger.debug("deleteComment(), category = {}", category);
 		peripheralService.deleteComment(userIdDto, commentId);
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "주변기기 후기(평점) 수정", description = "후기(평점)를 수정합니다.")
+	@PutMapping("/{category}/comments/{commentId}")
+	@CurrentUserId("userIdDto")
+	public ResponseEntity<RatingResponseDto> updateComment(UserIdDto userIdDto, HttpServletRequest request,
+		@PathVariable String category, @PathVariable Long commentId, @RequestBody RatingRequestDto ratingRequestDto) {
+		logger.debug("updateComment(), category = {}, commentId = {}", category, commentId);
+		return ResponseEntity.ok().body(peripheralService.updateComment(userIdDto, category, commentId, ratingRequestDto));
+	}
+
+	@Operation(summary = "주변기기 후기(평점) 조회", description = "후기(평점)를 조회합니다.")
+	@GetMapping("/{category}/comments")
+	public ResponseEntity<?> getComments(@PathVariable String category) {
+		logger.debug("getComments(), category = {}, pages = {}", category);
+		// TODO: 페이징 처리, 평균 평점
+		return ResponseEntity.ok().body(null);
 	}
 
 }
