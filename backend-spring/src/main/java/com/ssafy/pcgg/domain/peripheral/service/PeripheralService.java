@@ -141,9 +141,9 @@ public class PeripheralService {
 	}
 
 	@Transactional
-	public ReviewListDto getReviews(int pages){
+	public ReviewListDto getReviews(int pages, Long peripheralId){
 		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Slice<PeripheralReview> peripheralReviews = peripheralReviewRepository.findSliceBy(pageRequest);
+		Slice<PeripheralReview> peripheralReviews = peripheralReviewRepository.findSliceByPeripheralId(peripheralId, pageRequest);
 
 		List<Integer> ratingList = peripheralReviews.stream()
 			.map(review -> review.getRating())

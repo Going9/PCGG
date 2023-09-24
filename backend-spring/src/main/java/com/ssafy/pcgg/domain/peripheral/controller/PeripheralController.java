@@ -81,10 +81,10 @@ public class PeripheralController {
 	}
 
 	@Operation(summary = "주변기기 후기(평점) 조회", description = "후기(평점)를 조회합니다.")
-	@GetMapping("/{category}/reviews")
-	public ResponseEntity<ReviewListDto> getReviews(@PathVariable String category, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+	@GetMapping("/{category}/{peripheralId}/reviews")
+	public ResponseEntity<ReviewListDto> getReviews(@PathVariable String category, @PathVariable Long peripheralId, @RequestParam(value = "pages", defaultValue = "0") int pages) {
 		logger.debug("getReviews(), category = {}, pages = {}", category, pages);
-		return ResponseEntity.ok().body(peripheralService.getReviews(pages));
+		return ResponseEntity.ok().body(peripheralService.getReviews(pages, peripheralId));
 	}
 
 }
