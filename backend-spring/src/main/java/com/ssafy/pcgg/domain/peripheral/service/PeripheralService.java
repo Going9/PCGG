@@ -1,6 +1,9 @@
 package com.ssafy.pcgg.domain.peripheral.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,16 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
+import com.ssafy.pcgg.domain.peripheral.dto.ReviewDto;
+import com.ssafy.pcgg.domain.peripheral.dto.ReviewListDto;
 import com.ssafy.pcgg.domain.peripheral.dto.ReviewRequestDto;
 import com.ssafy.pcgg.domain.peripheral.dto.RatingResponseDto;
-import com.ssafy.pcgg.domain.peripheral.entity.PeripheralRating;
+import com.ssafy.pcgg.domain.peripheral.entity.PeripheralReview;
 import com.ssafy.pcgg.domain.peripheral.entity.PeripheralTypeNs;
 import com.ssafy.pcgg.domain.peripheral.repository.EtcRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.KeyboardRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.MonitorRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.MouseRepository;
-import com.ssafy.pcgg.domain.peripheral.repository.PeripheralRatingRepository;
-import com.ssafy.pcgg.domain.peripheral.repository.PreipheralTypeNsRepository;
+import com.ssafy.pcgg.domain.peripheral.repository.PeripheralReviewRepository;
+import com.ssafy.pcgg.domain.peripheral.repository.PeripheralTypeNsRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.PrinterRepository;
 import com.ssafy.pcgg.domain.user.UserEntity;
 import com.ssafy.pcgg.domain.user.UserRepository;
@@ -37,8 +42,8 @@ public class PeripheralService {
 	private final EtcRepository etcRepository;
 
 	private final UserRepository userRepository;
-	private final PreipheralTypeNsRepository preipheralTypeNsRepository;
-	private final PeripheralRatingRepository peripheralRatingRepository;
+	private final PeripheralTypeNsRepository peripheralTypeNsRepository;
+	private final PeripheralReviewRepository peripheralReviewRepository;
 
 	/**
 	* 주변기기 - 키보드
@@ -76,21 +81,22 @@ public class PeripheralService {
 
 	@Transactional
 	public RatingResponseDto addReview(UserIdDto userIdDto, String category, ReviewRequestDto reviewRequestDto){
-		PeripheralTypeNs peripheralTypeNs = preipheralTypeNsRepository.findByName(category);
+		PeripheralTypeNs peripheralTypeNs = peripheralTypeNsRepository.findByName(category);
 		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
 
-		PeripheralRating peripheralRating = PeripheralRating.builder()
+		PeripheralReview peripheralReview = PeripheralReview.builder()
 			.peripheralTypeNs(peripheralTypeNs)
 			.user(userEntity)
 			.peripheralId(reviewRequestDto.getPeripheralId())
 			.rating(reviewRequestDto.getRating())
 			.review(reviewRequestDto.getReview())
+			.createdAt(LocalDateTime.now())
 			.build();
 
 
 
-		Long ratingId =  peripheralRatingRepository.save(peripheralRating).getId();
+		Long ratingId =  peripheralReviewRepository.save(peripheralReview).getId();
 
 		// 평점 평균 계산
 		String avgRating = calculateAverageRating(reviewRequestDto.getPeripheralId(), category);
@@ -103,27 +109,27 @@ public class PeripheralService {
 
 	@Transactional
 	public void deleteReview(UserIdDto userIdDto, Long reviewId){
-		PeripheralRating peripheralRating = peripheralRatingRepository.findById(reviewId)
+		PeripheralReview peripheralReview = peripheralReviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 후기(평점)이 없습니다."));
 
-		if(!Objects.equals(peripheralRating.getUser().getUserId(), userIdDto.getUserId())) {
+		if(!Objects.equals(peripheralReview.getUser().getUserId(), userIdDto.getUserId())) {
 			throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
 		}
 
-		peripheralRatingRepository.delete(peripheralRating);
+		peripheralReviewRepository.delete(peripheralReview);
 	}
 
 	@Transactional
 	public RatingResponseDto updateReview(UserIdDto userIdDto, String category, Long reviewId, ReviewRequestDto reviewRequestDto){
-		PeripheralRating peripheralRating = peripheralRatingRepository.findById(reviewId)
+		PeripheralReview peripheralReview = peripheralReviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 후기(평점)이 없습니다."));
 
-		if(!Objects.equals(peripheralRating.getUser().getUserId(), userIdDto.getUserId())) {
+		if(!Objects.equals(peripheralReview.getUser().getUserId(), userIdDto.getUserId())) {
 			throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
 		}
 
-		peripheralRating.updateRating(reviewRequestDto.getRating(), reviewRequestDto.getReview());
-		Long ratingId = peripheralRatingRepository.save(peripheralRating).getId();
+		peripheralReview.updateRating(reviewRequestDto.getRating(), reviewRequestDto.getReview());
+		Long ratingId = peripheralReviewRepository.save(peripheralReview).getId();
 
 		// 평점 평균 계산
 		String avgRating = calculateAverageRating(reviewRequestDto.getPeripheralId(), category);
@@ -135,8 +141,39 @@ public class PeripheralService {
 	}
 
 	@Transactional
+	public ReviewListDto getReviews(int pages){
+		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Slice<PeripheralReview> peripheralReviews = peripheralReviewRepository.findSliceBy(pageRequest);
+
+		List<Integer> ratingList = peripheralReviews.stream()
+			.map(review -> review.getRating())
+			.collect(Collectors.toList());
+
+		double averageRating = ratingList.stream()
+			.mapToInt(Integer::intValue)
+			.average()
+			.orElse(0.0); // 만약 리스트가 비어있으면 기본값을 설정
+
+		return ReviewListDto.builder()
+			.avgRating(String.format("%.1f", averageRating))
+			.reviewDtos(peripheralReviews.map(this::convertToDto))
+			.build();
+	}
+
+	private ReviewDto convertToDto(PeripheralReview peripheralReview) {
+		return ReviewDto.builder()
+			.reviewId(peripheralReview.getId())
+			.userId(peripheralReview.getUser().getUserId())
+			.userNickname(peripheralReview.getUser().getNickname())
+			.rating(peripheralReview.getRating())
+			.review(peripheralReview.getReview())
+			.createdAt(peripheralReview.getCreatedAt())
+			.build();
+	}
+
+	@Transactional
 	public String calculateAverageRating(Long peripheralId, String type){
-		Double value = peripheralRatingRepository.findAverageRatingByTypeNameAndPeripheralId(type, peripheralId);
+		Double value = peripheralReviewRepository.findAverageRatingByTypeNameAndPeripheralId(type, peripheralId);
 		return String.format("%.1f", value);
 	}
 

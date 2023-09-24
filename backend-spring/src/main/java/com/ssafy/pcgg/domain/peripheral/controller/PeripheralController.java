@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
+import com.ssafy.pcgg.domain.peripheral.dto.ReviewListDto;
 import com.ssafy.pcgg.domain.peripheral.dto.ReviewRequestDto;
 import com.ssafy.pcgg.domain.peripheral.dto.RatingResponseDto;
 import com.ssafy.pcgg.domain.peripheral.service.PeripheralService;
@@ -58,7 +59,6 @@ public class PeripheralController {
 	@CurrentUserId("userIdDto")
 	public ResponseEntity<RatingResponseDto> addReview(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @RequestBody ReviewRequestDto reviewRequestDto) {
 		logger.debug("addReview(), category = {}", category);
-		// Long ratingId = peripheralService.addComment(userIdDto, category, reviewRequestDto);
 		return ResponseEntity.status(201).body(peripheralService.addReview(userIdDto, category, reviewRequestDto));
 	}
 
@@ -82,10 +82,9 @@ public class PeripheralController {
 
 	@Operation(summary = "주변기기 후기(평점) 조회", description = "후기(평점)를 조회합니다.")
 	@GetMapping("/{category}/reviews")
-	public ResponseEntity<?> getReviews(@PathVariable String category) {
-		logger.debug("getReviews(), category = {}, pages = {}", category);
-		// TODO: 페이징 처리, 평균 평점
-		return ResponseEntity.ok().body(null);
+	public ResponseEntity<ReviewListDto> getReviews(@PathVariable String category, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+		logger.debug("getReviews(), category = {}, pages = {}", category, pages);
+		return ResponseEntity.ok().body(peripheralService.getReviews(pages));
 	}
 
 }
