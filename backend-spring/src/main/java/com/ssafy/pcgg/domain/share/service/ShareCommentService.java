@@ -58,7 +58,7 @@ public class ShareCommentService {
 			.id(shareComment.getId())
 			.shareId(shareComment.getShare().getId())
 			.userId(shareComment.getUser().getUserId())
-			// .userName(shareComment.getUser().getNickname())	//추후 UserEntity에 nickname 추가시, 수정예정
+			.userNickname(shareComment.getUser().getNickname())
 			.content(shareComment.getContent())
 			.build();
 
