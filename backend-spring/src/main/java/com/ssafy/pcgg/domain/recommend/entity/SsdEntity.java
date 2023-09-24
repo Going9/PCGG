@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class SsdEntity {
     @Column(length = 100)
     private String name;
 
+    @Getter
     private Integer price;
 
     @Column(name="image_source", length=100)
@@ -27,6 +29,7 @@ public class SsdEntity {
     @Column(name="changed_date", nullable = false)
     private LocalDate changedDate;
 
+    @Getter
     @Column(name="pcie_ver")
     private Integer pcieVer;
 

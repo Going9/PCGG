@@ -40,6 +40,6 @@ public class RamEntity {
     private Boolean heatSink;
 
     @Setter
-    @Column(name = "class", columnDefinition = "tinyint")
+    @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
 }

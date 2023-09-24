@@ -50,6 +50,6 @@ public class CpuEntity {
     private int multiScore;
 
     @Setter
-    @Column(name = "class", columnDefinition = "tinyint")
+    @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
 }

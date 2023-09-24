@@ -46,6 +46,6 @@ public class PowerEntity {
     private Integer freeWarrantyPeriod;
 
     @Setter
-    @Column(name = "class", columnDefinition = "tinyint")
+    @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
 }
