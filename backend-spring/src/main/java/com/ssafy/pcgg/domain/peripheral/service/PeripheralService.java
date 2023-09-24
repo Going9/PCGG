@@ -1,18 +1,30 @@
 package com.ssafy.pcgg.domain.peripheral.service;
 
+import java.util.LongSummaryStatistics;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
+import com.ssafy.pcgg.domain.peripheral.dto.RatingRequestDto;
+import com.ssafy.pcgg.domain.peripheral.entity.PeripheralRating;
+import com.ssafy.pcgg.domain.peripheral.entity.PeripheralTypeNs;
 import com.ssafy.pcgg.domain.peripheral.repository.EtcRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.KeyboardRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.MonitorRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.MouseRepository;
+import com.ssafy.pcgg.domain.peripheral.repository.PeripheralRatingRepository;
+import com.ssafy.pcgg.domain.peripheral.repository.PreipheralTypeNsRepository;
 import com.ssafy.pcgg.domain.peripheral.repository.PrinterRepository;
+import com.ssafy.pcgg.domain.user.UserEntity;
+import com.ssafy.pcgg.domain.user.UserRepository;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +35,10 @@ public class PeripheralService {
 	private final MouseRepository mouseRepository;
 	private final PrinterRepository printerRepository;
 	private final EtcRepository etcRepository;
+
+	private final UserRepository userRepository;
+	private final PreipheralTypeNsRepository preipheralTypeNsRepository;
+	private final PeripheralRatingRepository peripheralRatingRepository;
 
 	/**
 	* 주변기기 - 키보드
@@ -57,4 +73,22 @@ public class PeripheralService {
 
 		return peripheralResponseDtoSlice;
 	}
+
+	@Transactional
+	public Long addComment(UserIdDto userIdDto, String category, RatingRequestDto ratingRequestDto){
+		PeripheralTypeNs peripheralTypeNs = preipheralTypeNsRepository.findByName(category);
+		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
+
+		PeripheralRating peripheralRating = PeripheralRating.builder()
+			.peripheralTypeNs(peripheralTypeNs)
+			.user(userEntity)
+			.peripheralId(ratingRequestDto.getPeripheralId())
+			.rating(ratingRequestDto.getRating())
+			.comment(ratingRequestDto.getComment())
+			.build();
+
+		return peripheralRatingRepository.save(peripheralRating).getId();
+	}
+
 }
