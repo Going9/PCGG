@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RatingRequestDto {
+public class ReviewRequestDto {
 	private Long peripheralId;
 	private Integer rating;
-	private String comment;
+	private String review;
 }

@@ -45,11 +45,12 @@ public class PeripheralRating {
 	@Column(nullable = false)
 	private Integer rating;
 
-	private String comment;
+	@Column(nullable = false)
+	private String review;
 
-	public void updateRating(Integer rating, String comment){
+	public void updateRating(Integer rating, String review){
 		this.rating = rating;
-		this.comment = comment;
+		this.review = review;
 	}
 
 }

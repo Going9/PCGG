@@ -1,9 +1,7 @@
 package com.ssafy.pcgg.domain.peripheral.service;
 
-import java.util.LongSummaryStatistics;
 import java.util.Objects;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.dto.PeripheralResponseDto;
-import com.ssafy.pcgg.domain.peripheral.dto.RatingRequestDto;
+import com.ssafy.pcgg.domain.peripheral.dto.ReviewRequestDto;
 import com.ssafy.pcgg.domain.peripheral.dto.RatingResponseDto;
 import com.ssafy.pcgg.domain.peripheral.entity.PeripheralRating;
 import com.ssafy.pcgg.domain.peripheral.entity.PeripheralTypeNs;
@@ -77,7 +75,7 @@ public class PeripheralService {
 	}
 
 	@Transactional
-	public RatingResponseDto addComment(UserIdDto userIdDto, String category, RatingRequestDto ratingRequestDto){
+	public RatingResponseDto addReview(UserIdDto userIdDto, String category, ReviewRequestDto reviewRequestDto){
 		PeripheralTypeNs peripheralTypeNs = preipheralTypeNsRepository.findByName(category);
 		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
@@ -85,9 +83,9 @@ public class PeripheralService {
 		PeripheralRating peripheralRating = PeripheralRating.builder()
 			.peripheralTypeNs(peripheralTypeNs)
 			.user(userEntity)
-			.peripheralId(ratingRequestDto.getPeripheralId())
-			.rating(ratingRequestDto.getRating())
-			.comment(ratingRequestDto.getComment())
+			.peripheralId(reviewRequestDto.getPeripheralId())
+			.rating(reviewRequestDto.getRating())
+			.review(reviewRequestDto.getReview())
 			.build();
 
 
@@ -95,7 +93,7 @@ public class PeripheralService {
 		Long ratingId =  peripheralRatingRepository.save(peripheralRating).getId();
 
 		// 평점 평균 계산
-		String avgRating = calculateAverageRating(ratingRequestDto.getPeripheralId(), category);
+		String avgRating = calculateAverageRating(reviewRequestDto.getPeripheralId(), category);
 
 		return RatingResponseDto.builder()
 			.ratingId(ratingId)
@@ -104,8 +102,8 @@ public class PeripheralService {
 	}
 
 	@Transactional
-	public void deleteComment(UserIdDto userIdDto, Long commentId){
-		PeripheralRating peripheralRating = peripheralRatingRepository.findById(commentId)
+	public void deleteReview(UserIdDto userIdDto, Long reviewId){
+		PeripheralRating peripheralRating = peripheralRatingRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 후기(평점)이 없습니다."));
 
 		if(!Objects.equals(peripheralRating.getUser().getUserId(), userIdDto.getUserId())) {
@@ -116,19 +114,19 @@ public class PeripheralService {
 	}
 
 	@Transactional
-	public RatingResponseDto updateComment(UserIdDto userIdDto, String category, Long commentId, RatingRequestDto ratingRequestDto){
-		PeripheralRating peripheralRating = peripheralRatingRepository.findById(commentId)
+	public RatingResponseDto updateReview(UserIdDto userIdDto, String category, Long reviewId, ReviewRequestDto reviewRequestDto){
+		PeripheralRating peripheralRating = peripheralRatingRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 후기(평점)이 없습니다."));
 
 		if(!Objects.equals(peripheralRating.getUser().getUserId(), userIdDto.getUserId())) {
 			throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
 		}
 
-		peripheralRating.updateRating(ratingRequestDto.getRating(), ratingRequestDto.getComment());
+		peripheralRating.updateRating(reviewRequestDto.getRating(), reviewRequestDto.getReview());
 		Long ratingId = peripheralRatingRepository.save(peripheralRating).getId();
 
 		// 평점 평균 계산
-		String avgRating = calculateAverageRating(ratingRequestDto.getPeripheralId(), category);
+		String avgRating = calculateAverageRating(reviewRequestDto.getPeripheralId(), category);
 
 		return RatingResponseDto.builder()
 			.ratingId(ratingId)
