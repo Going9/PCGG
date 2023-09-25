@@ -18,3 +18,5 @@ INSERT INTO part_gpu (name, price, image_source, extinct, changed_date, needed_p
 INSERT INTO part_case (name, price, image_source, extinct, changed_date, extended_atx, standard_atx, micro_atx, mini_atx, width, depth, max_power_depth, max_gpu_depth, max_cooler_depth) VALUES ('chassis', 600, 'IS', true, now(), true, true, true, true, 1.1, 2.2, 3.3, 4.4, 5.5);
 INSERT INTO part_power (name, price, image_source, extinct, changed_date, size, grade, output, depth, free_warranty_period) VALUES ('power', 100, 'IS', true, now(), 1, 'grade', 101, 3.3, 5);
 INSERT INTO part_cooler (name, price, image_source, extinct, changed_date, form, type, free_warranty_period, height, fan_count, max_fan_noise) VALUES ('cooler', 100, 'IS', true, now(), '소켓정보', '타입', 3, 3.3, 5, 5.1);
+
+INSERT INTO peripheral_type_ns(name) VALUES ('keyboard'), ('monitor'), ('printer'), ('mouse'), ('etc');
