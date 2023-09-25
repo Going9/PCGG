@@ -63,7 +63,7 @@
 <script setup>
 import { ref } from "vue";
 import { userStore } from "@/store/userStore";
-import { signup } from "@/api/userAPI";
+import { signupAPI } from "@/api/userAPI";
 
 const store = userStore();
 const visible = ref(false);
@@ -84,10 +84,10 @@ const signupEvent = () => {
     nickname: nickname.value,
   };
 
-  signup(
+  signupAPI(
     userInput,
     ({ data }) => {
-      const msg = "회원가입이 완료되었습니다.";
+      let msg = "회원가입이 완료되었습니다.";
       if (data == null) {
         msg = "회원가입이 실패했습니다.";
       }
