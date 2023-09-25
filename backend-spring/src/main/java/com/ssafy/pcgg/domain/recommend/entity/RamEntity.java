@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -42,4 +43,7 @@ public class RamEntity {
     @Setter
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
+
+    @Column(columnDefinition = "DECIMAL(10,2)")
+    private BigDecimal capacity;
 }

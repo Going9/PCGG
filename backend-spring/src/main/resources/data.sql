@@ -15,7 +15,7 @@ INSERT INTO part_mainboard (name, price, image_source, extinct, changed_date, gr
 INSERT INTO part_ssd (name, price, image_source, extinct, changed_date, pcie_ver, reading_speed, writing_speed) VALUES ('ssd', 300, 'IS', false, now(), 1, 3, 5);
 INSERT INTO part_ram (name, price, image_source, extinct, changed_date, memory_spec, memory_clock, heat_sink) VALUES ('ram', 400, 'IS', false, now(), 'ms', 3, false);
 INSERT INTO part_gpu (name, price, image_source, extinct, changed_date, needed_power, width, thickness) VALUES ('gpu', 500, 'IS', true, now(), true, 1.1, 2.2);
-INSERT INTO part_case (name, price, image_source, extinct, changed_date, extended_atx, standard_atx, micro_atx, mini_atx, width, depth, max_power_depth, max_gpu_depth, max_cooler_depth) VALUES ('chassis', 600, 'IS', true, now(), true, true, true, true, 1.1, 2.2, 3.3, 4.4, 5.5);
+INSERT INTO part_chassis (name, price, image_source, extinct, changed_date, extended_atx, standard_atx, micro_atx, mini_itx, width, depth, max_power_depth, max_gpu_depth, max_cooler_depth) VALUES ('chassis', 600, 'IS', true, now(), true, true, true, true, 1.1, 2.2, 3.3, 4.4, 5.5);
 INSERT INTO part_power (name, price, image_source, extinct, changed_date, size, grade, output, depth, free_warranty_period) VALUES ('power', 100, 'IS', true, now(), 1, 'grade', 101, 3.3, 5);
 INSERT INTO part_cooler (name, price, image_source, extinct, changed_date, form, type, free_warranty_period, height, fan_count, max_fan_noise) VALUES ('cooler', 100, 'IS', true, now(), '소켓정보', '타입', 3, 3.3, 5, 5.1);
 

@@ -7,8 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Entity
-@Table(name = "usage_ns")
-public class UsageNsEntity {
+@Table(name = "part_type_ns")
+public class PartTypeNsEntity {
 
     @Id
     @Getter

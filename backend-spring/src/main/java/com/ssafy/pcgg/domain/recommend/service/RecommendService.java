@@ -1,5 +1,7 @@
 package com.ssafy.pcgg.domain.recommend.service;
 
+import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
+import com.ssafy.pcgg.domain.recommend.dto.QuoteResponseDto;
 import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartAllFailedException;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
@@ -13,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +32,10 @@ public class RecommendService {
     private final RamRepository ramRepository;
     private final GpuRepository gpuRepository;
     private final PowerRepository powerRepository;
+    private final SsdRepository ssdRepository;
+    private final MainboardRepository mainboardRepository;
+    private final ChassisRepository chassisRepository;
+
 
     public HttpStatus classifyAndCreateCandidate() {
         //분류
@@ -114,5 +122,93 @@ public class RecommendService {
                     , (List<RamEntity>) partList.get(1)
                     , (List<GpuEntity>) partList.get(2));
         }
+    }
+
+    public List<QuoteResponseDto> createRecommend(QuoteRequestDto quoteRequestDto){
+        /*
+        cpu, ram, gpu는 quotecandidate로 정해져있음.
+        남은 ssd, mainboard, case, power를 정해야함.
+        ssd는 유저 입력값에 따라 조절하고
+        mainboard는 cpu, ram, ssd, 용도에 따라 정하고
+        case는 mainboard, gpu에 따라 정해져있다.
+        power는 위 부품들의 필요전력 이상, 용도에 해당하는 등급 이상으로 추천한다.
+         */
+        int budget = quoteRequestDto.getBudget();
+
+        List<QuoteCandidateEntity> quoteCandidateList = quoteCandidateRepository.findAll();
+        List<QuoteResponseDto> responseList = new ArrayList<>();
+        //SSD > Mainboard > Chassis > Power 순으로 List 생성
+        for(QuoteCandidateEntity quoteCandidate : quoteCandidateList){
+            CpuEntity cpu = quoteCandidate.getCpu();
+            RamEntity ram = quoteCandidate.getRam();
+            GpuEntity gpu = quoteCandidate.getGpu();
+            int budgetLeft = budget - quoteCandidate.getTotalPrice();
+            String usage = quoteRequestDto.getUsage();
+            String caseSize = quoteRequestDto.getCaseSize();
+            double ssdSize = quoteRequestDto.getSsdSize();
+            int priority = quoteRequestDto.getPriority();
+            boolean as = quoteRequestDto.isAs();
+
+            //1.SSD는 사용자가 선택한 용량에 따라 필터링
+            List<SsdEntity> ssdList = ssdRepository.findByCapacity(new BigDecimal(quoteRequestDto.getSsdSize()/1000.0));
+            logger.debug("ssd 용량기반으로 리스트화 완료, "+ssdList.size());
+            for(SsdEntity ssd : ssdList){
+                if(budgetLeft < ssd.getPrice()) continue;
+                /*
+                2. Mainboard는
+                    유저가 고른 caseSize와 mainboard의 size가 맞아야하고
+                    cpu의 socket_info가 mainboard의 socket_info와 일치하고
+                    ram의 memory_spec과 mainboard의 memory_spec이 일치하고
+                    ssd의 pcie_ver에 해당하는 mainboard의 pcie_ver이 true여야 하고
+                    class가 quoteRequestDto의 usage에 따른 class와 일치해야한다.
+                 */
+                int requiredClass = recommendUtil.getClassByUsageAndPartType(usage,"mainboard");
+
+                List<MainboardEntity> mainboardList = mainboardRepository.findByCaseSizeSocketAndClassAndMemoryAndPcie(
+                        caseSize,
+                        quoteCandidate.getCpu().getSocketInfo(),
+                        requiredClass,
+                        quoteCandidate.getRam().getMemorySpec(),
+                        ssd.getPcieVer()
+                );
+
+                logger.debug("사용자쿼리 findBySocketAndClassAndMemoryAndPcie 성공, "+mainboardList.size());
+
+                for(MainboardEntity mainboard : mainboardList){
+                    if(budgetLeft - ssd.getPrice() < mainboard.getPrice()) continue;
+                    /*
+                    3. Chassis는
+                        mainboard의 size에 따른 chassis의 ~_atx컬럼이 true여야 하고
+                        gpu의 길이 < chassis의 depth 여야한다.
+                     */
+                    List<ChassisEntity> chassisList = chassisRepository.findByCaseSizeAndDepth(caseSize, gpu.getWidth());//size(ATX), max_gpu_depth,
+                    for(ChassisEntity chassis : chassisList){
+                        if(budgetLeft - ssd.getPrice() - mainboard.getPrice() < chassis.getPrice()) continue; //todo:총액 계산 메소드 제작필요
+                        //int totalPower = recommendUtil.getTotalPower(cpu, ram, gpu, ssd, mainboard, chassis)
+                        List<PowerEntity> powerList = powerRepository.findByChassisAndClass(
+                                chassis.getMaxPowerDepth(),
+                                recommendUtil.getClassByUsageAndPartType(usage,"power")
+                        ); //출력, 깊이=샤씨깊이, 분류
+                        for(PowerEntity power : powerList){
+                            if(budgetLeft - ssd.getPrice() - mainboard.getPrice() - chassis.getPrice() < power.getPrice()) continue;
+                            QuoteResponseDto responseDto = QuoteResponseDto.builder()
+                                    .cpu(cpu)
+                                    .ram(ram)
+                                    .gpu(gpu)
+                                    .ssd(ssd)
+                                    .mainboard(mainboard)
+                                    .chassis(chassis)
+                                    .power(power)
+                                    .totalPrice(cpu.getPrice()+ram.getPrice()+gpu.getPrice()+ssd.getPrice()+mainboard.getPrice()+chassis.getPrice()+power.getPrice())
+                                    .build();
+                            responseList.add(responseDto);
+                        }
+                    }
+                }
+            }
+        } //responseDto 삽입 완료
+        //todo:연산이 너무 많음. 중간중간에서 리스트의 가지수를 줄이는 로직 추가 필요.
+
+        return responseList;
     }
 }
