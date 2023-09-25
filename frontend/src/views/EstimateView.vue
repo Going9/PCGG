@@ -29,110 +29,31 @@
       </div>
       <div class="usage">
         <h3>용도</h3>
-        <div class="sub-select">
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceUsage = 'docs'"
-            :class="{ active: choiceUsage == 'docs' }"
-          >
-            <div>
-              <p>사무용</p>
-              <img
-                :src="docsWIcon"
-                alt="noimage"
-                v-if="choiceUsage == 'docs'"
-              />
-              <img :src="docsIcon" alt="noimage" v-else />
-            </div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceUsage = 'game'"
-            :class="{ active: choiceUsage == 'game' }"
-          >
-            <div>
-              <p>게이밍</p>
-              <img
-                :src="gameWIcon"
-                alt="noimage"
-                v-if="choiceUsage == 'game'"
-              />
-              <img :src="gameIcon" alt="noimage" v-else />
-            </div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceUsage = 'video'"
-            :class="{ active: choiceUsage == 'video' }"
-          >
-            <div>
-              <p>영상편집</p>
-              <img
-                :src="videoWIcon"
-                alt="noimage"
-                v-if="choiceUsage == 'video'"
-              />
-              <img :src="videoIcon" alt="noimage" v-else />
-            </div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceUsage = 'three'"
-            :class="{ active: choiceUsage == 'three' }"
-          >
-            <div>
-              <p>3d 디자인</p>
-              <img
-                :src="threeWIcon"
-                alt="noimage"
-                v-if="choiceUsage == 'three'"
-              />
-              <img :src="threeIcon" alt="noimage" v-else />
-            </div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceUsage = 'broadcast'"
-            :class="{ active: choiceUsage == 'broadcast' }"
-          >
-            <div>
-              <p>개인방송</p>
-              <img
-                :src="broadcastWIcon"
-                alt="noimage"
-                v-if="choiceUsage == 'broadcast'"
-              />
-              <img :src="broadcastIcon" alt="noimage" v-else />
-            </div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceUsage = 'develop'"
-            :class="{ active: choiceUsage == 'develop' }"
-          >
-            <div>
-              <p>고성능개발</p>
-              <img
-                :src="developWIcon"
-                alt="noimage"
-                v-if="choiceUsage == 'develop'"
-              />
-              <img :src="developIcon" alt="noimage" v-else />
-            </div>
-          </V-btn>
+        <div class="usage-combo">
+          <v-select
+            v-for="(combo, index) in choiceUsage"
+            :key="index"
+            v-model="combo.selectedItem"
+            :items="combo.items.map((item) => item.label)"
+            :label="combo.label"
+            @click="resetOtherCombos(index)"
+            variant="solo"
+            class="cleanbtn"
+          ></v-select>
         </div>
       </div>
     </div>
     <div class="selecttwo">
       <div class="budget">
         <h3>예산</h3>
-        <v-text-field label="" variant="outlined" suffix="원"></v-text-field>
+        <v-text-field
+          label=""
+          variant="outlined"
+          suffix="원"
+          v-model="choiceBudget"
+          type="number"
+          step="10000"
+        ></v-text-field>
       </div>
       <div class="os" v-if="choiceLaptop">
         <h3>운영체체 설치</h3>
@@ -188,49 +109,39 @@
           </V-btn>
         </div>
       </div>
-      <div class="size" v-if="!choiceLaptop">
+      <div class="case" v-if="!choiceLaptop">
         <h3>케이스 크기</h3>
-        <div class="sub-select">
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceSize = 'XL'"
-            :class="{ active: choiceSize == 'XL' }"
-          >
-            <div class="as-value">XL</div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceSize = 'L'"
-            :class="{ active: choiceSize == 'L' }"
-          >
-            <div class="as-value">L</div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceSize = 'M'"
-            :class="{ active: choiceSize == 'M' }"
-          >
-            <div class="as-value">M</div>
-          </V-btn>
-          <V-btn
-            class="btn-sub"
-            variant="flat"
-            @click="choiceSize = 'S'"
-            :class="{ active: choiceSize == 'S' }"
-          >
-            <div class="as-value">S</div>
-          </V-btn>
+        <div class="usage-combo">
+          <v-select
+            v-for="(combo, index) in choiceCase"
+            :key="index"
+            v-model="combo.selectedItem"
+            :items="combo.items"
+            :label="combo.label"
+            variant="solo"
+          ></v-select>
+        </div>
+      </div>
+      <div class="ssd" v-if="!choiceLaptop">
+        <h3>SSD 용량</h3>
+        <div class="usage-combo">
+          <v-select
+            v-for="(combo, index) in choiceSsd"
+            :key="index"
+            v-model="combo.selectedItem"
+            :items="combo.items"
+            :label="combo.label"
+            variant="solo"
+          ></v-select>
         </div>
       </div>
     </div>
 
-    <v-divider
-      class="border-opacity-100"
-      style="padding: 0rem 2rem"
-    ></v-divider>
+    <div class="result">
+      <v-btn color="#DA0000" class="callrecommend" @click="addEstimate()">
+        추천받기</v-btn
+      >
+    </div>
   </div>
 </template>
 
@@ -238,28 +149,78 @@
 import { ref, computed } from "vue";
 import { desktopIcon } from "@/assets/Icon";
 import { laptopIcon } from "@/assets/Icon";
-import { docsIcon } from "@/assets/Icon";
-import { gameIcon } from "@/assets/Icon";
-import { videoIcon } from "@/assets/Icon";
-import { threeIcon } from "@/assets/Icon";
-import { broadcastIcon } from "@/assets/Icon";
-import { developIcon } from "@/assets/Icon";
 import { desktopWIcon } from "@/assets/Icon";
 import { laptopWIcon } from "@/assets/Icon";
-import { docsWIcon } from "@/assets/Icon";
-import { gameWIcon } from "@/assets/Icon";
-import { videoWIcon } from "@/assets/Icon";
-import { threeWIcon } from "@/assets/Icon";
-import { broadcastWIcon } from "@/assets/Icon";
-import { developWIcon } from "@/assets/Icon";
 import { OWIcon } from "@/assets/Icon";
 import { OBIcon } from "@/assets/Icon";
 import { XWIcon } from "@/assets/Icon";
 import { XBIcon } from "@/assets/Icon";
+import { useEstimateStore } from "@/store/estimateStore";
+
+const store = useEstimateStore();
 
 const choiceLaptop = ref(true);
 
-const choiceUsage = ref(null);
+const choiceUsage = ref([
+  {
+    selectedItem: null,
+    items: [
+      { value: "가성비사무", label: "가성비 사무" },
+      { value: "고성능사무", label: "고성능 사무" },
+    ],
+    label: "사무용",
+  },
+  {
+    selectedItem: null,
+    items: [
+      { value: "캐주얼게임", label: "캐주얼 게임" },
+      { value: "중사양게임", label: "중사양 게임" },
+      { value: "고사양게임", label: "고사양 게임" },
+    ],
+    label: "게이밍",
+  },
+  {
+    selectedItem: null,
+    items: [
+      { value: "일반영상편집", label: "일반" },
+      { value: "전문영상편집", label: "전문가용" },
+    ],
+    label: "영상편집",
+  },
+  {
+    selectedItem: null,
+    items: [{ value: "3D디자인", label: "3D 디자인" }],
+    label: "3D 디자인",
+  },
+  {
+    selectedItem: null,
+    items: [
+      { value: "일반방송", label: "일반 방송" },
+      { value: "캐주얼게임방송", label: "캐주얼 게임" },
+      { value: "고성능게임방송", label: "고사양 게임" },
+    ],
+    label: "개인방송",
+  },
+  {
+    selectedItem: null,
+    items: [{ value: "고사양개발", label: "고성능 개발" }],
+    label: "고성능 개발",
+  },
+]);
+
+const resetOtherCombos = (currentIndex) => {
+  choiceUsage.value.forEach((combo, index) => {
+    if (index !== currentIndex) {
+      combo.selectedItem = null;
+    }
+  });
+};
+
+const choiceBudget = ref("");
+
+const budgetValue = computed(() => {
+  return Number(choiceBudget.value);
+});
 
 const choiceOs = ref(null);
 
@@ -273,10 +234,101 @@ const color = computed(() => {
 
 const choiceAs = ref(null);
 
-const choiceSize = ref(null);
+const choiceCase = ref([
+  {
+    selectedItem: null,
+    items: ["micro", "mini", "standard", "extend"],
+    label: "케이스 크기",
+  },
+]);
+
+const choiceSsd = ref([
+  {
+    selectedItem: null,
+    items: ["128GB", "256GB", "512GB", "1TB", "2TB", "4TB", "8TB"],
+    label: "SSD 용량",
+  },
+]);
+
+const estimate = ref([]);
+
+const addEstimate = () => {
+  if (choiceLaptop.value) {
+    estimate.value.push("laptop");
+  } else {
+    estimate.value.push("desktop");
+  }
+
+  choiceUsage.value.forEach((combo) => {
+    if (combo.selectedItem) {
+      const selectedItemLabel = combo.selectedItem;
+      const matchingItem = combo.items.find(
+        (item) => item.label === selectedItemLabel
+      );
+      if (matchingItem) {
+        const selectedItemValue = matchingItem.value;
+        estimate.value.push(selectedItemValue);
+      }
+    }
+  });
+
+  estimate.value.push(budgetValue.value);
+
+  if (choiceOs.value == "ok") {
+    estimate.value.push(true);
+  } else {
+    estimate.value.push(false);
+  }
+
+  estimate.value.push(priorityValue.value);
+
+  if (choiceAs.value) {
+    estimate.value.push(true);
+  } else {
+    estimate.value.push(false);
+  }
+
+  choiceCase.value.forEach((combo) => {
+    if (combo.selectedItem) {
+      estimate.value.push(combo.selectedItem);
+    }
+  });
+
+  choiceSsd.value.forEach((combo) => {
+    if (combo.selectedItem == "128GB") {
+      estimate.value.push(100);
+    } else if (combo.selectedItem == "256GB") {
+      estimate.value.push(200);
+    } else if (combo.selectedItem == "512GB") {
+      estimate.value.push(500);
+    } else if (combo.selectedItem == "1TB") {
+      estimate.value.push(1000);
+    } else if (combo.selectedItem == "2TB") {
+      estimate.value.push(2000);
+    } else if (combo.selectedItem == "4TB") {
+      estimate.value.push(4000);
+    } else {
+      estimate.value.push(8000);
+    }
+  });
+
+  if (estimate.value[0] == "desktop") {
+    store.callEstimate(estimate.value);
+  }
+
+  console.log(estimate.value);
+  console.log(choiceBudget.value);
+  console.log(budgetValue.value);
+
+  estimate.value = [];
+};
 </script>
 
 <style scoped>
+::v-deep(.v-field__append-inner) {
+  display: none;
+}
+
 .container {
   margin-top: 2rem;
 }
@@ -293,7 +345,6 @@ const choiceSize = ref(null);
   margin-right: 2%;
   justify-content: space-between;
 }
-
 .btn-main {
   display: flex;
   height: 10rem !important;
@@ -326,6 +377,16 @@ const choiceSize = ref(null);
   margin-left: 2%;
 }
 
+.usage-combo {
+  display: flex;
+  height: 100%;
+}
+
+.cleanbtn {
+  max-width: 15% !important;
+  margin-right: 1%;
+}
+
 .btn-sub {
   display: flex;
   height: 7rem !important;
@@ -351,6 +412,7 @@ const choiceSize = ref(null);
 .selecttwo {
   margin: 2%;
   display: flex;
+  justify-content: space-evenly;
 }
 
 .budget {
@@ -378,8 +440,24 @@ const choiceSize = ref(null);
   font-weight: bold;
 }
 
-.size {
-  width: 35%;
+.case {
+  width: 15%;
   padding-right: 2%;
+}
+
+.ssd {
+  width: 15%;
+  padding-right: 2%;
+}
+
+.result {
+  margin: 0% 2%;
+}
+
+.callrecommend {
+  height: 4rem !important;
+  width: 100%;
+  font-size: large;
+  font-weight: bolder;
 }
 </style>

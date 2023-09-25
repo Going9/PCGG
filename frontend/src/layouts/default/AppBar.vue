@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink } from "vue-router";
 import { test } from "@/api/userAPI";
 import { userStore } from "@/store/userStore";
 import router from "@/router";
