@@ -24,16 +24,6 @@ public class QuoteCandidateEntity {
 
     @ManyToOne
     @NotNull
-    @JoinColumn(name="mainboard_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private MainboardEntity mainboard;
-
-    @ManyToOne
-    @NotNull
-    @JoinColumn(name="ssd_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private SsdEntity ssd;
-
-    @ManyToOne
-    @NotNull
     @JoinColumn(name="ram_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private RamEntity ram;
 
@@ -41,21 +31,6 @@ public class QuoteCandidateEntity {
     @NotNull
     @JoinColumn(name="gpu_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private GpuEntity gpu;
-
-    @ManyToOne
-    @NotNull
-    @JoinColumn(name="chassis_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private ChassisEntity chassis;
-
-    @ManyToOne
-    @NotNull
-    @JoinColumn(name="power_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private PowerEntity power;
-
-    @ManyToOne
-    @NotNull
-    @JoinColumn(name="cooler_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CoolerEntity cooler;
 
     @Column(name = "bench_score")
     private Integer benchScore;
