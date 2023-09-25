@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 
 @Entity
-@Getter
 @Table(name = "part_cpu")
 public class CpuEntity {
     @Id
@@ -18,6 +17,7 @@ public class CpuEntity {
     @Column(length = 50)
     private String name;
 
+    @Getter
     private Integer price;
 
     @Column(name="image_source", length=100)
@@ -25,10 +25,14 @@ public class CpuEntity {
 
     private Boolean extinct;
 
+    @Getter
     @Column(name="socket_info", length=20)
     private String socketInfo;
 
+    @Getter
     private Boolean ddr4;
+
+    @Getter
     private Boolean ddr5;
 
     @Column(name = "integrated_graphics")

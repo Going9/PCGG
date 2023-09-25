@@ -18,6 +18,7 @@ public class PowerEntity {
     @Column(length = 100)
     private String name;
 
+    @Getter
     private Integer price;
 
     @Column(name="image_source", length=200)

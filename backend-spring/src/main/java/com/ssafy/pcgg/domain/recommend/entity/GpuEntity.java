@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.PartitionKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +19,7 @@ public class GpuEntity {
     @Column(length = 100)
     private String name;
 
+    @Getter
     private Integer price;
 
     @Column(name="image_source", length=100)
@@ -35,9 +35,9 @@ public class GpuEntity {
     @Column(name = "needed_power")
     private Integer neededPower;
 
+    @Getter
     @Column(columnDefinition = "DECIMAL(7,2)")
     //@Column(precision = 7, scale = 2)
-
     private BigDecimal width;
 
     @Column(columnDefinition = "DECIMAL(7,2)")

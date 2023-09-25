@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,10 @@ public class RecommendUtil {
     private final RamRepository ramRepository;
     private final GpuRepository gpuRepository;
     private final PowerRepository powerRepository;
+    private final PartTypeNsRepository partTypeNsRepository;
     private final Logger logger = LoggerFactory.getLogger(RecommendUtil.class.getName());
+
+
 
     @SuppressWarnings("unchecked")
     @Transactional
@@ -41,8 +46,7 @@ public class RecommendUtil {
     public void classifyGpu(List<?> partList) {
         Integer performance;
         for(GpuEntity gpu : (List<GpuEntity>)partList) {
-            //gpu 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
-            performance = 100;//gpu.getPerformance();
+            performance = 100;//gpu.getPerformance(); //todo:gpu 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             if(performance<1000) gpu.setClassColumn(LOW);
             else if(performance<2000) gpu.setClassColumn(MIDDLE);
             else if(performance<3000) gpu.setClassColumn(GOOD);
@@ -57,8 +61,7 @@ public class RecommendUtil {
         int capacity;
 //        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
-            //Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
-            capacity = 8;//ram.getCapacity();
+            capacity = 8;//ram.getCapacity(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             if(capacity==4) ram.setClassColumn(LOW);
             else if(capacity==8) ram.setClassColumn(MIDDLE);
             else if(capacity==16) ram.setClassColumn(GOOD);
@@ -71,8 +74,7 @@ public class RecommendUtil {
     public void classifyCpu(List<?> partList) {
         int performance;
         for(CpuEntity cpu : (List<CpuEntity>)partList){
-            //Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
-            performance = 8; //cpu.getSingleScore();
+            performance = 8; //cpu.getSingleScore(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             if(performance<1600) cpu.setClassColumn(LOW);
             else if(performance<1800) cpu.setClassColumn(MIDDLE);
             else if(performance<2000) cpu.setClassColumn(GOOD);
@@ -199,5 +201,68 @@ public class RecommendUtil {
         return cpuRepository.findAllByClassColumn(classColumn);
     }
 
-
+    public int getClassByUsageAndPartType(String usage, String partType) throws QuoteCandidateException{
+        //용도에 따른 부품의 별 성능수준(Class)을 반환하는 Util 메소드
+        int result;
+        //읽는법: cpu의 용도가 "가성비사무"면 요구하는 성능수준은 LOW(1)
+        if(partType.equals("cpu")){
+            result = switch(usage){
+                case "가성비사무","저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
+                case "고성능사무", "중사양게임" -> PerformanceRequirement.MIDDLE;
+                case "일반영상편집", "일반방송", "캐주얼게임방송", "고사양개발" -> PerformanceRequirement.GOOD;
+                case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
+                default -> throw new QuoteCandidateException("잘못된 usage In cpu. check "+usage);
+            };
+        } else if(partType.equals("mainboard")){
+            result = switch(usage){
+                case "가성비사무","저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
+                case "고성능사무", "중사양게임", "일반영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.MIDDLE;
+                case "고사양개발" -> PerformanceRequirement.GOOD;
+                case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
+                default -> throw new QuoteCandidateException("잘못된 usage In mainboard. check "+usage);
+            };
+        } else if(partType.equals("ram")){
+            result = switch(usage){
+                case "가성비사무","저사양개발", "일반방송" -> PerformanceRequirement.LOW;
+                case "고성능사무", "캐주얼게임", "중사양게임", "일반영상편집", "캐주얼게임방송"  -> PerformanceRequirement.MIDDLE;
+                case "고사양게임" -> PerformanceRequirement.GOOD;
+                case "전문영상편집", "3d디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
+                default -> throw new QuoteCandidateException("잘못된 usage In ram. check "+usage);
+            };
+        } else if(partType.equals("gpu")){
+            result = switch(usage){
+                case "가성비사무","저사양개발", "고성능사무", "캐주얼게임" -> PerformanceRequirement.LOW;
+                case "중사양게임", "일반영상편집" -> PerformanceRequirement.MIDDLE;
+                case "고사양게임", "3d디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
+                case "전문영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.GOOD;
+                default -> throw new QuoteCandidateException("잘못된 usage In gpu. check "+usage);
+            };
+        } else if(partType.equals("power")){
+            result = switch(usage){
+                case "가성비사무","저사양개발", "캐주얼게임", "일반영상편집" -> PerformanceRequirement.LOW;
+                case "고성능사무", "중사양게임", "전문영상편집", "일반방송", "캐주얼게임방송", "고사양개발" -> PerformanceRequirement.MIDDLE;
+                case "고사양게임", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
+                default -> throw new QuoteCandidateException("잘못된 usage In power. check "+usage);
+            };
+        } else throw new QuoteCandidateException("PartType이 잘못되었음 : "+partType);
+        return result;
+    }
 }
+
+/*
+            result = switch(usage){
+                case "가성비사무","저사양개발" -> PerformanceRequirement.;
+                case "고성능사무" -> PerformanceRequirement.;
+                case "캐주얼게임" -> PerformanceRequirement.;
+                case "중사양게임" -> PerformanceRequirement.;
+                case "고사양게임" -> PerformanceRequirement.;
+                case "일반영상편집" -> PerformanceRequirement.;
+                case "전문영상편집" -> PerformanceRequirement.;
+                case "3d디자인" -> PerformanceRequirement.;
+                case "일반방송" -> PerformanceRequirement.;
+                case "캐주얼게임방송" -> PerformanceRequirement.;
+                case "고성능게임방송" -> PerformanceRequirement.;
+                case "고사양개발" -> PerformanceRequirement.;
+                default -> throw new QuoteCandidateException("용도 매칭되지 않음. usage_ns의 레코드 점검필요");
+            }
+ */
