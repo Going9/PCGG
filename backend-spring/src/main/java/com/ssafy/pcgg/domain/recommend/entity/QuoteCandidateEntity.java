@@ -57,10 +57,10 @@ public class QuoteCandidateEntity {
     @JoinColumn(name="cooler_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CoolerEntity cooler;
 
-    @Column(name = "bench_score", nullable = true)
+    @Column(name = "bench_score")
     private Integer benchScore;
 
-    @Column(name = "total_price", nullable = true)
+    @Column(name = "total_price")
     private Integer totalPrice;
 
     @NotNull
