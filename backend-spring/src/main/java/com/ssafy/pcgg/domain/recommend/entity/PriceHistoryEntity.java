@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
+@Table(name = "price_history")
 @Entity
 public class PriceHistoryEntity {
     @Id
