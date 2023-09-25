@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +78,8 @@ public class PeripheralService {
 			peripheralResponseDtoSlice =  printerRepository.findSliceBy(pageRequest);
 		} else if(category.equals("etc")){
 			peripheralResponseDtoSlice =  etcRepository.findSliceBy(pageRequest);
+		} else{
+			throw new IllegalArgumentException("유효하지 않은 주변기기 카테고리입니다.");
 		}
 
 		return peripheralResponseDtoSlice;
@@ -97,8 +100,6 @@ public class PeripheralService {
 			.review(reviewRequestDto.getReview())
 			.createdAt(LocalDateTime.now())
 			.build();
-
-
 
 		Long ratingId =  peripheralReviewRepository.save(peripheralReview).getId();
 
@@ -127,6 +128,38 @@ public class PeripheralService {
 	public RatingResponseDto updateReview(UserIdDto userIdDto, String category, Long reviewId, ReviewRequestDto reviewRequestDto){
 		PeripheralReview peripheralReview = peripheralReviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 후기(평점)이 없습니다."));
+
+		JpaRepository<?, Long> repository = null;
+		String errorMessage = null;
+
+		switch (category) {
+			case "keyboard":
+				repository = keyboardRepository;
+				errorMessage = "해당 키보드 제품이 없습니다.";
+				break;
+			case "mouse":
+				repository = mouseRepository;
+				errorMessage = "해당 마우스 제품이 없습니다.";
+				break;
+			case "monitor":
+				repository = monitorRepository;
+				errorMessage = "해당 모니터 제품이 없습니다.";
+				break;
+			case "printer":
+				repository = printerRepository;
+				errorMessage = "해당 프린터 제품이 없습니다.";
+				break;
+			case "etc":
+				repository = etcRepository;
+				errorMessage = "해당 주변기기 제품 정보가 없습니다.";
+				break;
+			default:
+				throw new IllegalArgumentException("유효하지 않은 카테고리입니다.");
+		}
+
+		if (repository != null && !repository.existsById(reviewRequestDto.getPeripheralId())) {
+			throw new IllegalArgumentException(errorMessage);
+		}
 
 		if(!Objects.equals(peripheralReview.getUser().getUserId(), userIdDto.getUserId())) {
 			throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");

@@ -56,28 +56,28 @@ public class PeripheralController {
 
 	@Operation(summary = "주변기기 후기(평점) 작성", description = "후기(평점)를 작성합니다.")
 	@PostMapping("/{category}/reviews")
-	@CurrentUserId("userIdDto")
-	public ResponseEntity<RatingResponseDto> addReview(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @RequestBody ReviewRequestDto reviewRequestDto) {
+	@CurrentUserId("userId")
+	public ResponseEntity<?> addReview(UserIdDto userId, HttpServletRequest request, @PathVariable String category, @RequestBody ReviewRequestDto reviewRequestDto) {
 		logger.debug("addReview(), category = {}", category);
-		return ResponseEntity.status(201).body(peripheralService.addReview(userIdDto, category, reviewRequestDto));
+		return ResponseEntity.status(201).body(peripheralService.addReview(userId, category, reviewRequestDto));
 	}
 
 	@Operation(summary = "주변기기 후기(평점) 삭제", description = "후기(평점)를 삭제합니다.")
 	@DeleteMapping("/{category}/reviews/{reviewId}")
-	@CurrentUserId("userIdDto")
-	public ResponseEntity<Void> deleteReview(UserIdDto userIdDto, HttpServletRequest request, @PathVariable String category, @PathVariable Long reviewId) {
+	@CurrentUserId("userId")
+	public ResponseEntity<Void> deleteReview(UserIdDto userId, HttpServletRequest request, @PathVariable String category, @PathVariable Long reviewId) {
 		logger.debug("deleteReview(), category = {}", category);
-		peripheralService.deleteReview(userIdDto, reviewId);
+		peripheralService.deleteReview(userId, reviewId);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "주변기기 후기(평점) 수정", description = "후기(평점)를 수정합니다.")
 	@PutMapping("/{category}/reviews/{reviewId}")
-	@CurrentUserId("userIdDto")
-	public ResponseEntity<RatingResponseDto> updateReview(UserIdDto userIdDto, HttpServletRequest request,
+	@CurrentUserId("userId")
+	public ResponseEntity<RatingResponseDto> updateReview(UserIdDto userId, HttpServletRequest request,
 		@PathVariable String category, @PathVariable Long reviewId, @RequestBody ReviewRequestDto reviewRequestDto) {
 		logger.debug("updateReview(), category = {}, reviewId = {}", category, reviewId);
-		return ResponseEntity.ok().body(peripheralService.updateReview(userIdDto, category, reviewId, reviewRequestDto));
+		return ResponseEntity.ok().body(peripheralService.updateReview(userId, category, reviewId, reviewRequestDto));
 	}
 
 	@Operation(summary = "주변기기 후기(평점) 조회", description = "후기(평점)를 조회합니다.")
@@ -89,11 +89,11 @@ public class PeripheralController {
 
 	@Operation(summary = "주변기기 마이페이지 저장", description = "주변기기를 마이페이지에 저장합니다.")
 	@PostMapping("/{category}/{peripheralId}")
-	@CurrentUserId("userIdDto")
-	public ResponseEntity<Long> savePeripheral(UserIdDto userIdDto, HttpServletRequest request,
+	@CurrentUserId("userId")
+	public ResponseEntity<Long> savePeripheral(UserIdDto userId, HttpServletRequest request,
 		@PathVariable String category, @PathVariable Long peripheralId) {
 		logger.debug("savePeripheral(), category = {}, peripheralId = {}", category, peripheralId);
-		return ResponseEntity.status(201).body(peripheralService.savePeripheral(userIdDto, category, peripheralId));
+		return ResponseEntity.status(201).body(peripheralService.savePeripheral(userId, category, peripheralId));
 	}
 
 }
