@@ -28,7 +28,7 @@ public class MainboardEntity {
     @Column(name="changed_date", nullable = false)
     private LocalDate changedDate;
 
-    @Column(length=20)
+    @Column(length=20, name="socket_info")
     private String grade;
 
     @Column(name="memory_spec", length=10)

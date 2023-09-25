@@ -25,11 +25,6 @@ public class ChassisEntity {
 
     private Boolean extinct;
 
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
-
     @Column(name = "extended_atx")
     private Boolean extendedAtx;
 

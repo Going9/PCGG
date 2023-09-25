@@ -33,7 +33,7 @@ public class GpuEntity {
     private LocalDate changedDate;
 
     @Column(name = "needed_power")
-    private Boolean neededPower;
+    private Integer neededPower;
 
     @Column(columnDefinition = "DECIMAL(7,2)")
     //@Column(precision = 7, scale = 2)
@@ -43,7 +43,17 @@ public class GpuEntity {
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal thickness;
 
+    private Integer score;
+
     @Setter
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
+
+    public Integer getNeededPower() {
+        return neededPower;
+    }
+
+    public void setNeededPower(Integer neededPower) {
+        this.neededPower = neededPower;
+    }
 }

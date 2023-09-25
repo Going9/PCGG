@@ -24,11 +24,6 @@ public class SsdEntity {
 
     private Boolean extinct;
 
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
-
     @Getter
     @Column(name="pcie_ver")
     private Integer pcieVer;

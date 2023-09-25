@@ -1,8 +1,7 @@
 package com.ssafy.pcgg.domain.recommend.exception;
 
 public class ClassifyPartException extends RuntimeException{
-    public ClassifyPartException() {
-    }
+    public ClassifyPartException() {}
 
     public ClassifyPartException(String message) {
         super(message);

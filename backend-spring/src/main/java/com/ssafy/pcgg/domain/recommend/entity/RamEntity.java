@@ -25,11 +25,6 @@ public class RamEntity {
 
     private Boolean extinct;
 
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
-
     @Column(name = "memory_spec", length = 10)
     private String memorySpec;
 
@@ -42,4 +37,6 @@ public class RamEntity {
     @Setter
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
+
+    private Integer capacity;
 }
