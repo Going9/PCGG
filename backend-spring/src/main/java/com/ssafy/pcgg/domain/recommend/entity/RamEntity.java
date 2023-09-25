@@ -3,10 +3,7 @@ package com.ssafy.pcgg.domain.recommend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,15 +18,10 @@ public class RamEntity {
 
     private Integer price;
 
-    @Column(name="image_source", length=100)
+    @Column(name="image_source", length=200)
     private String imageSource;
 
     private Boolean extinct;
-
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
 
     @Column(name = "memory_spec", length = 10)
     private String memorySpec;
@@ -44,6 +36,5 @@ public class RamEntity {
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
 
-    @Column(columnDefinition = "DECIMAL(10,2)")
-    private BigDecimal capacity;
+    private Integer capacity;
 }

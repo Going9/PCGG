@@ -15,21 +15,16 @@ public class PowerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50)
+    @Column(length = 100)
     private String name;
 
     @Getter
     private Integer price;
 
-    @Column(name="image_source", length=100)
+    @Column(name="image_source", length=200)
     private String imageSource;
 
     private Boolean extinct;
-
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
 
     @Column(length = 10)
     private String size;

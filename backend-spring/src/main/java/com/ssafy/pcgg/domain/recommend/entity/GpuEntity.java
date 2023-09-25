@@ -22,18 +22,13 @@ public class GpuEntity {
     @Getter
     private Integer price;
 
-    @Column(name="image_source", length=100)
+    @Column(name="image_source", length=200)
     private String imageSource;
 
     private Boolean extinct;
 
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
-
     @Column(name = "needed_power")
-    private Boolean neededPower;
+    private Integer neededPower;
 
     @Getter
     @Column(columnDefinition = "DECIMAL(7,2)")
@@ -43,7 +38,17 @@ public class GpuEntity {
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal thickness;
 
+    private Integer score;
+
     @Setter
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
+
+    public Integer getNeededPower() {
+        return neededPower;
+    }
+
+    public void setNeededPower(Integer neededPower) {
+        this.neededPower = neededPower;
+    }
 }
