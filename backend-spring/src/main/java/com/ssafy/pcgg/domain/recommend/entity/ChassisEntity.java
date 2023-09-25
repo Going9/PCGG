@@ -22,15 +22,10 @@ public class ChassisEntity {
     @Getter
     private Integer price;
 
-    @Column(name="image_source", length=100)
+    @Column(name="image_source", length=200)
     private String imageSource;
 
     private Boolean extinct;
-
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
 
     @Column(name = "extended_atx")
     private Boolean extendedAtx;
