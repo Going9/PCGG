@@ -132,7 +132,6 @@ def get_cooler_list(url: str):
                         name=parsed_name,
                         price=price,
                         image_source=file_url,
-                        changed_date=timezone.now(),
                         extinct=False,
                         form=form,
                         height=height,
@@ -150,7 +149,7 @@ def get_cooler_list(url: str):
                     price_history = PriceHistory(
                         type="cooler",
                         part_id=cooler_info.id,
-                        start_date=timezone.now(),
+                        changed_date=timezone.now(),
                         price=price
                     )
                     price_history.save()
@@ -178,3 +177,5 @@ def get_cooler_list(url: str):
     print("쿨러 크롤링 끝")
     driver.quit()
 
+
+get_cooler_list("https://prod.danawa.com/list/?cate=11236855")

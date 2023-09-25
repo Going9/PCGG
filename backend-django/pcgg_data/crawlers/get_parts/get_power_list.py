@@ -117,7 +117,6 @@ def get_power_list(url: str):
                         name=parsed_name,
                         price=price,
                         image_source=file_url,
-                        changed_date=timezone.now(),
                         extinct=False,
                         size=size,
                         grade=grade,
@@ -135,7 +134,7 @@ def get_power_list(url: str):
                     price_history = PriceHistory(
                         type="power",
                         part_id=power_info.id,
-                        start_date=timezone.now(),
+                        changed_date=timezone.now(),
                         price=price
                     )
                     price_history.save()
@@ -162,3 +161,6 @@ def get_power_list(url: str):
 
     print("power 크롤링 종료")
     driver.quit()
+
+
+get_power_list("https://prod.danawa.com/list/?cate=112777")

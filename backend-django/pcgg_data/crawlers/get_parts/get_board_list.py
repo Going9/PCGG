@@ -68,7 +68,7 @@ def get_board_list(url: str):
 
             # 만약 크롤링한 데이터에도 있고 DB에도 있는 데이터라면
             try:
-                update_history(Board, parsed_name, price, "board")
+                update_history(Board, parsed_name, price, "mainboard")
 
             # 그렇지 않고 크롤링한 데이터에는 있고 db에 없는 데이터라면
             except:
@@ -90,94 +90,102 @@ def get_board_list(url: str):
                 m2_count = 0
 
                 # 데이터 파싱해서 변수에 저장
-                for item in spec_items:
-                    if "소켓" in item:
-                        socket_info = item.split("소켓")[1].strip().rstrip(')').strip()
+                try:
+                    for item in spec_items:
+                        if "소켓" in item:
+                            socket_info = item.split("소켓")[1].strip().rstrip(')').strip()
 
-                    elif "AMD" in item:
-                        amd_chipsets = {
-                            "X670E": "X670E",
-                            "X670": "X670",
-                            "B650E": "B650E",
-                            "B650": "B650",
-                            "A620": "A620",
-                            "A320": "A320",
-                            "B350": "B350",
-                            "B450": "B450",
-                            "X370": "X370",
-                            "X470": "X470",
-                            "X450": "X450",
-                            "X570": "X570",
-                            "B550": "B550",
-                            "A520": "A520"
-                        }
-                        chipset = item.split()[1]
-                        grade = amd_chipsets.get(chipset, None)
+                        elif "AMD" in item:
+                            amd_chipsets = {
+                                "X670E": "X670E",
+                                "X670": "X670",
+                                "B650E": "B650E",
+                                "B650": "B650",
+                                "A620": "A620",
+                                "A320": "A320",
+                                "B350": "B350",
+                                "B450": "B450",
+                                "X370": "X370",
+                                "X470": "X470",
+                                "X450": "X450",
+                                "X570": "X570",
+                                "B550": "B550",
+                                "A520": "A520"
+                            }
+                            chipset = item.split()[1]
+                            grade = amd_chipsets.get(chipset, None)
 
-                    elif "인텔" in item:
-                        intel_chipsets = {
-                            "H610": "H610",
-                            "B660": "B660",
-                            "H670": "H670",
-                            "Z690": "Z690",
-                            "B760": "B760",
-                            "H770": "H770",
-                            "Z790": "Z790"
-                        }
+                        elif "인텔" in item:
+                            intel_chipsets = {
+                                "H610": "H610",
+                                "B660": "B660",
+                                "H670": "H670",
+                                "Z690": "Z690",
+                                "B760": "B760",
+                                "H770": "H770",
+                                "Z790": "Z790"
+                            }
 
-                        chipset = item.split()[1]
-                        grade = intel_chipsets.get(chipset, None)
+                            chipset = item.split()[1]
+                            grade = intel_chipsets.get(chipset, None)
 
-                    elif ("ATX" in item or
-                          "M-ATX" in item or
-                          "M-iTX" in item):
-                        size = item.split()[0]
+                        elif ("ATX" in item or
+                              "M-ATX" in item or
+                              "M-iTX" in item):
+                            size = item.split()[0]
 
-                    elif "DDR4" in item:
-                        memory_spec = "DDR4"
+                        elif "DDR4" in item:
+                            memory_spec = "DDR4"
 
-                    elif "DDR5" in item:
-                        memory_spec = "DDR5"
+                        elif "DDR5" in item:
+                            memory_spec = "DDR5"
 
-                    if "PCIe" in item:
-                        if "PCIe5.0" in item:
-                            pcie5 = True
+                        if "PCIe" in item:
+                            if "PCIe5.0" in item:
+                                pcie5 = True
 
-                        if "PCIe4.0" in item:
-                            pcie4 = True
+                            if "PCIe4.0" in item:
+                                pcie4 = True
 
-                        if "PCIe3.0" in item:
-                            pcie3 = True
+                            if "PCIe3.0" in item:
+                                pcie3 = True
 
-                    if "M.2:" in item:
-                        m2_count = item.split()[2][0]
+                        if "M.2:" in item:
+                            m2_count = item.split()[2][0]
 
-                # board 모델 업데이트
-                board_info = Board(
-                    name=parsed_name,
-                    price=price,
-                    socket_info=socket_info,
-                    grade=grade,
-                    memory_spec=memory_spec,
-                    size=size,
-                    pcie3=pcie3,
-                    pcie4=pcie4,
-                    pcie5=pcie5,
-                    m2_count=m2_count,
-                    image_source=file_url,
-                    changed_date=timezone.now(),
-                    extinct=False
-                )
-                board_info.save()
+                except Exception as e:
+                    print(e)
 
-                # 가격 추적 모델도 업데이트
-                price_history = PriceHistory(
-                    type="board",
-                    part_id=board_info.id,
-                    start_date=timezone.now(),
-                    price=price
-                )
-                price_history.save()
+                try:
+                    # board 모델 업데이트
+                    board_info = Board(
+                        name=parsed_name,
+                        price=price,
+                        socket_info=socket_info,
+                        grade=grade,
+                        memory_spec=memory_spec,
+                        size=size,
+                        pcie3=pcie3,
+                        pcie4=pcie4,
+                        pcie5=pcie5,
+                        m2_count=m2_count,
+                        image_source=file_url,
+                        extinct=False
+                    )
+                    board_info.save()
+
+                    # 가격 추적 모델도 업데이트
+                    price_history = PriceHistory(
+                        type="mainboard",
+                        part_id=board_info.id,
+                        changed_date=timezone.now(),
+                        price=price
+                    )
+                    price_history.save()
+
+                except Exception as e:
+                    print(e, "board model update error")
+                    print(parsed_name)
 
         # 스크롤 끝까지 내리고
         driver.execute_script(
@@ -196,5 +204,5 @@ def get_board_list(url: str):
     driver.quit()
 
 
-# board_url = "https://prod.danawa.com/list/?cate=112751&15main_11_02"
-# get_board_list(board_url)
+board_url = "https://prod.danawa.com/list/?cate=112751&15main_11_02"
+get_board_list(board_url)

@@ -9,7 +9,6 @@ class BasicInfo(models.Model):
     price = models.IntegerField(null=True)
     image_source = models.URLField(null=True)
     extinct = models.BooleanField(default=False)
-    changed_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -21,9 +20,7 @@ class BasicInfo(models.Model):
 class PriceHistory(models.Model):
     type = models.CharField(max_length=20, null=True)
     part_id = models.PositiveIntegerField(null=False)
-    start_date = models.DateTimeField(auto_now=True)
-    end_date = models.DateTimeField(
-        default=datetime.datetime(9999, 12, 31, 23, 59, 59, tzinfo=timezone.utc))
+    changed_date = models.DateTimeField(auto_now=True)
     price = models.IntegerField(null=False)
 
     def __str__(self):
@@ -132,7 +129,7 @@ class Case(BasicInfo):
         return self.name
 
     class Meta:
-        db_table = 'part_case'
+        db_table = 'part_chassis'
 
 
 class Power(BasicInfo):
@@ -162,3 +159,35 @@ class Cooler(BasicInfo):
 
     class Meta:
         db_table = 'part_cooler'
+
+
+class Laptop(BasicInfo):
+    type = models.CharField(max_length=20, null=True)
+    os = models.CharField(max_length=20, null=True)
+    screen_size = models.IntegerField(null=True)
+    refresh_rate = models.IntegerField(null=True)
+    resolution = models.CharField(max_length=20, null=True)
+    brightness = models.IntegerField(null=True)
+    cpu = models.CharField(max_length=100, null=True)
+    ram_capacity = models.IntegerField(null=True)
+    ram_clock = models.IntegerField(null=True)
+    ram_upgradeable = models.BooleanField(default=False, null=True)
+    gpu = models.CharField(max_length=100, null=True)
+    tgp = models.IntegerField(null=True)
+    ssd = models.FloatField(null=True)
+    cellular = models.BooleanField(default=False, null=True)
+    hdmi = models.BooleanField(default=False, null=True)
+    thunderbolt = models.IntegerField(null=True) # null, 1개, 2개
+    usb_a = models.IntegerField(null=True)  # null, 1개, 2개
+    usb_c = models.IntegerField(null=True)  # null, 1개, 2개
+    sd_card = models.CharField(max_length=20, null=True)
+    weight = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    battery = models.IntegerField(null=True)
+    single_score = models.IntegerField(null=True)
+    multi_score = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'laptop'

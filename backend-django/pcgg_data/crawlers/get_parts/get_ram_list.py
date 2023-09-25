@@ -12,6 +12,7 @@ django.setup()
 
 import re
 import time
+import datetime
 from crawlers.models import PriceHistory, Ram
 from selenium.webdriver.common.by import By
 from django.utils import timezone
@@ -73,6 +74,7 @@ def get_ram_list(url: str):
                 "(64GB(8Gx8))": 64,
                 "(128GB(16Gx8))": 128,
             }
+
             ram_capacity = 0
             for name_item in name.split():
                 try:
@@ -103,43 +105,51 @@ def get_ram_list(url: str):
                 memory_clock = 0
                 heat_sink = False
 
-                # 데이터 파싱해서 변수에 저장
-                for item in spec_items:
-                    if "DDR4" in item:
-                        memory_spec = "DDR4"
+                try:
+                    # 데이터 파싱해서 변수에 저장
+                    for item in spec_items:
+                        if "DDR4" in item:
+                            memory_spec = "DDR4"
 
-                    elif "DDR5" in item:
-                        memory_spec = "DDR5"
+                        elif "DDR5" in item:
+                            memory_spec = "DDR5"
 
-                    if "MHz" in item:
-                        memory_clock = int(item.split("MHz")[0].strip())
+                        if "MHz" in item:
+                            memory_clock = int(item.split("MHz")[0].strip())
 
-                    elif "히트싱크" in item:
-                        if "방열판" in item:
-                            heat_sink = True
+                        elif "히트싱크" in item:
+                            if "방열판" in item:
+                                heat_sink = True
 
-                # ram 모델 업데이트
-                ram_info = Ram(
-                    name=parsed_name,
-                    price=price,
-                    memory_spec=memory_spec,
-                    memory_clock=memory_clock,
-                    heat_sink=heat_sink,
-                    capacity=ram_capacity,
-                    image_source=file_url,
-                    changed_date=timezone.now(),
-                    extinct=False
-                )
-                ram_info.save()
+                except Exception as e:
+                    print(e)
 
-                # 가격 추적 모델도 업데이트
-                price_history = PriceHistory(
-                    type="ram",
-                    part_id=ram_info.id,
-                    start_date=timezone.now(),
-                    price=price
-                )
-                price_history.save()
+
+                try:
+                    # ram 모델 업데이트
+                    ram_info = Ram(
+                        name=parsed_name,
+                        price=price,
+                        memory_spec=memory_spec,
+                        memory_clock=memory_clock,
+                        heat_sink=heat_sink,
+                        capacity=ram_capacity,
+                        image_source=file_url,
+                        extinct=False
+                    )
+                    ram_info.save()
+
+                    # 가격 추적 모델도 업데이트
+                    price_history = PriceHistory(
+                        type="ram",
+                        part_id=ram_info.id,
+                        changed_date=timezone.now(),
+                        price=price
+                    )
+                    price_history.save()
+
+                except Exception as e:
+                    print(e, "ram model update error")
 
         # 스크롤 끝까지 내리고
         driver.execute_script(
@@ -156,3 +166,6 @@ def get_ram_list(url: str):
 
     print("램 크롤링 완료")
     driver.quit()
+
+
+get_ram_list("https://prod.danawa.com/list/?cate=112752")

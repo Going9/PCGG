@@ -135,7 +135,6 @@ def get_ssd_list(url: str):
                         capacity=capacity,
                         manufacturer=manufacturer,
                         image_source=file_url,
-                        changed_date=timezone.now(),
                         extinct=False
                     )
                     ssd_info.save()
@@ -148,7 +147,7 @@ def get_ssd_list(url: str):
                     price_history = PriceHistory(
                         type="ssd",
                         part_id=ssd_info.id,
-                        start_date=timezone.now(),
+                        changed_date=timezone.now(),
                         price=price
                     )
                     price_history.save()

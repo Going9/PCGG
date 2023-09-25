@@ -21,7 +21,8 @@ def get_driver(url: str):
 
     service = ChromeService(
         config("chrome_driver"))
-    driver = webdriver.Chrome(service=service, options=options)
+    # driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(service=service)
     driver.get(url)
     driver.implicitly_wait(10)
 
@@ -70,7 +71,7 @@ def move_to_next_page(driver: webdriver, current_page):
                 By.CSS_SELECTOR, ".num.now_on").text)
 
     except Exception as e:
-        print(e)
+        print(e, "\n")
         return False, current_page  # 페이지 이동 실패 시 False와 현재 페이지 반환
 
     return True, current_page  # 페이지 이동 성공 시 True와 현재 페이지 반환
@@ -90,7 +91,7 @@ def get_name_and_price(product, service):
     detail_page.implicitly_wait(30)
 
     if detail_page is None:
-        print("디테일 페이지가 없습니다.")
+        print("디테일 페이지가 없습니다. \n")
 
     # 이름 저장
     name = detail_page.find_element(
@@ -109,7 +110,7 @@ def get_name_and_price(product, service):
         return name, price, detail_page
 
     except Exception as e:
-        print(e, "가격이 없습니다.")
+        print(e, "가격이 없습니다. \n")
         price = 0
 
         return name, price, detail_page
@@ -162,11 +163,11 @@ def upload_to_storage(detail_page, model_name: str, parsed_name):
         return file_url
 
     except NoCredentialsError:
-        print("AWS 자격 증명이 없습니다.")
+        print("AWS 자격 증명이 없습니다. \n")
         return None
 
     except Exception as e:
-        print(f"파일 업로드 중 오류 발생: {e}")
+        print(f"파일 업로드 중 오류 발생: {e} \n")
         return None
 
 
@@ -181,7 +182,7 @@ def update_history(model: crawlers.models, parsed_name, price, model_name: str):
     price_history = PriceHistory(
         type=model_name,
         part_id=existing_model.id,
-        start_date=timezone.now(),
+        changed_date=timezone.now(),
         price=price
     )
     price_history.save()

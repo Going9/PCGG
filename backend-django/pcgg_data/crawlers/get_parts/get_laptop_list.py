@@ -12,30 +12,35 @@ django.setup()
 
 import re
 import time
-from crawlers.models import Case, PriceHistory
+from crawlers.models import Laptop, PriceHistory
 from selenium.webdriver.common.by import By
 from django.utils import timezone
 from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_current_page, move_to_next_page, \
     upload_to_storage, update_history, extract_product_info, update_database, get_name_and_price
 
 
-def get_case_list(url: str):
-    print("case crawling 시작")
-    global case_info
+def get_laptop_list(url: str):
+    print("laptop 크롤링 시작")
+
     service, driver = get_driver(url)
 
-    # 지원 보드 규격 클릭
+    # 옵션 전체보기 클릭
     driver.find_element(
-        By.CSS_SELECTOR, "#simpleSearchOptionpriceCompare > div > dl:nth-child(6) > dd > div > button.btn_spec_view.btn_view_more"
+        By.CSS_SELECTOR, "#frmProductList > div.option_nav > div.nav_header > div.head_opt > button"
     ).click()
 
-    # extended atx, standard atx, micro atx, mini itx
-    attribute_value = ["22394", "22391", "22392", "22398"]
+    # cpu 코드명 클릭
+    driver.find_element(
+        By.CSS_SELECTOR, "#extendSearchOptionpriceCompare > div > dl:nth-child(10) > dd > div > button.btn_spec_view.btn_view_more"
+    ).click()
+
+    # 타이거레이크, 르누아르 이후 노트북만 필터
+    # 드래곤레인지, 피닉스, 랩터레이크, 램브란트-R, 램브란트, 엘더레이크, 엘더레이크-N, 바르셀로, 바르셀로-R,
+    attribute_value = ["823528", "823516", "823300", "823525", "758011", "758008", "845353", "762679", "823522"]
     for option in attribute_value:
         driver.find_element(
             By.CSS_SELECTOR, f"#searchAttributeValue{option}"
         ).click()
-
 
     # 잠시대기
     time.sleep(2)
@@ -43,22 +48,22 @@ def get_case_list(url: str):
     # 현재 페이지 번호 저장
     current_page = save_current_page(driver)
 
-    # DB에 있는 case 리스트
-    existing_cases = set(Case.objects.values_list('name', flat=True))
+    # DB에 있는 laptop 리스트
+    existing_laptops = set(Laptop.objects.values_list('name', flat=True))
 
-    # 크롤링한 case 목록
-    crawled_cases = []
+    # 크롤링한 laptop 목록
+    crawled_laptops = []
 
-    # case list 추출 및 개별 case정보 추출
+    # laptop list 추출 및 개별 laptop정보 추출
     while True:
-        # case list 추출
+        # laptop list 추출
         product_list = get_product_list(driver)
 
-        # 개별 case 정보 추출
-        for case in product_list:
+        # 개별 laptop 정보 추출
+        for laptop in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(case, service)
+            name, price, detail_page = get_name_and_price(laptop, service)
 
             # 이름 파싱
             # 파일명으로 사용할 수 없는 문자를 언더스코어로 대체
@@ -67,18 +72,18 @@ def get_case_list(url: str):
             parsed_name = parsed_name.replace(" ", "_")
 
             # 업로드한 이미지 주소
-            file_url = upload_to_storage(detail_page, "case", parsed_name)
+            file_url = upload_to_storage(detail_page, "laptop", parsed_name)
 
             # 만약 크롤링한 데이터에도 있고 DB에도 있는 데이터라면
             try:
-                update_history(Case, parsed_name, price, "chassis")
+                update_history(Laptop, parsed_name, price, "laptop")
 
             # 그렇지 않고 크롤링한 데이터에는 있고 db에 없는 데이터라면
             except:
-                spec_items = extract_product_info(case)
+                spec_items = extract_product_info(laptop)
 
                 # 모델 저장에 필요한 변수들
-                extended_atx = False
+                type = False
                 standard_atx = False
                 micro_atx = False
                 mini_itx = False
@@ -143,9 +148,9 @@ def get_case_list(url: str):
                         print(e, "\n")
                         print(item, "\n")
 
-                # case 모델 업데이트
+                # laptop 모델 업데이트
                 try:
-                    case_info = Case(
+                    laptop_info = Laptop(
                         name=parsed_name,
                         price=price,
                         image_source=file_url,
@@ -160,7 +165,7 @@ def get_case_list(url: str):
                         max_gpu_depth=max_gpu_depth,
                         max_cooler_depth=max_cooler_depth
                     )
-                    case_info.save()
+                    laptop_info.save()
 
                 except Exception as e:
                     print(e, "\n")
@@ -169,7 +174,7 @@ def get_case_list(url: str):
                     # 가격 추적 모델도 업데이트
                     price_history = PriceHistory(
                         type="chassis",
-                        part_id=case_info.id,
+                        part_id=laptop_info.id,
                         changed_date=timezone.now(),
                         price=price
                     )
@@ -190,13 +195,13 @@ def get_case_list(url: str):
             break
 
     try:
-        update_database(crawled_cases, existing_cases, Case)
+        update_database(crawled_laptops, existing_laptops, Laptop)
 
     except Exception as e:
         print(e, "\n")
 
-    print("case crawling 끝")
+    print("laptop crawling 끝")
     driver.quit()
 
 
-get_case_list("https://prod.danawa.com/list/?cate=112775")
+get_laptop_list("https://prod.danawa.com/list/?cate=112758&15main_11_02")

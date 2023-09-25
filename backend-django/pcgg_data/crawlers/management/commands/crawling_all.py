@@ -56,14 +56,32 @@ class Command(BaseCommand):
         # for task in tasks:
         #     task.join()
 
-        get_ssd_list("https://prod.danawa.com/list/?cate=112760")
-        get_gpu_list("https://prod.danawa.com/list/?cate=112753")
-        get_case_list("https://prod.danawa.com/list/?cate=112775")
-        get_power_list("https://prod.danawa.com/list/?cate=112777")
-        get_cooler_list("https://prod.danawa.com/list/?cate=11236855")
-        get_ram_list("https://prod.danawa.com/list/?cate=112752")
-        get_cpu_list("https://prod.danawa.com/list/?cate=112747")
-        get_board_list("https://prod.danawa.com/list/?cate=112751&15main_11_02")
+        # get_ssd_list("https://prod.danawa.com/list/?cate=112760")
+        # get_gpu_list("https://prod.danawa.com/list/?cate=112753")
+        # get_case_list("https://prod.danawa.com/list/?cate=112775")
+        # get_power_list("https://prod.danawa.com/list/?cate=112777")
+        # get_cooler_list("https://prod.danawa.com/list/?cate=11236855")
+        # get_ram_list("https://prod.danawa.com/list/?cate=112752")
+        # get_cpu_list("https://prod.danawa.com/list/?cate=112747")
+        # get_board_list("https://prod.danawa.com/list/?cate=112751&15main_11_02")
+
+        funcs = {
+            get_gpu_list(): "https://prod.danawa.com/list/?cate=112753",
+            get_ssd_list(): "https://prod.danawa.com/list/?cate=112760",
+            get_case_list(): "https://prod.danawa.com/list/?cate=112775",
+            get_power_list(): "https://prod.danawa.com/list/?cate=112777",
+            get_cooler_list(): "https://prod.danawa.com/list/?cate=11236855",
+            get_ram_list(): "https://prod.danawa.com/list/?cate=112752",
+            get_cpu_list(): "https://prod.danawa.com/list/?cate=112747",
+            get_board_list(): "https://prod.danawa.com/list/?cate=112751&15main_11_02"
+        }
+
+        for func, url in funcs.items():
+            try:
+                func(url)
+            except Exception as e:
+                print(e)
+                continue
 
         # tasks = []
         # cpu_url = "https://prod.danawa.com/list/?cate=112747"

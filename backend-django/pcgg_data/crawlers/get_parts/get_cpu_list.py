@@ -137,7 +137,6 @@ def get_cpu_list(url: str):
                     image_source=file_url,
                     single_score=single_score,
                     multi_score=multi_score,
-                    changed_date=timezone.now(),
                     extinct=False
                 )
                 cpu_info.save()
@@ -146,7 +145,7 @@ def get_cpu_list(url: str):
                 price_history = PriceHistory(
                     type="cpu",
                     part_id=cpu_info.id,
-                    start_date=timezone.now(),
+                    changed_date=timezone.now(),
                     price=price
                 )
                 price_history.save()
@@ -167,5 +166,5 @@ def get_cpu_list(url: str):
     print("CPU 크롤링 종료")
     driver.quit()
 
-#
-# get_cpu_list("https://prod.danawa.com/list/?cate=112747")
+
+get_cpu_list("https://prod.danawa.com/list/?cate=112747")
