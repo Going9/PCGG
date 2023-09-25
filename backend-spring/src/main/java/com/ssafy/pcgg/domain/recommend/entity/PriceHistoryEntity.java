@@ -2,10 +2,13 @@ package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@Entity
 public class PriceHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
