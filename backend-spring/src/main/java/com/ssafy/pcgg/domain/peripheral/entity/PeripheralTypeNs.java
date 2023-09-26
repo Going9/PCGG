@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Peripheral_type_ns")
+@Table(name = "peripheral_type_ns")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
