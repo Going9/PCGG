@@ -28,8 +28,8 @@ public class RecommendController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @GetMapping("/desktop")
-    public ResponseEntity<?> getDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
+    @PostMapping("/desktop")
+    public ResponseEntity<?> createDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
         Map<String,Object> resultMap = new HashMap<>();
         HttpStatus httpStatus;
         try{
@@ -80,7 +80,7 @@ public class RecommendController {
     }
 
     //추천결과 상세ㅗㅈ회
-    @GetMapping("{category}/{resultNo}")
+    @GetMapping("/{category}/{resultNo}")
     public ResponseEntity<?> getRecommendDetail(@PathVariable String category, @PathVariable int resultNo){
         Map<String,Object> resultMap;
         HttpStatus httpStatus;
@@ -117,7 +117,7 @@ public class RecommendController {
     }
 
     //저장한 추천 목록 조회
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getSavedRecommendList(@PathVariable int userId){
         Map<String,Object> resultMap;
         HttpStatus httpStatus;
@@ -136,7 +136,7 @@ public class RecommendController {
 
     //크롤링한 뒤 새로운 QuoteCandidate(견적후보) 생성
     @Operation(summary = "견적후보 생성", description = "CPU, GPU, RAM으로 견적후보를 생성합니다.")
-    @PutMapping("desktop")
+    @PutMapping("/desktop")
     public ResponseEntity<?> classifyAndCreateCandidate(){
         Map<String,Object> resultMap = new HashMap<>();
         HttpStatus httpStatus;
