@@ -77,7 +77,7 @@
       </div>
 
       <div>
-        <Signup/>
+        <Signup />
       </div>
     </div>
     <!-- 회원가입 컴포넌트 end -->
@@ -101,18 +101,18 @@ const triggerShot = () => {
   store.triggerActivation();
 };
 
-const goToLoginPage = () => {
-  store.changePageLoginSignup();
-};
+// const goToLoginPage = () => {
+//   store.changePageLoginSignup();
+// };
 
-function isLogin() {
-  store.login();
-}
+// function isLogin() {
+//   store.login();
+// }
 
-function moveToMain() {
-  isLogin();
-  router.push({ name: "Home" });
-}
+// function moveToMain() {
+//   isLogin();
+//   router.push({ name: "Home" });
+// }
 </script>
 
 <style scoped>
