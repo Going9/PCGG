@@ -135,6 +135,7 @@ public class RecommendController {
     }
 
     //크롤링한 뒤 새로운 QuoteCandidate(견적후보) 생성
+    @Operation(summary = "견적후보 생성", description = "CPU, GPU, RAM으로 견적후보를 생성합니다.")
     @PutMapping("desktop")
     public ResponseEntity<?> classifyAndCreateCandidate(){
         Map<String,Object> resultMap = new HashMap<>();
