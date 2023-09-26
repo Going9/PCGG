@@ -1,5 +1,8 @@
 package com.ssafy.pcgg.domain.recommend.controller;
 
+import com.ssafy.pcgg.domain.recommend.dto.CpuResponseDto;
+import com.ssafy.pcgg.domain.recommend.dto.PartDto;
+import com.ssafy.pcgg.domain.recommend.dto.PartRequestDto;
 import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -8,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,19 +35,16 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, httpStatus);
-
     }
 
     //랩탑 추천
     @GetMapping("/laptop")
     public ResponseEntity<?> getLaptopRecommend(){
-        Map<String,Object> resultMap;
         HttpStatus httpStatus;
         try{
 //            resultMap = recommendService.bussinessLogic();
             httpStatus = HttpStatus.OK;
         }catch(Exception e){
-            resultMap = new HashMap<>();
             resultMap.put("message","unexpected ERROR");
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -53,8 +55,8 @@ public class RecommendController {
 
     //부품 추천
     @GetMapping("/part")
-    public ResponseEntity<?> getPartRecommend(){
-        Map<String,Object> resultMap;
+    public ResponseEntity<?> getPartRecommend(@RequestBody PartRequestDto partRequestDto){
+        List<PartDto> partDtoList = null;
         HttpStatus httpStatus;
         try{
 //            resultMap = recommendService.bussinessLogic();
@@ -64,9 +66,7 @@ public class RecommendController {
             resultMap.put("message","unexpected ERROR");
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-//        return new ResponseEntity<>(resultMap, httpStatus);
-        //todo:미완성
-        return null;
+        return new ResponseEntity<>(partDtoList, httpStatus);
     }
 
     //추천결과 상세ㅗㅈ회
