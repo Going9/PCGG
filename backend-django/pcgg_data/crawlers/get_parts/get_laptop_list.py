@@ -417,7 +417,7 @@ def get_laptop_list(url: str):
                             if "kg" in item:
                                 weight = float(item.split()[1].replace("kg", ""))
 
-                            elif "g" in item:
+                            elif "g" in item and "kg" not in item:
                                 weight = float(item.split()[1].replace("g", "")) / 1000
 
                         elif "배터리" in item:
