@@ -2,6 +2,7 @@ package com.ssafy.pcgg.domain.user;
 
 import com.ssafy.pcgg.domain.auth.AuthorityEntity;
 import com.ssafy.pcgg.domain.user.dto.UserListResponse;
+import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
 import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
 import com.ssafy.pcgg.domain.user.exception.DuplicateUserException;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +49,18 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public List<UserListResponse> getUsers() {
-        return userRepository.findAll().stream()
-                .map(UserListResponse::new)
-                .collect(Collectors.toList());
+    public UserMyResponse getMyUser(Long userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException());
+
+        return UserMyResponse.builder()
+                .nickname(userEntity.getNickname())
+                .build();
     }
+
+//    public List<UserListResponse> getUsers() {
+//        return userRepository.findAll().stream()
+//                .map(UserListResponse::new)
+//                .collect(Collectors.toList());
+//    }
 }
