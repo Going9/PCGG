@@ -50,6 +50,6 @@ public class QuoteEntity {
     @JoinColumn(name="cooler_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CoolerEntity cooler;
 
-    @Column(name = "total_price")
-    private Integer totalPrice;
+    // @Column(name = "total_price")
+    // private Integer totalPrice;
 }
