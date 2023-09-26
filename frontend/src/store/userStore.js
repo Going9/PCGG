@@ -15,8 +15,17 @@ export const userStore = defineStore("userStore", {
     },
     triggerOne: true,
     triggerTwo: true,
-    peripheralSwitch: true,
+    mypageCategory: "profile",
   }),
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        storage: sessionStorage,
+        paths: ["loginActivated", "accessToken", "userInfo"],
+      },
+    ],
+  },
   // getters도 vuex랑 큰 차이점 모르겠음
   getters: {
     isLogin: (state) => {
@@ -28,7 +37,9 @@ export const userStore = defineStore("userStore", {
     getUserInfo: (state) => {
       return state.userInfo;
     },
-    // getLogon: (state) => !state.loginActivated,
+    getCategory: (state) => {
+      return state.mypageCategory;
+    },
   },
   // 이게 actions랑 mutations합친거인듯. 액션에서 뮤테이션 보내고 뮤테이션에서 스테이트 바꾸고 하는게 아니고 한번에 바꿈
   // vuex배울때 이러면 뭔가 문제가 될수 있다 그랬던거 같은데 기억안남
@@ -66,8 +77,8 @@ export const userStore = defineStore("userStore", {
     changePageLoginSignup() {
       this.triggerTwo = !this.triggerTwo;
     },
-    isPeripheralRecommend() {
-      this.peripheralSwitch = !this.peripheralSwitch;
+    async setCategory(category) {
+      this.mypageCategory = category;
     },
   },
   // 위 3개가 끝임.

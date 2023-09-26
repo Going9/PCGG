@@ -87,11 +87,13 @@ const signupEvent = () => {
   signupAPI(
     userInput,
     ({ data }) => {
-      let msg = "회원가입이 완료되었습니다.";
+      let msg = "회원가입이 완료되었습니다. 로그인화면으로 이동합니다.";
       if (data == null) {
         msg = "회원가입이 실패했습니다.";
       }
-      alert(msg);
+      if (confirm(msg)) {
+        store.changePageLoginSignup();
+      }
     },
     (error) => {
       console.log(error);

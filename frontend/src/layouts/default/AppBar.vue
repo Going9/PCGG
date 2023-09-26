@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink } from "vue-router";
 import { userStore } from "@/store/userStore";
 import router from "@/router";
 

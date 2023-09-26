@@ -1,23 +1,64 @@
 <template>
   <div class="background">
-    <div class="info">
+    <div class="userinfo">
       <v-img class="banner" cover src="@/assets/anohter.png" />
-      <v-img class="profile" cover src="@/assets/anohter.png" />
+      <v-img class="profilePicture" cover src="@/assets/anohter.png" />
       <div class="nickname">
         {{ nickname }}
       </div>
+    </div>
+    <div class="button-container">
+      <v-btn-toggle v-model="category" class="buttons">
+        <v-btn
+          v-for="item in buttonItems"
+          :key="item.value"
+          :value="item.value"
+          :class="{
+            'active-button': category === item.value,
+            'inactive-button': category !== item.value,
+          }"
+          @click="buttonEvent(item.value)"
+        >
+          {{ item.label }}
+        </v-btn>
+      </v-btn-toggle>
+    </div>
+    <div class="productinfo">
+      <profile-component v-if="category === 'profile'" />
+      <saved-quote-component v-if="category === 'savedQuote'" />
+      <peripheral-component v-if="category === 'peripheral'" />
+      <used-market-component v-if="category === 'usedMarket'" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { userStore } from "@/store/userStore";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import ProfileComponent from "../components/MyPageViewComponents/profileComponent.vue";
+import SavedQuoteComponent from "../components/MyPageViewComponents/savedQuoteComponent.vue";
+import PeripheralComponent from "../components/MyPageViewComponents/peripheralComponent.vue";
+import UsedMarketComponent from "../components/MyPageViewComponents/usedMarketComponent.vue";
 
 const store = userStore();
-
 const userInfo = store.getUserInfo;
 const nickname = ref(userInfo.nickname);
+const category = ref(null);
+const buttonItems = [
+  { label: "프로필", value: "profile" },
+  { label: "저장견적", value: "savedQuote" },
+  { label: "주변기기", value: "peripheral" },
+  { label: "중고장터", value: "usedMarket" },
+];
+
+onMounted(() => {
+  category.value = store.getCategory;
+});
+
+const buttonEvent = async (value) => {
+  category.value = value;
+  await store.setCategory(value);
+};
 </script>
 
 <style scoped>
@@ -29,16 +70,16 @@ const nickname = ref(userInfo.nickname);
     1
   );
   width: 100%;
-  height: 100%;
-  position: fixed;
+  height: 500vh;
+  position: absolute;
 }
-.info {
+.userinfo {
   background-color: rgba(255, 255, 255, 1);
-  width: 71.2%;
-  height: 57.6%;
-  margin: auto;
-  margin-top: 10%;
+  width: 1200px;
+  height: 450px;
   position: relative;
+  margin: auto;
+  margin-top: 50px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border-bottom-left-radius: 8px;
@@ -60,7 +101,7 @@ const nickname = ref(userInfo.nickname);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
-.profile {
+.profilePicture {
   border-radius: 50%;
   background-color: rgba(
     217.0000022649765,
@@ -73,7 +114,6 @@ const nickname = ref(userInfo.nickname);
   /* width: 18.4%;
   height: 48.5%; */
   position: absolute;
-  margin: auto;
   margin-top: 5%;
   margin-left: 10%;
   /* background-image: url(@/assets/anohter.png); */
@@ -82,11 +122,50 @@ const nickname = ref(userInfo.nickname);
   border: 3px solid rgba(255, 255, 255, 1);
 }
 .nickname {
-  width: 100%;
-  height: 100%;
-  font-size: 100%;
+  font-size: 40px;
   position: absolute;
-  margin-top: 30%;
-  margin-left: 40%;
+  top: 45%;
+  left: 30%;
+}
+.button-container {
+  width: 1200px;
+  position: relative;
+  margin: auto;
+  margin-top: 50px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.active-button {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  color: #fff;
+  background: #d9d9d9;
+  border-radius: 20px !important;
+  text-shadow: 2px 2px 5px #00000080;
+  height: 50px;
+  width: 18%;
+  background-color: #4599fc;
+  box-shadow: inset 2px 2px 5px #00000080;
+}
+.inactive-button {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  color: #fff;
+  background: #d9d9d9;
+  border-radius: 20px !important;
+  height: 50px;
+  width: 18%;
+}
+.productinfo {
+  background-color: rgba(255, 255, 255, 1);
+  width: 1200px;
+  height: 1200px;
+  position: relative;
+  margin: auto;
+  margin-top: 50px;
 }
 </style>

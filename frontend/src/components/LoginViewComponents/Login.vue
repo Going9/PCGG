@@ -41,6 +41,7 @@
         variant="outlined"
         @click:append-inner="visible = !visible"
         v-model="password"
+        @keyup.enter="loginEvent"
       ></v-text-field>
 
       <!-- <v-card class="mb-12" color="surface-variant" variant="tonal">
