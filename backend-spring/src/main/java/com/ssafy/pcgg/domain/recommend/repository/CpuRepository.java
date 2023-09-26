@@ -1,10 +1,13 @@
 package com.ssafy.pcgg.domain.recommend.repository;
 
+import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
+import java.util.List;
 
 @Repository
-public interface CpuRepository extends JpaRepository<CpuEntity, Long> {
+public interface CpuRepository extends JpaRepository<CpuEntity,Long> {
+
+    List<CpuEntity> findAllByClassColumn(Integer classColumn);
 }

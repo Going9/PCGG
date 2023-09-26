@@ -2,13 +2,14 @@ package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Null;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "part_case")
+@Table(name = "part_chassis")
 public class ChassisEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,17 +19,13 @@ public class ChassisEntity {
     @Column(length = 100)
     private String name;
 
+    @Getter
     private Integer price;
 
-    @Column(name="image_source", length=100)
+    @Column(name="image_source", length=200)
     private String imageSource;
 
     private Boolean extinct;
-
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
 
     @Column(name = "extended_atx")
     private Boolean extendedAtx;
@@ -39,8 +36,8 @@ public class ChassisEntity {
     @Column(name = "micro_atx")
     private Boolean microAtx;
 
-    @Column(name = "mini_atx")
-    private Boolean miniAtx;
+    @Column(name = "mini_itx")
+    private Boolean miniItx;
 
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal width;
@@ -48,6 +45,7 @@ public class ChassisEntity {
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal depth;
 
+    @Getter
     @Column(name="max_power_depth", columnDefinition = "DECIMAL(7,2)")
     //@Column(name="max_power_depth", precision = 7, scale = 2)
     private BigDecimal maxPowerDepth;
