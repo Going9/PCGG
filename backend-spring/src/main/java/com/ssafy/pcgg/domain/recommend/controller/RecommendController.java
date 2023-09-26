@@ -2,7 +2,11 @@ package com.ssafy.pcgg.domain.recommend.controller;
 
 import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name = "Recommends",description = "추천 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/recommends")
@@ -18,6 +23,11 @@ public class RecommendController {
     private final RecommendService recommendService;
 
     //데스크탑추천
+    @Operation(summary = "공유마당 게시글 작성", description = "공유마당 게시글을 작성합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     @GetMapping("/desktop")
     public ResponseEntity<?> getDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
         Map<String,Object> resultMap = new HashMap<>();

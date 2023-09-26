@@ -143,11 +143,13 @@ public class RecommendService {
             RamEntity ram = quoteCandidate.getRam();
             GpuEntity gpu = quoteCandidate.getGpu();
             int budgetLeft = budget - quoteCandidate.getTotalPrice();
+
             String usage = quoteRequestDto.getUsage();
             String caseSize = quoteRequestDto.getCaseSize();
+            /* 현재 미사용중
             double ssdSize = quoteRequestDto.getSsdSize();
             int priority = quoteRequestDto.getPriority();
-            boolean as = quoteRequestDto.isAs();
+            boolean as = quoteRequestDto.isAs();*/
 
             //1.SSD는 사용자가 선택한 용량에 따라 필터링
             List<SsdEntity> ssdList = ssdRepository.findByCapacity(new BigDecimal(quoteRequestDto.getSsdSize()/1000.0));
