@@ -1,56 +1,64 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
+import Layout from "@/layouts/default/Default"
+import Home from "@/views/HomeView"
+import Login from "@/views/LoginView.vue"
+import Peripheral from "@/views/PeripheralView.vue"
+import RecommendationView from "@/views/RecommendationView.vue"
+import Share from "@/views/ShareView.vue"
+import CreateShare from "@/views/CreateShareView.vue"
+import ShareDetail from "@/views/ShareDetailView.vue"
+import Simulation from "@/views/SimulationView.vue"
 
 const routes = [
   {
     path: "/",
-    component: () => import("@/layouts/default/Default.vue"),
+    component: Layout,
     children: [
       {
         path: "",
         name: "Home",
-        component: () =>
-          import("@/views/HomeView.vue"),
+        component: Home,
       },
       {
         path: "/login",
         name: "Login",
-        component: () => import("@/views/LoginView.vue"),
+        component: Login,
       },
       {
         path: "/peripheral",
         name: "Peripheral",
-        component: () => import("@/views/PeripheralView.vue"),
+        component: Peripheral
       },
       {
         path: "/recommendation",
         name: "RecommendationView",
-        component: () => import("@/views/RecommendationView.vue"),
+        component: RecommendationView,
       },
       {
-        path: "/share",
+        path: "",
         children: [
           {
-            path: "",
+            path: "/share",
             name: "Share",
-            component: () => import("@/views/ShareView.vue"),
+            component: Share,
           },
           {
-            path: "createshare",
+            path: "/share/createshare",
             name: "CreateShare",
-            component: () => import("@/views/CreateShareView.vue"),
+            component: CreateShare,
           },
           {
-            path: "sharedetail",
+            path: "/share/sharedetail",
             name: "ShareDetail",
-            component: () => import("@/views/ShareDetailView.vue"),
+            component:ShareDetail,
           },
         ],
       },
       {
         path: "/simulation",
         name: "Simulation",
-        component: () => import("@/views/SimulationView.vue"),
+        component: Simulation,
       },
     ],
   },

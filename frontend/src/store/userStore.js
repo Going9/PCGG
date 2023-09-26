@@ -28,9 +28,11 @@ export const userStore = defineStore("userStore", {
   // vuex배울때 이러면 뭔가 문제가 될수 있다 그랬던거 같은데 기억안남
   actions: {
     async login(loginInput) {
+
       await loginAPI(
         loginInput,
         ({ data }) => {
+          console.log(data.token)
           this.loginActivated = true;
           this.accessToken = data.token;
           router.push({ name: "Home" });

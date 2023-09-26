@@ -3,7 +3,7 @@
     <ModalComponent
       @closeModal="closeModal"
       :isModal="isModal"
-      :selectedPart="partCategory"
+      :partCategory="partCategory"
     />
     <v-container>
       <v-row>
@@ -11,15 +11,15 @@
         cols="12"
         xxl="2"
         xl="3"
-        lg="4"
-        md="6"
-        sm="12"
+        lg="3"
+        md="4"
+        sm="6"
         v-for="part in partList" :key="part.name">
           <SelectedPartButtonComponent
             @click="toggleModal(part.name)"
             v-if="isPartSelected(part)"
-            :props="part.name"
-            :value="part.value"
+            :category="part.name"
+            :selectedItem="part.value"
           />
           <PartButtonComponent
             @click="toggleModal(part.name)"
@@ -36,7 +36,14 @@
   import PartButtonComponent from './PartButtonComponent.vue';
   import SelectedPartButtonComponent from './SelectedPartButtonComponent.vue'
   import ModalComponent from './ModalComponent.vue';
-  import { ref } from 'vue';
+  import { ref, defineEmits, onUpdated } from 'vue';
+
+  const emit = defineEmits(['partList']);
+
+  onUpdated(()=>{
+    const newPartList = partList
+    emit('partList', newPartList)
+  })
 
   let partCategory = "";
   const isModal = ref(false);
@@ -47,7 +54,6 @@
   { name: '메모리', value: "" },
   { name: 'GPU', value: "" },
   { name: 'SSD', value: "" },
-  { name: 'HDD', value: "" },
   { name: '케이스', value: "" },
   { name: '파워', value: "" },
 ]);
@@ -62,6 +68,7 @@ function toggleModal(part) {
 function closeModal(selectedPart) {
   changePart(partCategory, selectedPart);
   isModal.value = false;
+  console.log(partList)
 }
 
 // partList에 선택된 부품을 추가

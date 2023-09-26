@@ -1,4 +1,5 @@
 <script setup>
+  import {defineProps} from 'vue'
   import { BlackPartIcon } from '@/assets/Icon';
   const { props } = defineProps(['props']);
 </script>
