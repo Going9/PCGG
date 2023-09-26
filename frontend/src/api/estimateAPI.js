@@ -12,10 +12,7 @@ async function isCallEstimatePc(data, success, fail) {
     as: data[5],
     ssdSize: data[7],
   };
-  await apiAuth
-    .get(`/recommends/desktop`, { params })
-    .then(success)
-    .catch(fail);
+  await api.post(`/recommends/desktop`, params).then(success).catch(fail);
 }
 
 async function isCallEstimateLaptop(data, success, fail) {
@@ -26,7 +23,7 @@ async function isCallEstimateLaptop(data, success, fail) {
     priority: data[4],
     as: data[5],
   };
-  await api.get(`/recommends/laptop`, { params }).then(success).catch(fail);
+  await api.post(`/recommends/laptop`, params).then(success).catch(fail);
 }
 
 export { isCallEstimatePc, isCallEstimateLaptop };
