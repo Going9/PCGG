@@ -17,6 +17,7 @@ public class PriceHistoryEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name="type")
     private PartTypeNsEntity type;
 
     @NotNull
