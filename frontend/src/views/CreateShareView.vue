@@ -1,14 +1,20 @@
 <script setup>
 import PartSelectionComponent from '@/components/Common/PartSelectionComponent.vue';
+import { ref } from 'vue'
 import { createSharedPost } from "@/api/shares";
 
+const title = ref("")
+const content = ref("")
+const summary = ref("")
+
 const createSharedPostEvent = () => {
-    const data = {
+
+    const body = {
       userId: 3,
-      title: "string",
-      content: "string",
+      title: title.value,
+      content: content.value,
       imageSource: "string",
-      summary: "string",
+      summary: title.value,
       shareAddQuoteRequestDto: {
       cpuId: 1,
       mainboardId: 1,
@@ -20,7 +26,7 @@ const createSharedPostEvent = () => {
       coolerId: 1,
   } }
       createSharedPost(
-      data
+        body
       ,
       ({ data }) => {
         let msg = "공유 게시글 작성에 성공했습니다.";
@@ -65,6 +71,7 @@ const createSharedPostEvent = () => {
         <v-text-field
           label="제목"
           hide-details="auto"
+          v-model="title"
         ></v-text-field>
       </div>
       <div class="sub-title">
@@ -78,6 +85,19 @@ const createSharedPostEvent = () => {
 
       <div class="sub-title">
         <h2>
+          견적 설명
+        </h2>
+      </div>
+      <div class="info-input input">
+        <v-text-field
+          label="견적 설명"
+          hide-details="auto"
+          v-model="content"
+        ></v-text-field>
+      </div>
+
+      <div class="sub-title">
+        <h2>
           한 줄 설명
         </h2>
       </div>
@@ -85,6 +105,7 @@ const createSharedPostEvent = () => {
         <v-text-field
           label="한 줄 설명"
           hide-details="auto"
+          v-model="summary"
         ></v-text-field>
       </div>
     </div>

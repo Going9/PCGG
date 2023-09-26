@@ -3,9 +3,10 @@
   import ItemComponent from './ItemComponent.vue';
   import ItemDetailComponent from './ItemDetailComponent.vue';
   import { defineProps, defineEmits, ref, onUpdated, onMounted } from 'vue';
-  onUpdated(()=>{
-    selectedItem.value =""
-  })
+
+  // onUpdated(()=>{
+  //   selectedItem.value =""
+  // })
 
   const selectedItem = ref("")
 

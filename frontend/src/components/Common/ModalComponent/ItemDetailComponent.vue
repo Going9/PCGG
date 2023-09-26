@@ -12,11 +12,15 @@
     </v-row>
     <v-row>
       <div class="part-info">
-        <v-col cols="12">
-          제품명 : {{ selectedItem.name }}
+        <v-col cols="12" class="ml-3">
+          <h3>
+            제품명 : {{ selectedItem.name }}
+          </h3>
         </v-col>
-        <v-col cols="12">
-          가 격 : {{ selectedItem.price }}원
+        <v-col cols="12" class="ml-3">
+          <h3>
+            가 격 : {{ selectedItem.price }}원
+          </h3>
         </v-col>
       </div>
     </v-row>
@@ -34,5 +38,6 @@
   height: 25%;
   border-radius: 0.625rem;
   border: 1px solid #000;
+  text-align: start;
  }
 </style>

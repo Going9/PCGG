@@ -40,7 +40,7 @@
 
   const emit = defineEmits(['partList']);
 
-  onUpdated(()=>{
+  onUpdated(() => {
     const newPartList = partList
     emit('partList', newPartList)
   })
