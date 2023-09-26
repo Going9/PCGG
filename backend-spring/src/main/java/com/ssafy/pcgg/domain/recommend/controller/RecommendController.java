@@ -44,7 +44,8 @@ public class RecommendController {
     }
 
     //랩탑 추천
-    @GetMapping("/laptop")
+    @Operation(summary = "(미완성)Laptop 추천받기", description = "Laptop을 추천받습니다.")
+    @PostMapping("/laptop")
     public ResponseEntity<?> getLaptopRecommend(){
         Map<String,Object> resultMap;
         HttpStatus httpStatus;
@@ -62,7 +63,8 @@ public class RecommendController {
     }
 
     //부품 추천
-    @GetMapping("/part")
+    @Operation(summary = "(진행중)부품 추천받기", description = "부품을 추천받습니다.")
+    @PostMapping("/part")
     public ResponseEntity<?> getPartRecommend(){
         Map<String,Object> resultMap;
         HttpStatus httpStatus;
@@ -80,6 +82,7 @@ public class RecommendController {
     }
 
     //추천결과 상세ㅗㅈ회
+    @Operation(summary = "(미완성)추천 결과 상세조회", description = "선택한 추천결과를 조회합니다.")
     @GetMapping("/{category}/{resultNo}")
     public ResponseEntity<?> getRecommendDetail(@PathVariable String category, @PathVariable int resultNo){
         Map<String,Object> resultMap;
@@ -98,6 +101,7 @@ public class RecommendController {
     }
 
     //추천결과 저장
+    @Operation(summary = "(미완성)추천결과를 저장", description = "선택한 추천결과를 마이페이지에 저장합니다.")
     @PostMapping
     public ResponseEntity<?> saveRecommend(){
         Map<String,Object> resultMap;
@@ -116,27 +120,9 @@ public class RecommendController {
 
     }
 
-    //저장한 추천 목록 조회
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getSavedRecommendList(@PathVariable int userId){
-        Map<String,Object> resultMap;
-        HttpStatus httpStatus;
-        try{
-//            resultMap = recommendService.bussinessLogic();
-            httpStatus = HttpStatus.OK;
-        }catch(Exception e){
-            resultMap = new HashMap<>();
-            resultMap.put("message","unexpected ERROR");
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-//        return new ResponseEntity<>(resultMap, httpStatus);
-        //todo:미완성
-        return null;
-    }
-
     //크롤링한 뒤 새로운 QuoteCandidate(견적후보) 생성
     @Operation(summary = "견적후보 생성", description = "CPU, GPU, RAM으로 견적후보를 생성합니다.")
-    @PutMapping("/desktop")
+    @PostMapping("/desktop")
     public ResponseEntity<?> classifyAndCreateCandidate(){
         Map<String,Object> resultMap = new HashMap<>();
         HttpStatus httpStatus;
