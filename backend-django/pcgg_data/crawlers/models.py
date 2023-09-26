@@ -162,29 +162,28 @@ class Cooler(BasicInfo):
 
 
 class Laptop(BasicInfo):
+    manufacturer = models.CharField(max_length=20, null=True)
     type = models.CharField(max_length=20, null=True)
     os = models.CharField(max_length=20, null=True)
-    screen_size = models.IntegerField(null=True)
-    refresh_rate = models.IntegerField(null=True)
+    screen_size = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    refresh_rate = models.IntegerField(null=True, default=60)
     resolution = models.CharField(max_length=20, null=True)
     brightness = models.IntegerField(null=True)
     cpu = models.CharField(max_length=100, null=True)
     ram_capacity = models.IntegerField(null=True)
-    ram_clock = models.IntegerField(null=True)
     ram_upgradeable = models.BooleanField(default=False, null=True)
     gpu = models.CharField(max_length=100, null=True)
     tgp = models.IntegerField(null=True)
     ssd = models.FloatField(null=True)
     cellular = models.BooleanField(default=False, null=True)
     hdmi = models.BooleanField(default=False, null=True)
-    thunderbolt = models.IntegerField(null=True) # null, 1개, 2개
-    usb_a = models.IntegerField(null=True)  # null, 1개, 2개
-    usb_c = models.IntegerField(null=True)  # null, 1개, 2개
+    thunderbolt = models.BooleanField(default=False, null=True) # null, 1개, 2개
+    usb_a = models.BooleanField(default=False, null=True)  # null, 1개, 2개
+    usb_c = models.BooleanField(default=False, null=True)  # null, 1개, 2개
     sd_card = models.CharField(max_length=20, null=True)
     weight = models.DecimalField(max_digits=7, decimal_places=2, null=True)
-    battery = models.IntegerField(null=True)
-    single_score = models.IntegerField(null=True)
-    multi_score = models.IntegerField(null=True)
+    battery = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+
 
     def __str__(self):
         return self.name

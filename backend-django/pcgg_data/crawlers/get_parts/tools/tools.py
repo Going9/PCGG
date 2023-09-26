@@ -21,8 +21,8 @@ def get_driver(url: str):
 
     service = ChromeService(
         config("chrome_driver"))
-    # driver = webdriver.Chrome(service=service, options=options)
-    driver = webdriver.Chrome(service=service)
+    driver = webdriver.Chrome(service=service, options=options)
+    # driver = webdriver.Chrome(service=service)
     driver.get(url)
     driver.implicitly_wait(10)
 
@@ -178,14 +178,18 @@ def update_history(model: crawlers.models, parsed_name, price, model_name: str):
     if price != existing_model.price:
         existing_model.price = price
 
-    # 가격 추적 모델도 업데이트
-    price_history = PriceHistory(
-        type=model_name,
-        part_id=existing_model.id,
-        changed_date=timezone.now(),
-        price=price
-    )
-    price_history.save()
+        try:
+            # 가격 추적 모델도 업데이트
+            price_history = PriceHistory(
+                type=model_name,
+                part_id=existing_model.id,
+                changed_date=timezone.now(),
+                price=price
+            )
+            price_history.save()
+
+        except Exception as e:
+            print(e, "\n")
 
     return
 

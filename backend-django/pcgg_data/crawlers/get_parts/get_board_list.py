@@ -154,7 +154,7 @@ def get_board_list(url: str):
                             m2_count = item.split()[2][0]
 
                 except Exception as e:
-                    print(e)
+                    print(e, f"{item} \n")
 
                 try:
                     # board 모델 업데이트
@@ -184,8 +184,8 @@ def get_board_list(url: str):
                     price_history.save()
 
                 except Exception as e:
-                    print(e, "board model update error")
-                    print(parsed_name)
+                    print(e, f"{parsed_name} \n")
+
 
         # 스크롤 끝까지 내리고
         driver.execute_script(
