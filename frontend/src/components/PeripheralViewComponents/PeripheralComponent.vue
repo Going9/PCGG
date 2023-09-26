@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="text">
-      <span class="username">username</span><span>님께 추천드리는 </span>
+      <span class="username">{{ user.userInfo[0] }}</span
+      ><span>님께 추천드리는 </span>
       <span v-if="store.peripheralCategory === 'keyboard'">키보드</span>
       <span v-if="store.peripheralCategory === 'mouse'">마우스</span>
       <span v-if="store.peripheralCategory === 'monitor'">모니터</span>
@@ -37,11 +38,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { usePeripehralStore } from "@/store/peripheralStore";
+import { userStore } from "@/store/userStore";
 import PeripheralCardComponentVue from "./PeripheralCardComponent.vue";
 
 const store = usePeripehralStore();
+
+const user = userStore();
 
 const toggle = ref(null);
 
@@ -57,6 +61,10 @@ const buttonItems = [
   { label: "높은가격순", value: "high" },
   { label: "상품명순", value: "name" },
 ];
+
+onMounted(() => {
+  console.log(user.userInfo);
+});
 </script>
 
 <style scoped>

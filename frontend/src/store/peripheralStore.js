@@ -16,12 +16,15 @@ export const usePeripehralStore = defineStore("peripheral", {
   actions: {
     isPeripheralCategory(value) {
       this.peripheralCategory = value;
+      this.peripheralList = [];
     },
     async callList(value) {
       await isCallPeripheralList(
         value,
         ({ data }) => {
-          console.log(data);
+          this.peripheralList.push(data.content);
+          console.log(data.content);
+          console.log(this.peripheralList);
         },
         (error) => {
           console.log(error);
