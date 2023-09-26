@@ -23,7 +23,7 @@ public class RecommendController {
     private final RecommendService recommendService;
 
     //데스크탑추천
-    @Operation(summary = "공유마당 게시글 작성", description = "공유마당 게시글을 작성합니다.")
+    @Operation(summary = "PC견적 추천받기", description = "PC견적을 추천받습니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
