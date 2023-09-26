@@ -9,13 +9,22 @@ const routes = [
       {
         path: "",
         name: "Home",
-        component: () =>
-          import("@/views/HomeView.vue"),
+        component: () => import("@/views/HomeView.vue"),
       },
       {
         path: "/login",
         name: "Login",
         component: () => import("@/views/LoginView.vue"),
+      },
+      {
+        path: "/mypage",
+        name: "MyPage",
+        component: () => import("@/views/MyPageView.vue"),
+      },
+      {
+        path: "/mypage_EX",
+        name: "MyPage_EX",
+        component: () => import("@/views/MyPageView_EX.vue"),
       },
       {
         path: "/peripheral",
