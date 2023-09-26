@@ -1,8 +1,9 @@
-import { apiSpringInstance } from "./index.js";
+import { apiSpringInstance, apiSpringAuthInstance } from "./index.js";
 
 const api = apiSpringInstance();
+const apiAuth = apiSpringAuthInstance();
 
-async function isCallEstimate(data, success, fail) {
+async function isCallEstimatePc(data, success, fail) {
   const params = {
     usage: data[1],
     budget: data[2],
@@ -11,7 +12,21 @@ async function isCallEstimate(data, success, fail) {
     as: data[5],
     ssdSize: data[7],
   };
-  await api.get(`/recommends/desktop`, { params }).then(success).catch(fail);
+  await apiAuth
+    .get(`/recommends/desktop`, { params })
+    .then(success)
+    .catch(fail);
 }
 
-export { isCallEstimate };
+async function isCallEstimateLaptop(data, success, fail) {
+  const params = {
+    usage: data[1],
+    budget: data[2],
+    os: data[3],
+    priority: data[4],
+    as: data[5],
+  };
+  await api.get(`/recommends/laptop`, { params }).then(success).catch(fail);
+}
+
+export { isCallEstimatePc, isCallEstimateLaptop };

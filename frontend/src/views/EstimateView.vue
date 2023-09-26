@@ -53,6 +53,7 @@
           v-model="choiceBudget"
           type="number"
           step="10000"
+          @input="filterNegativeNumbers"
         ></v-text-field>
       </div>
       <div class="os" v-if="choiceLaptop">
@@ -84,17 +85,22 @@
       </div>
       <div class="priority">
         <h3>우선순위</h3>
-        <v-slider
-          v-model="priorityValue"
-          thumb-label
-          step="50"
-          show-ticks
-          track-color="#FC794F"
-          track-fill-color="#4599fc"
-          :thumb-color="color"
-          :min="-100"
-          :max="100"
-        ></v-slider>
+        <div style="display: flex; align-items: center">
+          <span style="font-weight: bold; color: #4599fc">가격</span>
+          <v-slider
+            v-model="priorityValue"
+            thumb-label
+            step="50"
+            show-ticks
+            track-color="#FC794F"
+            track-fill-color="#4599fc"
+            :thumb-color="color"
+            :min="-100"
+            :max="100"
+            hide-details
+          ></v-slider>
+          <span style="font-weight: bold; color: #fc794f">성능</span>
+        </div>
       </div>
       <div class="as">
         <h3>AS여부</h3>
@@ -218,11 +224,17 @@ const resetOtherCombos = (currentIndex) => {
 
 const choiceBudget = ref("");
 
+const filterNegativeNumbers = () => {
+  if (choiceBudget.value < 0) {
+    choiceBudget.value = 0;
+  }
+};
+
 const budgetValue = computed(() => {
   return Number(choiceBudget.value);
 });
 
-const choiceOs = ref(null);
+const choiceOs = ref("ok");
 
 const priorityValue = ref(0);
 
@@ -311,15 +323,19 @@ const addEstimate = () => {
       estimate.value.push(8000);
     }
   });
+  if (estimate.value.length >= 7) {
+    if (estimate.value[0] == "laptop") {
+      store.callEstimateLaptop(estimate.value);
+    }
+  }
 
-  if (estimate.value[0] == "desktop") {
-    store.callEstimate(estimate.value);
+  if (estimate.value.length == 8) {
+    if (estimate.value[0] == "desktop") {
+      store.callEstimatePc(estimate.value);
+    }
   }
 
   console.log(estimate.value);
-  console.log(choiceBudget.value);
-  console.log(budgetValue.value);
-
   estimate.value = [];
 };
 </script>

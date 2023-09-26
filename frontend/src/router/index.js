@@ -57,6 +57,11 @@ const routes = [
         component: () => import("@/views/EstimateView.vue"),
       },
       {
+        path: "/partrecommend",
+        name: "PartRecommend",
+        component: () => import("@/views/PartRecommendView.vue"),
+      },
+      {
         path: "/simulation",
         name: "Simulation",
         component: () => import("@/views/SimulationView.vue"),
