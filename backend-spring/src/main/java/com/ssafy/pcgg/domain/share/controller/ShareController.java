@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
-import com.ssafy.pcgg.domain.auth.TokenProvider;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
@@ -24,8 +23,6 @@ import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.service.ShareService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -40,17 +37,12 @@ public class ShareController {
 	private final ShareService shareService;
 
 	@Operation(summary = "공유마당 게시글 작성", description = "공유마당 게시글을 작성합니다.")
-	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "OK"),
-		@ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-		@ApiResponse(responseCode = "404", description = "NOT FOUND"),
-		@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	})
 	@PostMapping("/")
-	public ResponseEntity<Long> addShare(@RequestBody ShareAddRequestDto addRequestDto) {
-		logger.info("addShare(), userId = {}", addRequestDto.getUserId());
+	@CurrentUserId("userId")
+	public ResponseEntity<Long> addShare(UserIdDto userId, HttpServletRequest request, @RequestBody ShareAddRequestDto addRequestDto) {
+		logger.info("addShare(), userId = {}", userId.getUserId());
 
-		Long quoteId = shareService.addShare(addRequestDto);
+		Long quoteId = shareService.addShare(userId, addRequestDto);
 
 		return ResponseEntity.ok().body(quoteId);
 	}
@@ -63,14 +55,6 @@ public class ShareController {
 		return ResponseEntity.ok().body(shareDetailDto);
 	}
 
-	@Operation(summary = "공유마당 게시글 삭제", description = "공유마당 게시글을 삭제합니다.")
-	@DeleteMapping("/{articleId}")
-	public ResponseEntity<Long> deleteShare(@PathVariable Long articleId) {
-		logger.info("deleteShare(), articleId = {}", articleId);
-		shareService.deleteShare(articleId);
-		return ResponseEntity.ok().body(articleId);
-	}
-
 	@Operation(summary = "공유마당 게시글 목록 조회", description = "공유마당 게시글 목록을 조회합니다.")
 	@GetMapping("/")
 	public ResponseEntity<Slice<ShareResponseDto>> getShares(@RequestParam(value = "pages", defaultValue = "0") int pages) {
@@ -79,8 +63,17 @@ public class ShareController {
 		return ResponseEntity.ok().body(shareResponseDto);
 	}
 
+	@Operation(summary = "공유마당 게시글 삭제", description = "공유마당 게시글을 삭제합니다.")
+	@DeleteMapping("/{articleId}")
+	@CurrentUserId("userId")
+	public ResponseEntity<Void> deleteShare(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId) {
+		logger.info("deleteShare(), articleId = {}", articleId);
+		shareService.deleteShare(userId, articleId);
+		return ResponseEntity.ok().build();
+	}
+
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요 조회", description = "공유마당 게시글에 좋아요/싫어요 여부를 조회합니다.")
-	@GetMapping("/{articleId}/mark")
+	@GetMapping("/{articleId}/marks")
 	@CurrentUserId("userId")
 	public ResponseEntity<Integer> getMarkInfo(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId) {
 		logger.info("getShareDetail(), articleId = {}", articleId);
@@ -89,10 +82,11 @@ public class ShareController {
 	}
 
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요", description = "공유마당 게시글에 좋아요/싫어요를 누릅니다.")
-	@PutMapping("/{articleId}/mark")
-	public ResponseEntity<Integer> markLikes(@PathVariable Long articleId, @RequestBody ShareMarkRequestDto markRequestDto) {
+	@PutMapping("/{articleId}/marks")
+	@CurrentUserId("userId")
+	public ResponseEntity<Integer> markLikes(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId, @RequestBody ShareMarkRequestDto markRequestDto) {
 		logger.info("markLikes(), articleId = {}", articleId);
-		shareService.markLikes(articleId, markRequestDto);
+		shareService.markLikes(userId, articleId, markRequestDto);
 		return ResponseEntity.ok().body(markRequestDto.getMark());
 	}
 
