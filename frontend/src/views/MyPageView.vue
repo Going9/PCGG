@@ -70,7 +70,7 @@ const buttonEvent = async (value) => {
     1
   );
   width: 100%;
-  height: 500vh;
+  height: 2000px;
   position: absolute;
 }
 .userinfo {
