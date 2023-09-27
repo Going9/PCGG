@@ -41,6 +41,7 @@
         variant="outlined"
         @click:append-inner="visible = !visible"
         v-model="password"
+        @keyup.enter="loginEvent"
       ></v-text-field>
 
       <!-- <v-card class="mb-12" color="surface-variant" variant="tonal">
@@ -89,13 +90,14 @@ const goToSignupPage = () => {
   store.changePageLoginSignup();
 };
 
-const loginEvent = () => {
+const loginEvent = async () => {
   const loginInput = {
     email: email.value,
     password: password.value,
   };
 
-  store.login(loginInput);
+  await store.login(loginInput);
+  await store.loginUser();
 
   // 라우팅을 여기서 삭제하고 userStore로 옮겨서 해결
   // 여기서 하면 왜 안되는지 모르겠음 // async, await 문제는 아닌듯?

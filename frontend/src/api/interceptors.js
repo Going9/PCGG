@@ -5,7 +5,6 @@ export function setInterceptors(instance) {
     (config) => {
       const token = userStore().getAccessToken;
       if (token) {
-        console.log(token);
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;

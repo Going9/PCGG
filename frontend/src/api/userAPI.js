@@ -4,7 +4,7 @@ const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
 
 // 회원가입
-async function signup(user, success, fail) {
+async function signupAPI(user, success, fail) {
   await api.post("/users", JSON.stringify(user)).then(success).catch(fail);
 }
 
@@ -14,9 +14,9 @@ async function loginAPI(user, success, fail) {
   await api.post("/auth", JSON.stringify(user)).then(success).catch(fail);
 }
 
-// 테스트 api
-async function test(success, fail) {
+// 마이페이지(userInfo)
+async function getUserInfoAPI(success, fail) {
   await apiAuth.get("/users").then(success).catch(fail);
 }
 
-export { signup, loginAPI, test };
+export { signupAPI, loginAPI, getUserInfoAPI };
