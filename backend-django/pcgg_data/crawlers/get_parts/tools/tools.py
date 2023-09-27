@@ -46,29 +46,23 @@ def get_product_list(driver: webdriver):
 
 def move_to_next_page(driver: webdriver, current_page):
     try:
-        # 다음 페이지가 존재할 때
-        if driver.find_element(
+        # 현재 10의 배수 페이지면 화살표 눌러야함
+        if current_page % 10 == 0:
+            driver.find_element(
+                By.CSS_SELECTOR, "#productListArea > div.prod_num_nav > div > a").click()
+            time.sleep(2)  # 페이지 로딩 대기
+
+        elif current_page % 10 != 0:
+            driver.find_element(
                 By.CSS_SELECTOR,
                 f"a.num[onclick*='movePage({current_page + 1})']"
-        ):
+            ).click()
 
-            # 현재 10의 배수 페이지면 화살표 눌러야함
-            if current_page % 10 == 0:
-                driver.find_element(
-                    By.CSS_SELECTOR, "a.edge_nav nav_next").click()
-                time.sleep(2)  # 페이지 로딩 대기
+            time.sleep(2)  # 페이지 로딩 대기
 
-            else:
-                driver.find_element(
-                    By.CSS_SELECTOR,
-                    f"a.num[onclick*='movePage({current_page + 1})']"
-                ).click()
-
-                time.sleep(2)  # 페이지 로딩 대기
-
-            # 현재 페이지 번호 갱신
-            current_page = int(driver.find_element(
-                By.CSS_SELECTOR, ".num.now_on").text)
+        # 현재 페이지 번호 갱신
+        current_page = int(driver.find_element(
+            By.CSS_SELECTOR, ".num.now_on").text)
 
     except Exception as e:
         print(e, "\n")
