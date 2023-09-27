@@ -27,10 +27,10 @@ import videoWIcon from "./videoW.png";
 import threeWIcon from "./TesseractW.png";
 import broadcastWIcon from "./TwitchW.png";
 import developWIcon from "./VectorW.png";
-import OWIcon from "./OW.png";
-import OBIcon from "./OB.png";
-import XWIcon from "./XW.png";
-import XBIcon from "./XB.png";
+import OWIcon from "./ow.png";
+import OBIcon from "./ob.png";
+import XWIcon from "./xw.png";
+import XBIcon from "./xb.png";
 
 export {
   bellIcon,
