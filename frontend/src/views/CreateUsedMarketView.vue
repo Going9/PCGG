@@ -50,6 +50,7 @@
 import { usedMarketStore } from "@/store/usedmarketStore";
 import { usedMarketAPI } from "@/api/usedmarketAPI";
 import {ref} from 'vue';
+import router from "@/router";
 
 const store = usedMarketStore();
 
@@ -65,11 +66,12 @@ const createPostEvent = () => {
   usedMarketAPI(
     UsedMarketInput,
     ({ data }) => {
-      const msg = "게시글 작성이 완료되었습니다.";
+      let msg = "게시글 작성이 완료되었습니다.";
       if (data == null) {
-        msg = "회원가입이 실패했습니다.";
+        msg = "게시글 작성이 실패되었습니다.";
       }
       alert(msg);
+      router.push({name: "UsedMarket"});
     },
     (error) => {
       console.log(error);
