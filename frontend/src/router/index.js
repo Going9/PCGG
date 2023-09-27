@@ -33,6 +33,7 @@ const routes = [
         path: "/mypage",
         name: "MyPage",
         component: MyPage,
+      },
       {
         path: "/mypage_EX",
         name: "MyPage_EX",
