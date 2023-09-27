@@ -18,7 +18,7 @@ from decouple import config
 from asgiref.sync import sync_to_async
 
 
-@sync_to_async
+# @sync_to_async
 def get_peripherals_list(peripheral_device: str, model):
     print(f"{peripheral_device} 콜렉팅 시작")
 
@@ -82,7 +82,6 @@ async def main():
     print(b - a)  # asyncio.gather로 비동기 함수 실행
     # 10.750402212142944
 
-
 asyncio.run(main())
 
 
@@ -93,6 +92,7 @@ def not_async():
         get_peripherals_list(peripheral.__name__, peripheral)
     b = time.time()
     print(b - a)
-    # 12.450602769851685
+    #10.983697891235352
+
 
 # not_async()
