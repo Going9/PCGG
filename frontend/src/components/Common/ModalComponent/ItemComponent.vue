@@ -1,9 +1,11 @@
 <script setup>
+  import {defineProps} from 'vue'
+  const { item } = defineProps(['item']);
 </script>
 
 <template>
   <div class="container basic">
-    <span>부품 이름</span>
+    <span>제품명 : {{item.name}}</span>
   </div>
 </template>
 

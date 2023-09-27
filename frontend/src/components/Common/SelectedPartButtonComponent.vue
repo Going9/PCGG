@@ -1,6 +1,10 @@
 <script setup>
+  import { defineProps, defineEmits, ref } from 'vue';
   import { WhitePartIcon } from '@/assets/Icon';
-  const { props } = defineProps(['props']);
+  const props = defineProps({
+    selectedItem: String,
+    category : String,
+});
 </script>
 
 <template>
@@ -14,13 +18,13 @@
           </v-col >
           <v-col cols="7">
             <div class="font">
-              <div>{{ props }}</div>
+              <div>{{ category }}</div>
             </div>
           </v-col>
           <v-col cols="12">
             <div class="part-font">
               <div>
-                i - 7310
+                {{ selectedItem }}
               </div>
             </div>
           </v-col>

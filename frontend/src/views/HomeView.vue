@@ -121,9 +121,6 @@ import { mainbannerImg } from "@/assets/image";
   flex-wrap: wrap;
 }
 
-</style>
-
-<style scoped>
 .estimate {
   width: 31.375rem;
   height: 5.0625rem;

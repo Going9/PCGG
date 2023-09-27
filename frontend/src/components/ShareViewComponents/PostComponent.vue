@@ -15,7 +15,6 @@
     }else{
       share_like.value = 1
     }
-
    }
 
 </script>
@@ -24,14 +23,6 @@
   <div
   class="container">
     <div class="card-up">
-      <div class="heartIcon">
-        <v-icon
-          @click = "Changelike"
-          size="large"
-          :color="share_like > 0 ? 'red' : 'grey'"
-          icon="mdi-heart">
-        </v-icon>
-      </div>
       <div
       @click ="goDetail"
       class="content">
@@ -70,11 +61,6 @@
 </template>
 
 <style scoped>
-  .heartIcon {
-    position: absolute;
-    top: 0;
-    right: 0
-  }
   .card-down img {
     width: 2.5rem;
     height: 2.5rem;
