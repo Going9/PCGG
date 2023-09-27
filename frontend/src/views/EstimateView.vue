@@ -86,20 +86,18 @@
       <div class="priority">
         <h3>우선순위</h3>
         <div style="display: flex; align-items: center">
-          <span style="font-weight: bold; color: #4599fc">가격</span>
           <v-slider
             v-model="priorityValue"
-            thumb-label
-            step="50"
-            show-ticks
+            step="1"
+            show-ticks="always"
+            :ticks="tickLabels"
             track-color="#FC794F"
             track-fill-color="#4599fc"
             :thumb-color="color"
-            :min="-100"
-            :max="100"
+            :min="-1"
+            :max="1"
             hide-details
           ></v-slider>
-          <span style="font-weight: bold; color: #fc794f">성능</span>
         </div>
       </div>
       <div class="as">
@@ -238,9 +236,15 @@ const choiceOs = ref("ok");
 
 const priorityValue = ref(0);
 
+const tickLabels = {
+  "-1": "성능",
+  0: "가성비",
+  1: "가격",
+};
+
 const color = computed(() => {
-  if (priorityValue.value > 0) return "#FC794F";
-  if (priorityValue.value < 0) return "#4599fc";
+  if (priorityValue.value < 0) return "#FC794F";
+  if (priorityValue.value > 0) return "#4599fc";
   return "white";
 });
 
