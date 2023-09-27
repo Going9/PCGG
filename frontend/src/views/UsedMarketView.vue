@@ -1,10 +1,3 @@
-<script setup>
-  import PostComponent from '@/components/ShareViewComponents/PostComponent.vue'
-  import SearchComponent from '@/components/Common/SearchBarComponent.vue'
-  import ModalComponent from '@/components/Common/ModalComponent.vue';
-  import { RouterLink } from 'vue-router';
-</script>
-
 <template>
   <main>
     <ModalComponent class="modal"/>
@@ -20,7 +13,7 @@
     </div>
     <div class="searchbox flex-center">
       <SearchComponent/>
-    </div>
+    </div>         
       <div class="writebox">
         <RouterLink to="/used-market/createusedmarket">
           <v-btn color="#4599FC">글쓰기</v-btn>
@@ -36,13 +29,7 @@
               xl="2"
               lg="3"
               md="4"
-              sm="6"
-              v-for="postNum in 20"
-              :key="postNum"
-              style="{{margin-top: 1%; }}" class="post">
-              <PostComponent
-              style="{{  width: 20%; height: 100%; }}"
-              />
+              sm="6">
             </v-col>
           </v-row>
           </v-container>
@@ -51,6 +38,14 @@
     <router-view />
   </main>
 </template>
+
+<script setup>
+  import PostComponent from '@/components/ShareViewComponents/PostComponent.vue'
+  import SearchComponent from '@/components/Common/SearchBarComponent.vue'
+  import ModalComponent from '@/components/Common/ModalComponent.vue';
+  import { RouterLink } from 'vue-router';
+  import {   usedMarketAPI } from '@/api/usedmarketAPI';
+</script>
 
 <style scoped>
 .banner {

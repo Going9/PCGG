@@ -31,7 +31,32 @@
       </div>
       <div class="sub-title">
         <h2>
-          한 줄 설명
+          내용
+        </h2>
+      </div>
+
+      <div class="title-input input">
+        <v-text-field v-model="content"
+          label="내용"
+          :rules="rules"
+          hide-details="auto" 
+        ></v-text-field>
+      </div>
+      <div class="sub-title">
+        <h2>
+          가격
+        </h2>
+      </div>
+      <div class="title-input input">
+        <v-text-field v-model="price"
+          label="가격"
+          :rules="rules"
+          hide-details="auto" 
+        ></v-text-field>
+      </div>
+      <div class="sub-title">
+        <h2>
+          한 줄 요약
         </h2>
       </div>
       <div class="info-input input">
@@ -56,11 +81,15 @@ const store = usedMarketStore();
 
 const title2 = ref("");
 const summary = ref("");
+const content = ref("");
+const price = ref("");
 
 const createPostEvent = () => {
   const UsedMarketInput = {
     title: title2.value,
     summary: summary.value,
+    content: content.value,
+    price: price.value,
   };
 
   usedMarketAPI(

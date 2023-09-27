@@ -12,6 +12,18 @@ async function usedMarketAPI(data, success, fail) {
       .catch(fail);
 }
 
+// 중고거래 게시글 목록 출력
+async function listUsedMarketPost(success, fail) {
+  console.log("****");
+
+  await api
+    .get('/used-market')
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch(fail);
+}
+
 export {
   usedMarketAPI
 };        
