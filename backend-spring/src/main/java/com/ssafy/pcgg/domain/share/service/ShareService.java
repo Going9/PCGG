@@ -65,24 +65,48 @@ public class ShareService {
 	public Long addShare(UserIdDto userId, ShareAddRequestDto shareAddRequestDto) {
 		//1. 견적 생성
 		ShareAddQuoteRequestDto quoteRequestDto = shareAddRequestDto.getShareAddQuoteRequestDto();
+		CpuEntity cpuEntity = null;
+		MainboardEntity mainboardEntity = null;
+		SsdEntity ssdEntity = null;
+		RamEntity ramEntity = null;
+		GpuEntity gpuEntity = null;
+		ChassisEntity chassisEntity = null;
+		PowerEntity powerEntity = null;
+		CoolerEntity coolerEntity = null;
 
 		//1.1 견적Dto에서 받은 부품별 객체를 받아서
-		CpuEntity cpuEntity = cpuRepository.findById(quoteRequestDto.getCpuId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 cpu가 존재하지 않습니다."));
-		MainboardEntity mainboardEntity = mainboardRepository.findById(quoteRequestDto.getMainboardId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 mainboard가 존재하지 않습니다."));
-		SsdEntity ssdEntity = ssdRepository.findById(quoteRequestDto.getSsdId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 ssd가 존재하지 않습니다."));
-		RamEntity ramEntity = ramRepository.findById(quoteRequestDto.getRamId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 ram이 존재하지 않습니다."));
-		GpuEntity gpuEntity = gpuRepository.findById(quoteRequestDto.getGpuId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 gpu가 존재하지 않습니다."));
-		ChassisEntity chassisEntity = chassisRepository.findById(quoteRequestDto.getChassisId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 chassis가 존재하지 않습니다."));
-		PowerEntity powerEntity = powerRepository.findById(quoteRequestDto.getPowerId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 power가 존재하지 않습니다."));
-		CoolerEntity coolerEntity = coolerRepository.findById(quoteRequestDto.getCoolerId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 cooler가 존재하지 않습니다."));
+		if(quoteRequestDto.getCpuId() != null){
+			cpuEntity = cpuRepository.findById(quoteRequestDto.getCpuId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 cpu가 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getMainboardId() != null){
+			mainboardEntity = mainboardRepository.findById(quoteRequestDto.getMainboardId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 mainboard가 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getSsdId() != null){
+			ssdEntity = ssdRepository.findById(quoteRequestDto.getSsdId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 ssd가 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getRamId() != null){
+			ramEntity = ramRepository.findById(quoteRequestDto.getRamId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 ram이 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getGpuId() != null){
+			gpuEntity = gpuRepository.findById(quoteRequestDto.getGpuId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 gpu가 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getChassisId() != null){
+			chassisEntity = chassisRepository.findById(quoteRequestDto.getChassisId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 chassis가 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getPowerId() != null){
+			powerEntity = powerRepository.findById(quoteRequestDto.getPowerId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 power가 존재하지 않습니다."));
+		}
+		if(quoteRequestDto.getCoolerId() != null){
+			coolerEntity = coolerRepository.findById(quoteRequestDto.getCoolerId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 cooler가 존재하지 않습니다."));
+		}
 
 		//1.2 견적엔티티(QuoteEntity)를 생성
 		QuoteEntity quoteEntity = QuoteEntity.builder()
@@ -205,6 +229,8 @@ public class ShareService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
 
 		ShareLike shareLike = shareLikeRepository.findByShareAndUser(share, userEntity);
+
+		// TODO: mark 값 1, 0, -1만 허용하도록
 
 		if(shareLike == null){
 			shareLike = ShareLike.builder()
