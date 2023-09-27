@@ -24,7 +24,13 @@ export const userStore = defineStore("userStore", {
     strategies: [
       {
         storage: sessionStorage,
-        paths: ["loginActivated", "accessToken", "userInfo"],
+        paths: [
+          "loginActivated",
+          "accessToken",
+          "userInfo",
+          "mypageCategory",
+          "peripheralCategory",
+        ],
       },
     ],
   },
@@ -76,8 +82,15 @@ export const userStore = defineStore("userStore", {
       );
     },
     logout() {
+      // 모든 state 값을 일일이 초기화 하는대신
+      // session에 있는 값을 제거해보려 했지만 실패
       this.loginActivated = false;
       this.accessToken = "";
+      this.userInfo = {
+        nickname: "",
+      };
+      this.mypageCategory = "profile";
+      this.peripheralCategory = "keyboard";
     },
     triggerActivation() {
       this.triggerOne = !this.triggerOne;

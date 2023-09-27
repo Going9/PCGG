@@ -36,7 +36,7 @@ onMounted(() => {
 
 const buttonEvent = async (value) => {
   category.value = value;
-  await store.setCategory(value);
+  await store.setPeripheralCategory(value);
   await store.getMyPeripheral(value);
   console.log(store.getperipheralList);
 };
