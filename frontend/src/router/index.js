@@ -9,6 +9,10 @@ import Share from "@/views/ShareView.vue"
 import CreateShare from "@/views/CreateShareView.vue"
 import ShareDetail from "@/views/ShareDetailView.vue"
 import Simulation from "@/views/SimulationView.vue"
+import MyPage from "@/views/MyPageView.vue"
+import MyPage_EX from "@/views/MyPageView_EX.vue"
+import EstimateRecommend from "@/views/EstimateView.vue"
+import PartRecommend from "@/views/PartRecommendView.vue"
 
 const routes = [
   {
@@ -28,12 +32,11 @@ const routes = [
       {
         path: "/mypage",
         name: "MyPage",
-        component: () => import("@/views/MyPageView.vue"),
-      },
+        component: MyPage,
       {
         path: "/mypage_EX",
         name: "MyPage_EX",
-        component: () => import("@/views/MyPageView_EX.vue"),
+        component: MyPage_EX,
       },
       {
         path: "/peripheral",
@@ -73,17 +76,12 @@ const routes = [
       {
         path: "/estimaterecommend",
         name: "EstimateRecommend",
-        component: () => import("@/views/EstimateView.vue"),
+        component: EstimateRecommend,
       },
       {
         path: "/partrecommend",
         name: "PartRecommend",
-        component: () => import("@/views/PartRecommendView.vue"),
-      },
-      {
-        path: "/simulation",
-        name: "Simulation",
-        component: () => import("@/views/SimulationView.vue"),
+        component: PartRecommend,
       },
     ],
   },
