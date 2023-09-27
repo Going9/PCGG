@@ -9,7 +9,7 @@
       <span v-if="store.peripheralCategory === 'printer'">프린터와 복합기</span>
       <span v-if="store.peripheralCategory === 'etc'">주변기기</span>
     </div>
-    <PeripheralCardComponentVue class="recommend" :categoryVariable="toggle" />
+    <!-- <PeripheralCardComponentVue class="recommend" /> -->
     <!-- 분리선 -->
     <v-divider class="border-opacity-100" style="margin-top: 2rem"></v-divider>
     <div class="text">
@@ -32,7 +32,7 @@
           </v-btn>
         </v-btn-toggle>
       </div>
-      <PeripheralCardComponentVue :categoryVariable="toggle" />
+      <PeripheralCardComponentVue />
     </div>
   </div>
 </template>
