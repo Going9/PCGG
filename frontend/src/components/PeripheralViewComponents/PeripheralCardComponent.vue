@@ -1,35 +1,42 @@
 <template>
   <div>
-    <div v-for="(image, index) in temps" :key="index">
+    <div v-for="(item, index) in listData" :key="index">
       <div class="listitem" :class="{ open: expandedItem === index }">
-        <img :src="image" alt="noimage!" class="itemimg" />
+        <img :src="item['imageSource']" alt="noimage!" class="itemimg" />
         <v-divider class="border-opacity-100" vertical></v-divider>
         <div class="itemsummary" @click="toggleReview(index)">
           <div class="summary">
             <div>
-              <p>제품명: {{ store.peripheralCategory }}</p>
+              <p>제품명: {{ item["name"] }}</p>
             </div>
             <div>
-              <p>최고가: {{ store.peripheralCategory }}</p>
+              <p>최고가: {{ item["hprice"] }}</p>
             </div>
             <div>
-              <p>최저가: {{ store.peripheralCategory }}</p>
+              <p>최저가: {{ item["lprice"] }}</p>
             </div>
           </div>
           <div class="summary">
             <div>
-              <p>브랜드: {{ store.peripheralCategory }}</p>
+              <p>브랜드: {{ item["brand"] }}</p>
             </div>
             <div>
-              <p>단종여부: {{ store.peripheralCategory }}</p>
-            </div>
-            <div>
-              <p>링크: {{ store.peripheralCategory }}</p>
+              <v-btn :href="item['link']">상품 페이지</v-btn>
             </div>
           </div>
         </div>
-        <v-divider class="border-opacity-100" vertical></v-divider>
-        <v-btn icon="$vuetify" class="itembtn" variant="text">
+        <v-divider
+          class="border-opacity-100"
+          vertical
+          v-if="user.loginActivated"
+        ></v-divider>
+        <v-btn
+          icon="$vuetify"
+          class="itembtn"
+          variant="text"
+          @click="saveData(item['id'])"
+          v-if="user.loginActivated"
+        >
           <img :src="appendIcon" alt="no" class="append" />
         </v-btn>
       </div>
@@ -37,17 +44,14 @@
         <!-- 리뷰 내용 -->
         <div class="review-list">
           <div class="review-item">
-            <img src="" alt="profile" />
             <span>testdev1</span>
             <span>키보드 좋아요.</span>
           </div>
           <div class="review-item">
-            <img src="" alt="profile" />
             <span>testdev1</span>
             <span>키보드 좋아요.</span>
           </div>
           <div class="review-item">
-            <img src="" alt="profile" />
             <span>testdev1</span>
             <span>키보드 좋아요.</span>
           </div>
@@ -61,14 +65,23 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import temp1 from "@/assets/temp1.png";
+import { ref, computed } from "vue";
 import { appendIcon } from "@/assets/Icon";
 import { usePeripehralStore } from "@/store/peripheralStore";
+import { userStore } from "@/store/userStore";
 
 const store = usePeripehralStore();
 
-const temps = [temp1, temp1, temp1, temp1, temp1];
+const user = userStore();
+
+const listData = computed(function () {
+  return store.peripheralList;
+});
+
+const saveData = (id) => {
+  const data = [store.peripheralCategory, id];
+  store.saveItem(data);
+};
 
 const expandedItem = ref(-1);
 
@@ -106,9 +119,13 @@ const toggleReview = (index) => {
   padding: 3px 1rem;
   width: 80%;
   cursor: pointer;
+  justify-content: space-between;
 }
 
 .summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin-right: 2rem;
 }
 
