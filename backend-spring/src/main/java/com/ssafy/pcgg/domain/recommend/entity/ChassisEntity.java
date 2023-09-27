@@ -9,8 +9,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name = "part_chassis")
-public class ChassisEntity {
+public class
+ChassisEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +21,7 @@ public class ChassisEntity {
     @Column(length = 100)
     private String name;
 
-    @Getter
+    // @Getter
     private Integer price;
 
     @Column(name="image_source", length=200)
@@ -45,7 +47,7 @@ public class ChassisEntity {
     @Column(columnDefinition = "DECIMAL(7,2)")
     private BigDecimal depth;
 
-    @Getter
+    // @Getter
     @Column(name="max_power_depth", columnDefinition = "DECIMAL(7,2)")
     //@Column(name="max_power_depth", precision = 7, scale = 2)
     private BigDecimal maxPowerDepth;

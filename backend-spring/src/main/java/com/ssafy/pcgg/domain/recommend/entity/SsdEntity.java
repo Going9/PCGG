@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name = "part_ssd")
 public class SsdEntity {
     @Id
@@ -17,7 +18,7 @@ public class SsdEntity {
     @Column(length = 100)
     private String name;
 
-    @Getter
+    // @Getter
     private Integer price;
 
     @Column(name="image_source", length=200)
@@ -25,7 +26,7 @@ public class SsdEntity {
 
     private Boolean extinct;
 
-    @Getter
+    // @Getter
     @Column(name="pcie_ver")
     private Integer pcieVer;
 
