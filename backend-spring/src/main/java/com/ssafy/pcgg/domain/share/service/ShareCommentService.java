@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.share.service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.share.dto.CommentResponseDto;
 import com.ssafy.pcgg.domain.share.dto.CommentRequestDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
@@ -28,10 +30,10 @@ public class ShareCommentService {
 	private final UserRepository userRepository;
 
 	@Transactional
-	public Long addComment(Long articleId, CommentRequestDto addRequestDto){
+	public Long addComment(UserIdDto userId, Long articleId, CommentRequestDto addRequestDto){
 		Share share = shareRepository.findById(articleId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 게시글이 존재하지 않습니다."));
-		UserEntity userEntity = userRepository.findById(addRequestDto.getUserId())
+		UserEntity userEntity = userRepository.findById(userId.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 사용자가 존재하지 않습니다."));
 
 		ShareComment shareComment = ShareComment.builder()
@@ -41,9 +43,7 @@ public class ShareCommentService {
 			.createdAt(LocalDateTime.now())
 			.build();
 
-		ShareComment comment = shareCommentRepository.save(shareComment);
-
-		return comment.getId();
+		return shareCommentRepository.save(shareComment).getId();
 	}
 
 	@Transactional(readOnly=true)
@@ -58,7 +58,7 @@ public class ShareCommentService {
 			.id(shareComment.getId())
 			.shareId(shareComment.getShare().getId())
 			.userId(shareComment.getUser().getUserId())
-			// .userName(shareComment.getUser().getNickname())	//추후 UserEntity에 nickname 추가시, 수정예정
+			.userNickname(shareComment.getUser().getNickname())
 			.content(shareComment.getContent())
 			.build();
 
@@ -66,27 +66,27 @@ public class ShareCommentService {
 	}
 
 	@Transactional
-	public Long updateComment(Long commentId, CommentRequestDto commentRequestDto){
+	public void updateComment(UserIdDto userId, Long commentId, CommentRequestDto commentRequestDto){
 		ShareComment shareComment = shareCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 댓글이 존재하지 않습니다."));
 
-		// TODO: 댓글 작성자와 수정 요청자의 일치 여부 확인
-		if(shareComment.getUser().getUserId() != commentRequestDto.getUserId()){
-			throw new RuntimeException("수정 권한이 없는 사용자입니다.");
+		if(!Objects.equals(shareComment.getUser().getUserId(), userId.getUserId())) {
+			throw new IllegalArgumentException("수정 권한이 없는 사용자입니다. (작성자만 수정가능)");
 		}
 
 		shareComment.updateContent(commentRequestDto.getContent());
 		shareCommentRepository.save(shareComment);
 
-		return commentId;
 	}
 
 	@Transactional
-	public void deleteComment(Long commentId){
-		// TODO: 댓글 작성자와 삭제 요청자의 일치 여부 확인
-
+	public void deleteComment(UserIdDto userId, Long commentId){
 		ShareComment shareComment = shareCommentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 공유마당 댓글이 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 id의 공유마당 댓글이 존재하지 않습니다."));
+
+		if(!Objects.equals(shareComment.getUser().getUserId(), userId.getUserId())) {
+			throw new IllegalArgumentException("삭제 권한이 없는 사용자입니다. (작성자만 삭제가능)");
+		}
 
 		shareCommentRepository.delete(shareComment);
 	}

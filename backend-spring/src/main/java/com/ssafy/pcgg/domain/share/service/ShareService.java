@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.share.service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.recommend.entity.ChassisEntity;
 import com.ssafy.pcgg.domain.recommend.entity.CoolerEntity;
 import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
@@ -28,6 +30,7 @@ import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
 import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
 import com.ssafy.pcgg.domain.share.dto.ShareAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
+import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
 import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
@@ -55,10 +58,11 @@ public class ShareService {
 	private final CoolerRepository coolerRepository;
 	private final UserRepository userRepository;
 
+	private final QuoteRepository QuoteRepository;
 	private final ShareLikeRepository shareLikeRepository;
 
 	@Transactional
-	public Long addShare(ShareAddRequestDto shareAddRequestDto) {
+	public Long addShare(UserIdDto userId, ShareAddRequestDto shareAddRequestDto) {
 		//1. 견적 생성
 		ShareAddQuoteRequestDto quoteRequestDto = shareAddRequestDto.getShareAddQuoteRequestDto();
 
@@ -94,7 +98,7 @@ public class ShareService {
 
 		QuoteEntity quote = quoteRepository.save(quoteEntity);
 
-		UserEntity userEntity = userRepository.findById(shareAddRequestDto.getUserId())
+		UserEntity userEntity = userRepository.findById(userId.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 사용자가 존재하지 않습니다."));
 
 		//2. 공유마당 게시글 생성
@@ -117,11 +121,14 @@ public class ShareService {
 	 * 공유마당 상세 조회
 	 */
 	@Transactional(readOnly = true)
-	public ShareResponseDto getShare(Long shareId){
+	public ShareDetailDto getShare(Long shareId){
 		Share share =  shareRepository.findById(shareId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
 
-		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
+		long likeCnt = shareLikeRepository.countLikesForShareWithId(shareId, 1);
+		long disLikeCnt = shareLikeRepository.countLikesForShareWithId(shareId, -1);
+
+		ShareDetailDto shareDetailDto = ShareDetailDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
 			.quoteId(share.getQuote().getId())
@@ -129,21 +136,28 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
-			// .mark(0)
+			.likeCnt(likeCnt)
+			.dislikeCnt(disLikeCnt)
 			.build();
 
-		return shareResponseDto;
+		return shareDetailDto;
 	}
 
 	/**
 	 * 공유마당 삭제
 	 */
 	@Transactional
-	public void deleteShare(Long shareId){
+	public void deleteShare(UserIdDto userId, Long shareId){
 		Share share =  shareRepository.findById(shareId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
-		// TODO: 작성자와 삭제 요청자의 id의 일치 여부
+		QuoteEntity quoteEntity = share.getQuote();
+
+		if(!Objects.equals(share.getUser().getUserId(), userId.getUserId())) {
+			throw new IllegalArgumentException("삭제 권한이 없는 사용자입니다. (작성자만 삭제가능)");
+		}
+
 		shareRepository.delete(share);
+		QuoteRepository.delete(quoteEntity);
 	}
 
 	/**
@@ -166,18 +180,26 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
-			// .mark(0)
 			.build();
 
 		return shareResponseDto;
 	}
 
 	/**
+	 * 공유마당 좋아요/싫어요 확인
+	 */
+	public Integer getMarkInfo(UserIdDto userId, Long shareId){
+		Integer mark = shareLikeRepository.findMarkByShareIdAndUserId(shareId, userId.getUserId());
+		mark = (mark == null) ? 0 : mark;
+		return mark;
+	}
+
+	/**
 	 * 공유마당 좋아요/싫어요
 	 */
 	@Transactional
-	public void markLikes(Long articleId, ShareMarkRequestDto markRequestDto){
-		UserEntity userEntity = userRepository.findById(markRequestDto.getUserId())
+	public void markLikes(UserIdDto userId, Long articleId, ShareMarkRequestDto markRequestDto){
+		UserEntity userEntity = userRepository.findById(userId.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
 		Share share = shareRepository.findById(articleId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));

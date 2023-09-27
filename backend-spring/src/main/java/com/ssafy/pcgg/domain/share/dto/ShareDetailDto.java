@@ -1,5 +1,7 @@
 package com.ssafy.pcgg.domain.share.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +13,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentResponseDto {
+public class ShareDetailDto {
 	private Long id;
-	private Long shareId;
 	private Long userId;
-	private String userNickname;
+	private Long quoteId;
+	private String title;
 	private String content;
+	private String summary;
+	private LocalDateTime createdAt;
+	private Long likeCnt;
+	private Long dislikeCnt;
 }
