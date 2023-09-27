@@ -9,17 +9,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name = "part_gpu")
 public class GpuEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
+    // @Getter
     @Column(length = 100)
     private String name;
 
-    @Getter
+    // @Getter
     private Integer price;
 
     @Column(name="image_source", length=200)
@@ -30,7 +31,7 @@ public class GpuEntity {
     @Column(name = "needed_power")
     private Integer neededPower;
 
-    @Getter
+    // @Getter
     @Column(columnDefinition = "DECIMAL(7,2)")
     //@Column(precision = 7, scale = 2)
     private BigDecimal width;
