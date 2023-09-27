@@ -1,19 +1,33 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref, onMounted } from 'vue';
 import SearchBarComponent from './SearchBarComponent.vue';
 import ResultListComponent from './ModalComponent/ResultListComponent.vue';
 
 const props = defineProps({
   isModal: Boolean,
+  partCategory : String,
 });
 
-let selectedPart = ""
-// console.log(props.isModal)
+const selectedPart = ref("")
 const emit = defineEmits(['closeModal']);
+
+// 선택된 부품 정보를 partSelectionComponent로 보냄
 const closeModal = () => {
-  const newSelectedPart = selectedPart
-  emit('closeModal', newSelectedPart); // "closeModal" 이벤트를 발생시켜 부모 컴포넌트로 데이터를 전달
+  if(selectedPart.value != ""){
+    const newSelectedPart = selectedPart.value.name
+    emit('closeModal', newSelectedPart);
+    selectedPart.value = ""
+  }
+  else{
+    emit('closeModal', "");
+  }
 };
+const setItem = (itemName) => {
+  selectedPart.value = itemName
+};
+
+
+
 </script>
 <template>
   <v-row justify="center">
@@ -35,7 +49,13 @@ const closeModal = () => {
           >
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>부품 선택</v-toolbar-title>
+
+          <v-toolbar-title>부품 선택 ( {{partCategory}} )</v-toolbar-title>
+          <v-toolbar-items class="selectedpart">
+            <h2>
+              선택된 부품 : {{ selectedPart.name != "" ? selectedPart.name : " 없음"}}
+            </h2>
+          </v-toolbar-items>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn
@@ -47,14 +67,20 @@ const closeModal = () => {
           </v-toolbar-items>
         </v-toolbar>
         <SearchBarComponent/>
-        <ResultListComponent/>
-
+        <ResultListComponent
+        @msg="setItem"/>
       </v-card>
     </v-dialog>
   </v-row>
 </template>
 
 <style scoped>
+
+.selectedpart {
+  display: flex;
+  align-items: center;
+}
+
 .dialog-bottom-transition-enter-active,
 .dialog-bottom-transition-leave-active {
   transition: transform .2s ease-in-out;

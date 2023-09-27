@@ -1,13 +1,40 @@
 <script setup>
   import PostComponent from '@/components/ShareViewComponents/PostComponent.vue'
   import SearchComponent from '@/components/Common/SearchBarComponent.vue'
-  import ModalComponent from '@/components/Common/ModalComponent.vue';
   import { RouterLink } from 'vue-router';
+  import { loadSharedList } from "@/api/shares";
+  import { onMounted, ref } from 'vue';
+
+  const postList = ref([])
+
+  const loadSharedListEvent = (value) => {
+    const data = { pages : value }
+    loadSharedList(
+      data
+      ,
+      ({ data }) => {
+        let msg = "공유 게시글 불러오기에 성공했습니다.";
+        postList.value = data
+        console.log(postList.value.content)
+        if (data == null) {
+          msg = "공유 게시글이 없습니다.";
+        }
+        alert(msg);
+      },
+      (error) => {
+        console.log(error);
+      }
+  );
+};
+
+onMounted(() => {
+  loadSharedListEvent(0);
+});
+
 </script>
 
 <template>
   <main>
-    <ModalComponent class="modal"/>
     <div class="banner">
       <img alt="BannerImg" class="bannerImg" src="@/assets/image/share-banner.jpg" />
       <div class="box">
@@ -60,7 +87,6 @@
 }
 
 .bannerImg {
-  padding-top: 1.5%;
   width: 100%;
   height: 100%;
   object-fit: cover;
