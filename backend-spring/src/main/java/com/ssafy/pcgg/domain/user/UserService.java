@@ -70,14 +70,7 @@ public class UserService {
 
     // peripheral 관련 class 상속 구조로 리팩토링 필요!!
     public List<UserPeripheralResponse> getMyPeripherals(Long userId, String category) {
-        List<PeripheralSaved> peripheralSaved = peripheralSavedRepository.findByUser_UserId(userId);
-
-        for (PeripheralSaved ps : peripheralSaved) {
-            System.out.print(ps.getId());
-            System.out.print(ps.getPeripheralId());
-            System.out.print(ps.getUser().getUserId());
-            System.out.println(ps.getPeripheralTypeNs());
-        }
+        List<PeripheralSaved> peripheralSaved = peripheralSavedRepository.findByUser_UserIdAndPeripheralTypeNs_Name(userId, category);
 
         List<UserPeripheralResponse> userPeripheralResponseList= new ArrayList<>();
 
