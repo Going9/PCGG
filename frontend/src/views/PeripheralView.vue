@@ -10,7 +10,6 @@
           <v-btn
             v-for="item in buttonItems"
             :key="item.value"
-            :value="item.value"
             :class="{
               'active-button': toggle === item.value,
               'inactive-button': toggle !== item.value,
