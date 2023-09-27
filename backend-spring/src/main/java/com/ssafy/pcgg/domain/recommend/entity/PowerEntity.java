@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name = "part_power")
 public class PowerEntity {
     @Id
@@ -18,7 +19,7 @@ public class PowerEntity {
     @Column(length = 100)
     private String name;
 
-    @Getter
+    // @Getter
     private Integer price;
 
     @Column(name="image_source", length=200)
@@ -29,7 +30,7 @@ public class PowerEntity {
     @Column(length = 10)
     private String size;
 
-    @Getter
+    // @Getter
     @Column(length = 20)
     private String grade;
 
