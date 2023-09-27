@@ -81,9 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pcgg_db',
-        'USER': 'root',
-        'PASSWORD': 'ssafy',
-        'HOST': 'pcgg.kro.kr',
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
         'PORT': '3306'
     }
 }
