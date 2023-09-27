@@ -5,11 +5,32 @@ import profileIcon from "./profileIcon.png";
 import rankingIcon from "./Ranking.png";
 import searchIcon from "./search.png";
 import sendIcon from "./send.png";
-
-import WhitePartIcon from "./WhitePartIcon.png"
-import BlackPartIcon from "./BlackPartIcon.png"
+import WhitePartIcon from "./WhitePartIcon.png";
+import BlackPartIcon from "./BlackPartIcon.png";
 import saveIcon from "./saveIcon.png";
 import appendIcon from "./append.png";
+import pcIcon from "./pc.png";
+import partIcon from "./cpu.png";
+import desktopIcon from "./desktop.png";
+import laptopIcon from "./laptop.png";
+import docsIcon from "./document.png";
+import gameIcon from "./game.png";
+import videoIcon from "./video.png";
+import threeIcon from "./Tesseract.png";
+import broadcastIcon from "./Twitch.png";
+import developIcon from "./Vector.png";
+import desktopWIcon from "./desktopW.png";
+import laptopWIcon from "./laptopW.png";
+import docsWIcon from "./documentW.png";
+import gameWIcon from "./gameW.png";
+import videoWIcon from "./videoW.png";
+import threeWIcon from "./TesseractW.png";
+import broadcastWIcon from "./TwitchW.png";
+import developWIcon from "./VectorW.png";
+import OWIcon from "./OW.png";
+import OBIcon from "./OB.png";
+import XWIcon from "./XW.png";
+import XBIcon from "./XB.png";
 
 export {
   bellIcon,
@@ -23,4 +44,26 @@ export {
   BlackPartIcon,
   saveIcon,
   appendIcon,
+  pcIcon,
+  partIcon,
+  desktopIcon,
+  laptopIcon,
+  developIcon,
+  gameIcon,
+  docsIcon,
+  videoIcon,
+  threeIcon,
+  broadcastIcon,
+  desktopWIcon,
+  laptopWIcon,
+  developWIcon,
+  gameWIcon,
+  docsWIcon,
+  videoWIcon,
+  threeWIcon,
+  broadcastWIcon,
+  OWIcon,
+  OBIcon,
+  XWIcon,
+  XBIcon,
 };
