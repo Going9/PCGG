@@ -9,15 +9,13 @@ const summary = ref("")
 
 const createSharedPostEvent = () => {
 
-    const body = {
-      userId: 3,
+    const data = {
       title: title.value,
       content: content.value,
-      imageSource: "string",
-      summary: title.value,
+      summary: summary.value,
       shareAddQuoteRequestDto: {
       cpuId: 1,
-      mainboardId: 1,
+      mainboardId: 301,
       ssdId: 1,
       ramId: 1,
       gpuId: 1,
@@ -25,8 +23,9 @@ const createSharedPostEvent = () => {
       powerId: 1,
       coolerId: 1,
   } }
+  console.log(data)
       createSharedPost(
-        body
+        data
       ,
       ({ data }) => {
         let msg = "공유 게시글 작성에 성공했습니다.";
@@ -41,6 +40,12 @@ const createSharedPostEvent = () => {
     );
 
   }
+const partlist = ref([])
+
+const setList = (lst)=>{
+  console.log(lst)
+  partlist.value = lst
+}
 </script>
 
 <template>
@@ -80,7 +85,8 @@ const createSharedPostEvent = () => {
         </h2>
       </div>
       <div class="select">
-        <PartSelectionComponent/>
+        <PartSelectionComponent
+          @partList ="setList"/>
       </div>
 
       <div class="sub-title">

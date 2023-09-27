@@ -33,7 +33,6 @@
         v-for="item in cpuData"
         :key="item.id"
         >
-           <!-- 추후에 리스트 아이템의 이름으로 변경예정 -->
           <ItemComponent
           :class="{ 'selected' : selectedItem.id == item.id }"
           :item = item

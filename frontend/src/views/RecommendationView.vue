@@ -13,7 +13,7 @@
         <Carousel3D />
       </div>
       <div class="subcarouselbox" ref="subCarouselBox">
-        <div v-if="isIntersecting">
+        <div>
           <div class="subCarouselComment">
             <span>닉네임님에게 추천하는 상품</span>
           </div>

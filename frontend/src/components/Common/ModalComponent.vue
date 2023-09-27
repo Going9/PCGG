@@ -23,7 +23,6 @@ const closeModal = () => {
   }
 };
 const setItem = (itemName) => {
-  console.log(itemName)
   selectedPart.value = itemName
 };
 

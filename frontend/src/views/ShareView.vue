@@ -28,7 +28,7 @@
 };
 
 onMounted(() => {
-  // loadSharedListEvent(0);
+  loadSharedListEvent(0);
 });
 
 </script>

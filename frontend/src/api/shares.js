@@ -8,9 +8,11 @@ async function loadSharedList(body, success, fail) {
   await api.get("/shares/", JSON.stringify(params)).then(success).catch(fail);
 }
 
-async function createSharedPost(data, success, fail) {
-const body = { data }
-  await apiAuth.post("/shares/", JSON.stringify(body)).then(success).catch(fail);
+async function createSharedPost( data, success, fail) {
+  await apiAuth
+  .post(`/shares/`, JSON.stringify(data))
+  .then(success)
+  .catch(fail);
 }
 
 

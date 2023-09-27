@@ -68,7 +68,6 @@ function toggleModal(part) {
 function closeModal(selectedPart) {
   changePart(partCategory, selectedPart);
   isModal.value = false;
-  console.log(partList)
 }
 
 // partList에 선택된 부품을 추가
@@ -78,7 +77,7 @@ function changePart(part, selectedPartName) {
 }
 
 
-// 부품이 선택되었는지 여부를 확인하는 함수
+// 부품이 선택되었는지 여부를 확인
 function isPartSelected(part) {
   return partList.value.find(item => item.name === part.name && item.value !== "");
 }
