@@ -70,18 +70,13 @@ public class RecommendController {
     //부품 추천
     @Operation(summary = "(진행중)부품 추천받기", description = "부품을 추천받습니다.")
     @PostMapping("/part")
-    public ResponseEntity<?> getPartRecommend(){
-        Map<String,Object> resultMap;
-        HttpStatus httpStatus;
+    public ResponseEntity<?> getPartRecommend(@RequestBody PartRequestDto partRequestDto){
         try{
-//            resultMap = recommendService.bussinessLogic();
-            httpStatus = HttpStatus.OK;
+            List<PartDto> partDtoList = (List<PartDto>) recommendService.getPartRecommend(partRequestDto);
+            return ResponseEntity.ok().body(partDtoList);
         }catch(Exception e){
-            resultMap = new HashMap<>();
-            resultMap.put("message","unexpected ERROR");
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            return ResponseEntity.internalServerError().build();
         }
-        return new ResponseEntity<>(partDtoList, httpStatus);
     }
 
     //추천결과 상세조회

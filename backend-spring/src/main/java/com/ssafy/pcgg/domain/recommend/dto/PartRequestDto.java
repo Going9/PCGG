@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PartRequestDto {
+    private String category;
     private String usage;
     private int budget;
     private int priority;
