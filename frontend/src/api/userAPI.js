@@ -8,6 +8,7 @@ async function signup(user, success, fail) {
   await api.post("/users", JSON.stringify(user)).then(success).catch(fail);
 }
 
+
 // 로그인
 async function loginAPI(user, success, fail) {
   await api.post("/auth", JSON.stringify(user)).then(success).catch(fail);

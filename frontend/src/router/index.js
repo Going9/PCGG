@@ -52,6 +52,22 @@ const routes = [
         name: "Simulation",
         component: () => import("@/views/SimulationView.vue"),
       },
+      {
+        path: "/used-market",
+        children: [
+          {
+            path: "",
+            name: "UsedMarket",
+            component: () => import("@/views/UsedMarketView.vue"),
+          },
+          {
+            path: "createusedmarket",
+            name: "CreateUsedMarket",
+            component: () => import("@/views/CreateUsedMarketView.vue"),
+          }
+
+        ],
+      }
     ],
   },
 ];
