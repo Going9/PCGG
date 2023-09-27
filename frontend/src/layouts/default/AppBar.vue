@@ -30,15 +30,14 @@
             Logout</span
           >
         </RouterLink>
-        <RouterLink to="/">
+        <RouterLink to="/mypage">
           <img
             alt="profileIcon"
             class="profile"
             src="@/assets/Icon/profileIcon.png"
-            @click="testEvent"
           />
         </RouterLink>
-        <RouterLink to="/">
+        <RouterLink to="/mypage_EX">
           <img alt="bellIcon" class="bell" src="@/assets/Icon/bellIcon.png" />
         </RouterLink>
         <RouterLink to="/">
@@ -54,23 +53,11 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import { test } from "@/api/userAPI";
+import { RouterLink } from "vue-router";
 import { userStore } from "@/store/userStore";
 import router from "@/router";
 
 const store = userStore();
-
-const testEvent = () => {
-  test(
-    ({ data }) => {
-      console.log(data);
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
 
 const logoutEvent = () => {
   store.logout();

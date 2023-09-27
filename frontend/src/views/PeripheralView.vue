@@ -59,8 +59,11 @@ const toggle = ref(null);
 const setToggle = (value) => {
   toggle.value = value;
   store.isPeripheralCategory(value);
-  console.log(store.peripheralCategory);
+  const data = { category: toggle.value, page: 0 };
+  store.callList(data);
 };
+
+// const infiniteScroll = () => {};
 
 const buttonItems = [
   { label: "키보드", value: "keyboard" },
@@ -82,6 +85,8 @@ const goSearch = () => {
 
 onMounted(() => {
   toggle.value = store.peripheralCategory;
+  const data = { category: toggle.value, page: 0 };
+  store.callList(data);
 });
 </script>
 

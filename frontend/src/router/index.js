@@ -26,6 +26,16 @@ const routes = [
         component: Login,
       },
       {
+        path: "/mypage",
+        name: "MyPage",
+        component: () => import("@/views/MyPageView.vue"),
+      },
+      {
+        path: "/mypage_EX",
+        name: "MyPage_EX",
+        component: () => import("@/views/MyPageView_EX.vue"),
+      },
+      {
         path: "/peripheral",
         name: "Peripheral",
         component: Peripheral
