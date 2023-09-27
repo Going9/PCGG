@@ -43,10 +43,10 @@ public class CpuEntity {
 
     @Getter
     @Column(name = "single_score")
-    private int singleScore;
+    private Integer singleScore;
 
     @Column(name = "multi_score")
-    private int multiScore;
+    private Integer multiScore;
 
     @Setter
     @Column(name = "`class`", columnDefinition = "tinyint")
