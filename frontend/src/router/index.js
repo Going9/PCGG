@@ -63,7 +63,7 @@ const routes = [
             component: CreateShare,
           },
           {
-            path: "/share/sharedetail",
+            path: "/share/sharedetail/:id",
             name: "ShareDetail",
             component:ShareDetail,
           },

@@ -1,21 +1,74 @@
 <script setup>
   import { profileExampleImg } from '@/assets/image'
+  import { shareStore } from '@/store/shareStore';
+  import { userStore } from '@/store/userStore';
+  import { defineProps, ref, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { like, dislike } from '@/assets/Icon';
+  import { likeSharePostAPI } from '@/api/shareAPI';
+
+  const route = useRoute();
+  const id = route.params.id;
+  const post = ref([]);
+  const store = shareStore();
+  const likeCnt = ref(0);
+  const dislikeCnt = ref(0);
+  const isLike = ref(0);
+  const isLogin = ref(false);
+
+
+  const selectlike = (value) => {
+    console.log(isLogin.value)
+    if(!isLogin.value){
+      const msg = "로그인이 필요합니다"
+      return alert(msg)
+    }
+    const data = {
+      articleId : id,
+      mark : value
+    }
+    console.log(data)
+    likeSharePostAPI(
+    data
+    ,
+    ({ data }) => {
+      isLike.value = data
+    }
+    ,
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+
+  onMounted(()=>{
+    isLogin.value = userStore().isLogin;
+    const shareList = store.isShareList;
+    setTimeout(()=>{
+      console.log(shareList)
+      post.value= shareList.filter((post)=> post.id == id )[0]
+      console.log(post.value)
+    },200)
+
+  })
+
 </script>
 
 <template>
   <v-container class="container">
-
+    {{ post }}
     <v-row class="header">
       <span class="main-title">
         <h1>
-          제목 : 가성비 컴퓨터
+          제목 : {{ post?.title }}
         </h1>
       </span>
     </v-row>
     <v-row class="content">
       <div>
         <h1>
-          컴퓨터 견적 내용
+          컴퓨터 견적 내용 {{ post?.quoteld }}
         </h1>
       </div>
     </v-row>
@@ -24,13 +77,13 @@
       <v-col
         cols="8">
         <h3>
-          한 줄 설명 : 가벼운 컴퓨터 작업 기준 가성비 게임 입니다.
+          한 줄 설명 : {{ post?.summary }}
         </h3>
       </v-col>
       <v-col
         cols="2">
         <h3>
-          추천인 : 유저
+          추천인 : {{ post?.userId }}
         </h3>
       </v-col>
       <v-col
@@ -42,6 +95,48 @@
         alt="profileExample">
       </v-col>
     </v-row>
+
+    <v-row>
+      <v-col class="like">
+        <v-col
+        class="like-label"
+        cols="5">
+        <th>
+          추천
+        </th>
+        </v-col>
+        <v-col
+          @click="selectlike(1)"
+          cols="2">
+          <img :src="like" alt="like">
+        </v-col>
+        <v-col
+        class="like-cnt"
+        cols="5">
+          {{ isLike == 1 ? likeCnt+1 : likeCnt }}
+        </v-col>
+      </v-col>
+      <v-col class="dislike">
+        <v-col
+          class="dislike-label"
+          cols="5">
+          <th>
+            비추천
+          </th>
+        </v-col>
+        <v-col
+          @click="selectlike(-1)"
+          cols="2">
+          <img :src="dislike" alt="dislike">
+        </v-col>
+        <v-col
+        class="dislike-cnt"
+        cols="5">
+        {{ isLike == -1 ? dislikeCnt+1 : dislikeCnt }}
+        </v-col>
+      </v-col>
+    </v-row>
+
 
     <div class="footer">
       <span class="main-title">
@@ -108,7 +203,7 @@
 
 .summery-info {
   padding: 1%;
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -134,6 +229,19 @@
     border-radius: 2rem;
  }
 
+.like, .dislike {
+  display: flex;
+  text-align: right;
+}
 
+.like-label, .dislike-label {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.like-cnt, .dislike-cnt {
+  display: flex;
+  justify-content: flex-start;
+}
 
 </style>
