@@ -17,7 +17,6 @@ async function createSharePostAPI( data, success, fail) {
 
 async function likeSharePostAPI(data, success, fail) {
   const body = { mark : data.mark }
-  console.log(body)
   await apiAuth
   .put(`/shares/${data.articleId}/marks`, JSON.stringify(body))
   .then(success)
@@ -25,13 +24,12 @@ async function likeSharePostAPI(data, success, fail) {
 
 }
 
-// async function likeSharePostAPI(data, success, fail) {
-//   console.log(body)
-//   await apiAuth
-//   .put(`/shares/${data.articleId}/marks`, JSON.stringify(body))
-//   .then(success)
-//   .catch(fail);
+async function loadLikeHistoryAPI(data, success, fail) {
+  await apiAuth
+  .get(`/shares/${data.articleId}/marks`)
+  .then(success)
+  .catch(fail);
 
-// }
+}
 
-export { loadShareListAPI, createSharePostAPI, likeSharePostAPI}
+export { loadShareListAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI}
