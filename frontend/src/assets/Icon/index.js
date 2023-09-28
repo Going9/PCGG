@@ -31,8 +31,11 @@ import OWIcon from "./ow.png";
 import OBIcon from "./ob.png";
 import XWIcon from "./xw.png";
 import XBIcon from "./xb.png";
-
+import like from "./like.png";
+import dislike from "./dislike.png";
 export {
+  like,
+  dislike,
   bellIcon,
   hambergerIcon,
   peripheralIcon,
