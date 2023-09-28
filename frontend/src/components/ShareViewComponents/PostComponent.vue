@@ -1,21 +1,13 @@
 <script setup>
    import { profileExampleImg } from '@/assets/image'
-   import { ref } from 'vue'
+   import { defineProps } from 'vue'
    import router from '@/router';
 
+    const { post } = defineProps(['post']);
+
     const goDetail = () => {
-      router.push({ name: "ShareDetail" });
+      router.push({ name: "ShareDetail", params: {id: post.id} });
     };
-
-   const share_like = ref(-1)
-
-   function Changelike() {
-    if (share_like.value == 1){
-      share_like.value = -1
-    }else{
-      share_like.value = 1
-    }
-   }
 
 </script>
 
@@ -27,7 +19,7 @@
       @click ="goDetail"
       class="content">
         <span>
-          가벼운 컴퓨터 작업 기준 가성비 세팅입니다.
+          {{post.summary}}
         </span>
       </div>
     </div>
@@ -42,10 +34,10 @@
            cols="10"
            class="custom-padding">
             <v-col class="custom-padding">
-              제목 : 가성비 세팅
+              제목 : {{post.title}}
             </v-col>
             <v-col class="custom-padding">
-              추천인 : 유저 닉네임
+              추천인 : {{post.nickname}}
             </v-col>
           </v-col>
           <v-col

@@ -1,7 +1,7 @@
 <script setup>
 import PartSelectionComponent from '@/components/Common/PartSelectionComponent.vue';
 import { ref } from 'vue'
-import { createSharedPost } from "@/api/shares";
+import { createSharePostAPI } from "@/api/shareAPI";
 
 const title = ref("")
 const content = ref("")
@@ -24,7 +24,7 @@ const createSharedPostEvent = () => {
       coolerId: 1,
   } }
   console.log(data)
-      createSharedPost(
+  createSharePostAPI(
         data
       ,
       ({ data }) => {
