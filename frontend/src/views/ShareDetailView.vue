@@ -5,7 +5,7 @@
   import { defineProps, ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import { like, dislike } from '@/assets/Icon';
-  import { likeSharePostAPI } from '@/api/shareAPI';
+  import { likeSharePostAPI, loadLikeHistoryAPI } from '@/api/shareAPI';
 
   const route = useRoute();
   const id = route.params.id;
@@ -45,11 +45,25 @@
   onMounted(()=>{
     isLogin.value = userStore().isLogin;
     const shareList = store.isShareList;
+    const data = { articleId : id,}
+
+    // 해당 글의 유저의 좋아요 기록을 가져옴
+    loadLikeHistoryAPI(
+    data
+    ,
+    ({data}) => {
+      console.log(data)
+      isLike.value = data
+    }
+    ,
+    (error) => {
+      console.log(error);
+    }
+    );
+    // 리스트에서 해당 id의 post를 가져옴
     setTimeout(()=>{
-      console.log(shareList)
       post.value= shareList.filter((post)=> post.id == id )[0]
-      console.log(post.value)
-    },200)
+    },100)
 
   })
 
@@ -57,7 +71,6 @@
 
 <template>
   <v-container class="container">
-    {{ post }}
     <v-row class="header">
       <span class="main-title">
         <h1>
@@ -111,9 +124,10 @@
           <img :src="like" alt="like">
         </v-col>
         <v-col
+        :style="{ color: isLike === 1 ? 'blue': undefined }"
         class="like-cnt"
         cols="5">
-          {{ isLike == 1 ? likeCnt+1 : likeCnt }}
+          {{ isLike === 1 ? likeCnt+1 : likeCnt }}
         </v-col>
       </v-col>
       <v-col class="dislike">
@@ -130,6 +144,7 @@
           <img :src="dislike" alt="dislike">
         </v-col>
         <v-col
+        :style="{ color: isLike === -1 ? 'red' : undefined }"
         class="dislike-cnt"
         cols="5">
         {{ isLike == -1 ? dislikeCnt+1 : dislikeCnt }}
