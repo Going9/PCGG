@@ -1,43 +1,89 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
+import Layout from "@/layouts/default/Default"
+import Home from "@/views/HomeView"
+import Login from "@/views/LoginView.vue"
+import Peripheral from "@/views/PeripheralView.vue"
+import RecommendationView from "@/views/RecommendationView.vue"
+import Share from "@/views/ShareView.vue"
+import CreateShare from "@/views/CreateShareView.vue"
+import ShareDetail from "@/views/ShareDetailView.vue"
+import Simulation from "@/views/SimulationView.vue"
+import MyPage from "@/views/MyPageView.vue"
+import MyPage_EX from "@/views/MyPageView_EX.vue"
+import EstimateRecommend from "@/views/EstimateView.vue"
+import PartRecommend from "@/views/PartRecommendView.vue"
 
 const routes = [
   {
     path: "/",
-    component: () => import("@/layouts/default/Default.vue"),
+    component: Layout,
     children: [
       {
         path: "",
         name: "Home",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/HomeView.vue"),
+        component: Home,
+      },
+      {
+        path: "/login",
+        name: "Login",
+        component: Login,
+      },
+      {
+        path: "/mypage",
+        name: "MyPage",
+        component: MyPage,
+      },
+      {
+        path: "/mypage_EX",
+        name: "MyPage_EX",
+        component: MyPage_EX,
       },
       {
         path: "/peripheral",
         name: "Peripheral",
-        component: () => import("@/views/PeripheralViews.vue"),
+        component: Peripheral
       },
       {
-        path: "/peripheraldetail",
-        name: "PeripheralDetail",
-        component: () => import("@/views/PeripheralDetail.vue"),
+        path: "/recommendation",
+        name: "RecommendationView",
+        component: RecommendationView,
       },
       {
-        path: '/recommendation',
-        name: 'Recommendation',
-        component: () => import('@/views/RecommendationView.vue'),
+        path: "",
+        children: [
+          {
+            path: "/share",
+            name: "Share",
+            component: Share,
+          },
+          {
+            path: "/share/createshare",
+            name: "CreateShare",
+            component: CreateShare,
+          },
+          {
+            path: "/share/sharedetail/:id",
+            name: "ShareDetail",
+            component:ShareDetail,
+          },
+        ],
       },
       {
-        path: '/share',
-        name: 'share',
-        component: () => import('@/views/ShareView.vue'),
+        path: "/simulation",
+        name: "Simulation",
+        component: Simulation,
       },
-
-
-
+      {
+        path: "/estimaterecommend",
+        name: "EstimateRecommend",
+        component: EstimateRecommend,
+      },
+      {
+        path: "/partrecommend",
+        name: "PartRecommend",
+        component: PartRecommend,
+      },
     ],
   },
 ];
