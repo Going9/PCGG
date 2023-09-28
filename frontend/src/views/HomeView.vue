@@ -1,12 +1,7 @@
 <script setup>
-import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { rankingIcon } from "@/assets/Icon";
-import { pcIcon } from "@/assets/Icon";
-import { partIcon } from "@/assets/Icon";
 import { mainbannerImg } from "@/assets/image";
-
-const modaldialog = ref(false);
 </script>
 
 <template>
@@ -27,31 +22,8 @@ const modaldialog = ref(false);
           color="#4599FC"
           size="x-large"
           :style="{ height: '5.0625rem' }"
-          @click="modaldialog = true"
           >견적 받으러 가기</v-btn
         >
-        <!-- 견적버튼 누르면 나올 모달창 -->
-        <v-dialog v-model="modaldialog" width="auto">
-          <div class="modal">
-            <RouterLink to="/estimaterecommend">
-              <V-btn class="btn-inner">
-                <div>
-                  <p>노트북 / 데스크탑</p>
-                  <img :src="pcIcon" alt="noimage" />
-                </div>
-              </V-btn>
-            </RouterLink>
-            <RouterLink to="/partrecommend">
-              <V-btn class="btn-inner">
-                <div>
-                  <p>부품</p>
-                  <img :src="partIcon" alt="noimage" />
-                </div>
-              </V-btn>
-            </RouterLink>
-          </div>
-        </v-dialog>
-
         <RouterLink to="/recommendation">
           <v-hover>
             <template v-slot:default="{ isHovering, props }">
@@ -95,11 +67,7 @@ const modaldialog = ref(false);
               <v-btn class="used-market text-2" size="x-large">중고 장터</v-btn>
             </v-col>
             <v-col>
-              <RouterLink to="/simulation">
-                <v-btn class="simulation text-2" size="x-large"
-                  >시뮬레이션</v-btn
-                >
-              </RouterLink>
+              <v-btn class="simulation text-2" size="x-large">시뮬레이션</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -108,7 +76,7 @@ const modaldialog = ref(false);
   </main>
 </template>
 
-<style scoped>
+<style>
 .banner {
   position: relative; /* 부모 요소에 상대적 위치를 설정합니다. */
   width: 100%;
@@ -141,14 +109,9 @@ const modaldialog = ref(false);
   font-weight: 700;
   line-height: normal;
 }
+</style>
 
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
+<style scoped>
 .estimate {
   width: 31.375rem;
   height: 5.0625rem;
@@ -157,32 +120,6 @@ const modaldialog = ref(false);
   border-radius: 0.5rem;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   margin-left: 5%;
-}
-
-.modal {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 3px 3px 5px #00000050;
-  display: flex;
-  padding: 2rem;
-}
-
-.btn-inner {
-  display: flex;
-  height: 15rem !important;
-  width: 15rem;
-  margin: 0rem 1rem;
-}
-
-.btn-inner p {
-  font-size: large;
-  font-weight: bolder;
-  margin-bottom: 1rem;
-}
-
-.btn-inner img {
-  height: 8rem;
-  width: 8rem;
 }
 
 .share,
@@ -196,6 +133,13 @@ const modaldialog = ref(false);
   border-radius: 0.9375rem;
   color: white;
   background: rgba(112, 110, 110, 0.7);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .rangking {
