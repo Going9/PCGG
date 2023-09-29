@@ -32,7 +32,11 @@
     data
     ,
     ({ data }) => {
-      isLike.value = data
+      if(isLike.value == data){
+        isLike.value = 0
+      }else{
+        isLike.value = data
+      }
     }
     ,
     (error) => {
