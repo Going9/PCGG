@@ -2,7 +2,7 @@
   import { profileExampleImg } from '@/assets/image'
   import { shareStore } from '@/store/shareStore';
   import { userStore } from '@/store/userStore';
-  import { defineProps, ref, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import router from '@/router';
   import { like, dislike } from '@/assets/Icon';
@@ -121,6 +121,7 @@
         class="btn"
         color="rgba(112, 110, 110, 0.7)">
         글 수정하기</v-btn> -->
+        <!-- userInfo에 userId 정보가 추가되거나 글쓴 사람을 확인하는 api 만들어지면 수정 예정 -->
         <v-btn
         v-if="isLogin"
         class="btn"
