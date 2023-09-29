@@ -1,14 +1,18 @@
 <script setup>
   import { loadShareReviewAPI, createShareReviewAPI, } from "@/api/shareReviewAPI";
+  import { userStore } from "@/store/userStore";
   import {defineProps, ref, onMounted} from 'vue'
   import Review from '@/components/Common/ReviewComponent.vue'
   const { articleId } = defineProps(['articleId']);
 
+  const store = userStore()
   const content = ref("");
   const reviewList = ref([]);
+  const isLogin = ref(false)
 
   onMounted(()=>{
-    loadShareReview()
+    isLogin.value = store.isLogin;
+    loadShareReview();
   })
 
   const loadShareReview = () => {
@@ -29,6 +33,11 @@
   }
 
   const createShareReview = () => {
+    if(!isLogin.value){
+      alert("로그인이 필요합니다")
+      content.value = ""
+      return
+    }
     const data = {
       content : content.value,
       articleId
