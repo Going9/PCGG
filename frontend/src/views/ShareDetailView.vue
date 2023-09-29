@@ -7,6 +7,7 @@
   import router from '@/router';
   import { like, dislike } from '@/assets/Icon';
   import { likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI } from '@/api/shareAPI';
+  import Review from '@/components/Common/TotalReviewComponent.vue';
 
   const route = useRoute();
   const id = route.params.id;
@@ -78,19 +79,20 @@
     const shareList = store.isShareList;
     const data = { articleId : id,}
 
-    // 해당 글의 유저의 좋아요 기록을 가져옴
-    loadLikeHistoryAPI(
-    data
-    ,
-    ({data}) => {
-      console.log(data)
-      isLike.value = data
+    // 만약 해당 유저가 로그인 상태면 해당 글의 유저의 좋아요 기록을 가져옴
+    if(isLogin.value){
+      loadLikeHistoryAPI(
+      data
+      ,
+      ({data}) => {
+        isLike.value = data
+      }
+      ,
+      (error) => {
+        console.log(error);
+      }
+      );
     }
-    ,
-    (error) => {
-      console.log(error);
-    }
-    );
     // 리스트에서 해당 id의 post를 가져옴
     setTimeout(()=>{
       post.value= shareList.filter((post)=> post.id == id )[0]
@@ -204,12 +206,17 @@
 
 
     <div class="footer">
-      <span class="main-title">
-        <h1>
-          리뷰
-        </h1>
-      </span>
+      <div class="review-title">
+        <span>
+          <h1>
+            리뷰
+          </h1>
+        </span>
+      </div>
     </div>
+    <Review
+      class="input"
+      :articleId = "id"/>
   </v-container >
 
 </template>
@@ -231,7 +238,16 @@
 
 }
 
-.header, .footer {
+.input {
+  width: 80%;
+}
+
+.footer {
+  width: 100%;
+
+}
+
+.header, .review-title {
     width: 100%;
     margin: 2% 0%;
     display: flex;

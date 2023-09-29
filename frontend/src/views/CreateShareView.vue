@@ -15,13 +15,13 @@ const createSharedPostEvent = () => {
       summary: summary.value,
       shareAddQuoteRequestDto: {
       cpuId: 1,
-      mainboardId: 301,
-      ssdId: 1,
-      ramId: 1,
+      mainboardId: 640,
+      ssdId: 302,
+      ramId: 135,
       gpuId: 1,
-      chassisId: 1,
-      powerId: 1,
-      coolerId: 1,
+      chassisId: 240,
+      powerId: 301,
+      coolerId: 172,
   } }
   console.log(data)
   createSharePostAPI(
