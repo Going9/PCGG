@@ -12,6 +12,7 @@ export const userStore = defineStore("userStore", {
     accessToken: "",
     userInfo: {
       nickname: "",
+      id: 0,
     },
     triggerOne: true,
     triggerTwo: true,
