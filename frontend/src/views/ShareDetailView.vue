@@ -6,7 +6,7 @@
   import { useRoute } from 'vue-router';
   import router from '@/router';
   import { like, dislike } from '@/assets/Icon';
-  import { likeSharePostAPI, loadLikeHistoryAPI } from '@/api/shareAPI';
+  import { likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI } from '@/api/shareAPI';
 
   const route = useRoute();
   const id = route.params.id;
@@ -49,6 +49,30 @@
   );
 };
 
+  const deletSharePost = () => {
+    const data = {
+      articleId : id,
+    }
+    deleteSharePostAPI(
+    data
+    ,
+    ({ data }) => {
+      let msg="게시글 삭제에 성공했습니다"
+      if(data == null){
+        msg="게시글 삭제에 실패했습니다"
+      }else{
+        alert(msg)
+        returnToList()
+      }
+      alert(msg)
+    }
+    ,
+    (error) => {
+      console.log(error);
+    }
+  );
+  }
+
   onMounted(()=>{
     isLogin.value = userStore().isLogin;
     const shareList = store.isShareList;
@@ -90,15 +114,17 @@
         color="rgba(112, 110, 110, 0.7)"
         @click="returnToList"
         >목록으로 돌아가기</v-btn>
-        <v-btn
+        <!-- <v-btn
         v-if="isLogin"
         class="btn"
         color="rgba(112, 110, 110, 0.7)">
-        글 수정하기</v-btn>
+        글 수정하기</v-btn> -->
         <v-btn
         v-if="isLogin"
         class="btn"
-        color="rgba(112, 110, 110, 0.7)">
+        color="rgba(112, 110, 110, 0.7)"
+        @click="deletSharePost"
+        >
         글 삭제하기</v-btn>
       </div>
     </v-row>

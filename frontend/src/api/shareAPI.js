@@ -15,6 +15,14 @@ async function createSharePostAPI( data, success, fail) {
   .catch(fail);
 }
 
+async function deleteSharePostAPI(data, success, fail) {
+  await apiAuth
+  .delete(`/shares/${data.articleId}`)
+  .then(success)
+  .catch(fail);
+
+}
+
 async function likeSharePostAPI(data, success, fail) {
   const body = { mark : data.mark }
   await apiAuth
@@ -32,4 +40,4 @@ async function loadLikeHistoryAPI(data, success, fail) {
 
 }
 
-export { loadShareListAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI}
+export { loadShareListAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI}
