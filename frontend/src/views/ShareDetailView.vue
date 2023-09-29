@@ -4,6 +4,7 @@
   import { userStore } from '@/store/userStore';
   import { defineProps, ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
+  import router from '@/router';
   import { like, dislike } from '@/assets/Icon';
   import { likeSharePostAPI, loadLikeHistoryAPI } from '@/api/shareAPI';
 
@@ -16,6 +17,9 @@
   const isLike = ref(0);
   const isLogin = ref(false);
 
+  const returnToList = () => {
+    router.push({ name: "Share"});
+  }
 
   const selectlike = (value) => {
     console.log(isLogin.value)
@@ -44,7 +48,6 @@
     }
   );
 };
-
 
   onMounted(()=>{
     isLogin.value = userStore().isLogin;
@@ -76,11 +79,28 @@
 <template>
   <v-container class="container">
     <v-row class="header">
-      <span class="main-title">
+      <div class="main-title">
         <h1>
           제목 : {{ post?.title }}
         </h1>
-      </span>
+      </div>
+      <div class="btn-box">
+        <v-btn
+        class="btn"
+        color="rgba(112, 110, 110, 0.7)"
+        @click="returnToList"
+        >목록으로 돌아가기</v-btn>
+        <v-btn
+        v-if="isLogin"
+        class="btn"
+        color="rgba(112, 110, 110, 0.7)">
+        글 수정하기</v-btn>
+        <v-btn
+        v-if="isLogin"
+        class="btn"
+        color="rgba(112, 110, 110, 0.7)">
+        글 삭제하기</v-btn>
+      </div>
     </v-row>
     <v-row class="content">
       <div>
@@ -169,6 +189,14 @@
 </template>
 
 <style scoped>
+
+
+.btn-box {
+  display: flex;
+}
+.btn {
+  margin-left: 2%;
+}
 .container {
   display: flex;
   flex-wrap: wrap;
