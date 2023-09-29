@@ -1,10 +1,21 @@
 <script setup>
+  import { userStore } from '@/store/userStore';
   import { modifyShareReviewAPI, deleteShareReviewAPI } from "@/api/shareReviewAPI";
-  import {defineProps, defineEmits, ref} from 'vue'
+  import {defineProps, defineEmits, ref, onMounted} from 'vue'
+
+  const store = userStore()
+  const nickname = ref("")
+  const isLogin = ref(false)
   const { review } = defineProps(['review']);
   const emit = defineEmits(['change']);
   const isModify = ref(false)
   const content = ref("")
+
+  onMounted(()=>{
+    isLogin.value = store.isLogin;
+    nickname.value = store.getUserInfo.nickname;
+  }
+  )
 
   const toggleModifyMode = () => {
     if(!isModify.value){
@@ -63,7 +74,7 @@
     <v-container class="container">
       <v-col
       v-if="!isModify"
-      cols="8"
+      :cols="review.userNickname == nickname ? 8 : 10"
       class="content">
        내용 : {{ review.content }}
       </v-col>
@@ -84,12 +95,14 @@
         작성자 : {{ review.userNickname }}
       </v-col>
       <v-col
+      v-if="review.userNickname == nickname"
       cols="1">
         <v-btn
         @click="toggleModifyMode"
         >수정</v-btn>
       </v-col>
       <v-col
+      v-if="review.userNickname == nickname"
       cols="1">
         <v-btn
         @click="deleteShareReview"
