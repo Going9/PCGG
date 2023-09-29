@@ -50,7 +50,6 @@ export const userStore = defineStore("userStore", {
       await loginAPI(
         loginInput,
         ({ data }) => {
-          console.log(data.token)
           this.loginActivated = true;
           this.accessToken = data.token;
         },
