@@ -35,4 +35,6 @@ public interface MainboardRepository extends JpaRepository<MainboardEntity, Long
 
     Slice<MainboardEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
+    Slice<MainboardEntity> findSliceBy(Pageable pageable);
+
 }

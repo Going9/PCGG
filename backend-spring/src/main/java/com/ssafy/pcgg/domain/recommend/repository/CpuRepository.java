@@ -14,4 +14,6 @@ public interface CpuRepository extends JpaRepository<CpuEntity, Long> {
 
     List<CpuEntity> findAllByClassColumn(Integer classColumn);
     Slice<CpuEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    Slice<CpuEntity> findSliceBy(Pageable pageable);
 }

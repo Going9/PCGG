@@ -28,8 +28,8 @@ public class PartService {
 	private final ChassisRepository chassisRepository;
 	private final PowerRepository powerRepository;
 	private final CoolerRepository coolerRepository;
-	public Slice<?> searchParts(String type, int pages, String name){
-		if(name.length() < 2){
+	public Slice<?> searchParts(String type, int pages, String keyword){
+		if(keyword.length() < 2){
 			throw new IllegalArgumentException("검색어의 길이는 최소 2글자 이상이어야 합니다.");
 		}
 
@@ -37,23 +37,49 @@ public class PartService {
 
 		switch (type) {
 			case PartTypeFormat.CPU:
-				return cpuRepository.findSliceByNameContaining(pageRequest, name);
+				return cpuRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.MAINBOARD:
-				return mainboardRepository.findSliceByNameContaining(pageRequest, name);
+				return mainboardRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.SSD:
-				return ssdRepository.findSliceByNameContaining(pageRequest, name);
+				return ssdRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.RAM:
-				return ramRepository.findSliceByNameContaining(pageRequest, name);
+				return ramRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.GPU:
-				return gpuRepository.findSliceByNameContaining(pageRequest, name);
+				return gpuRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.CHASSIS:
-				return chassisRepository.findSliceByNameContaining(pageRequest, name);
+				return chassisRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.POWER:
-				return powerRepository.findSliceByNameContaining(pageRequest, name);
+				return powerRepository.findSliceByNameContaining(pageRequest, keyword);
 			case PartTypeFormat.COOLER:
-				return coolerRepository.findSliceByNameContaining(pageRequest, name);
+				return coolerRepository.findSliceByNameContaining(pageRequest, keyword);
 			default:
 				throw new IllegalArgumentException("유효하지 않은 부품 타입입니다.");
 		}
 	}
+
+	public Slice<?> getParts(String type, int pages){
+		PageRequest pageRequest = PageRequest.of(pages, 30);
+
+		switch (type) {
+			case PartTypeFormat.CPU:
+				return cpuRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.MAINBOARD:
+				return mainboardRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.SSD:
+				return ssdRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.RAM:
+				return ramRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.GPU:
+				return gpuRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.CHASSIS:
+				return chassisRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.POWER:
+				return powerRepository.findSliceBy(pageRequest);
+			case PartTypeFormat.COOLER:
+				return coolerRepository.findSliceBy(pageRequest);
+			default:
+				throw new IllegalArgumentException("유효하지 않은 부품 타입입니다.");
+		}
+	}
+
 }
