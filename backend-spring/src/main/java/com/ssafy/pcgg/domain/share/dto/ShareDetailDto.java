@@ -2,6 +2,8 @@ package com.ssafy.pcgg.domain.share.dto;
 
 import java.time.LocalDateTime;
 
+import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +19,7 @@ public class ShareDetailDto {
 	private Long id;
 	private Long userId;
 	private String userNickname;
-	// private String userImageSource;
-	private Long quoteId;
+	private QuoteEntity quoteEntity;
 	private String title;
 	private String content;
 	private String summary;

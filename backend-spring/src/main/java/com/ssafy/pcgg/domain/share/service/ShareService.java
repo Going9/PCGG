@@ -152,11 +152,23 @@ public class ShareService {
 		long likeCnt = shareLikeRepository.countLikesForShareWithId(shareId, 1);
 		long disLikeCnt = shareLikeRepository.countLikesForShareWithId(shareId, -1);
 
+		QuoteEntity quoteEntity = QuoteEntity.builder()
+			.id(share.getQuote().getId())
+			.cpu(share.getQuote().getCpu())
+			.mainboard(share.getQuote().getMainboard())
+			.ssd(share.getQuote().getSsd())
+			.ram(share.getQuote().getRam())
+			.gpu(share.getQuote().getGpu())
+			.chassis(share.getQuote().getChassis())
+			.power(share.getQuote().getPower())
+			.cooler(share.getQuote().getCooler())
+			.build();
+
 		ShareDetailDto shareDetailDto = ShareDetailDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
 			.userNickname(share.getUser().getNickname())
-			.quoteId(share.getQuote().getId())
+			.quoteEntity(quoteEntity)
 			.title(share.getTitle())
 			.content(share.getContent())
 			.summary(share.getSummary())
