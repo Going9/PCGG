@@ -16,6 +16,8 @@ import lombok.Setter;
 public class ShareDetailDto {
 	private Long id;
 	private Long userId;
+	private String userNickname;
+	// private String userImageSource;
 	private Long quoteId;
 	private String title;
 	private String content;

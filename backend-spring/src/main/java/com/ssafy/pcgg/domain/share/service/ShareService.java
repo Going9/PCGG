@@ -155,6 +155,7 @@ public class ShareService {
 		ShareDetailDto shareDetailDto = ShareDetailDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
+			.userNickname(share.getUser().getNickname())
 			.quoteId(share.getQuote().getId())
 			.title(share.getTitle())
 			.content(share.getContent())
