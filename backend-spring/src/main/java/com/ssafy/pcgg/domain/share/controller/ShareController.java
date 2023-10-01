@@ -91,13 +91,13 @@ public class ShareController {
 		return ResponseEntity.ok().body(markRequestDto.getMark());
 	}
 
-	@Operation(summary = "공유마당 게시글(견적) 저장하기", description = "공유마당 게시글을 마이페이지에 저장합니다.")
+	@Operation(summary = "공유마당 게시글(견적) 마이페이지 저장", description = "공유마당 게시글을 마이페이지에 저장합니다.")
 	@PostMapping("/{articleId}/quotes")
 	@CurrentUserId("userId")
-	public ResponseEntity<Integer> saveShare(UserIdDto userId, HttpServletRequest request, @RequestBody ShareAddQuoteRequestDto shareAddQuoteRequestDto) {
+	public ResponseEntity<Long> saveShare(UserIdDto userId, HttpServletRequest request, @RequestBody ShareAddQuoteRequestDto shareAddQuoteRequestDto) {
 		logger.info("saveShare()");
-		shareService.saveShare(userId, shareAddQuoteRequestDto);
-		return ResponseEntity.ok().body(1);
+		// shareService.saveShare(userId, shareAddQuoteRequestDto);
+		return ResponseEntity.ok().body(shareService.saveShare(userId, shareAddQuoteRequestDto));
 	}
 
 }

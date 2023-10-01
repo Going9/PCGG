@@ -1,5 +1,9 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.ssafy.pcgg.domain.user.UserEntity;
 
 import jakarta.persistence.Column;
@@ -43,5 +47,9 @@ public class QuoteSaved {
 
 	@Column(name = "quote_id")
 	private Long quoteId;
+
+	@CreationTimestamp
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
 }

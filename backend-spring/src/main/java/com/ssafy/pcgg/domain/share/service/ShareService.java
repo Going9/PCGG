@@ -10,16 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.pcgg.domain.auth.UserIdDto;
-import com.ssafy.pcgg.domain.recommend.entity.ChassisEntity;
-import com.ssafy.pcgg.domain.recommend.entity.CoolerEntity;
-import com.ssafy.pcgg.domain.recommend.entity.CpuEntity;
-import com.ssafy.pcgg.domain.recommend.entity.GpuEntity;
-import com.ssafy.pcgg.domain.recommend.entity.MainboardEntity;
-import com.ssafy.pcgg.domain.recommend.entity.PowerEntity;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteSaved;
-import com.ssafy.pcgg.domain.recommend.entity.RamEntity;
-import com.ssafy.pcgg.domain.recommend.entity.SsdEntity;
 import com.ssafy.pcgg.domain.recommend.repository.ChassisRepository;
 import com.ssafy.pcgg.domain.recommend.repository.CoolerRepository;
 import com.ssafy.pcgg.domain.recommend.repository.CpuRepository;
@@ -266,6 +258,7 @@ public class ShareService {
 		return quoteSavedRepository.save(QuoteSaved.builder()
 			.userId(userId.getUserId())
 			.quoteId(quoteId)
+			.createdAt(LocalDateTime.now())
 			.build()).getId();
 	}
 }
