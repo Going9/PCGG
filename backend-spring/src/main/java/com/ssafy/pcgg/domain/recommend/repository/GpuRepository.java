@@ -15,4 +15,6 @@ public interface GpuRepository extends JpaRepository<GpuEntity, Long> {
     List<GpuEntity> findAllByClassColumn(Integer classColumn);
 
     Slice<GpuEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    List<GpuEntity> findAllByClassColumnAndPriceLessThanEqual(int partClass, int budget);
 }

@@ -1,6 +1,6 @@
 package com.ssafy.pcgg.domain.recommend.controller;
 
-import com.ssafy.pcgg.domain.recommend.dto.PartDto;
+import com.ssafy.pcgg.domain.part.dto.PartDto;
 import com.ssafy.pcgg.domain.recommend.dto.PartRequestDto;
 import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;

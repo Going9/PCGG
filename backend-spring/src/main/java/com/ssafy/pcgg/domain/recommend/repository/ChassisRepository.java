@@ -20,7 +20,7 @@ public interface ChassisRepository extends JpaRepository<ChassisEntity, Long> {
         gpu의 길이 < chassis의 depth 여야한다.
      */
     @Query("SELECT c " +
-            "FROM ChassisEntity c " +
+            "FROM ChassisResponseDto c " +
             "WHERE " +
                 "CASE " +
                     "WHEN :caseSize='mini_itx' THEN c.miniItx " +
@@ -33,4 +33,7 @@ public interface ChassisRepository extends JpaRepository<ChassisEntity, Long> {
     List<ChassisEntity> findByCaseSizeAndDepth(@Param("caseSize")String caseSize, @Param("width")BigDecimal width);
 
     Slice<ChassisEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    @Query("SELECT c FROM ChassisResponseDto c WHERE c.price < :budget")
+    List<ChassisEntity> findAllByBudget(@Param("budget") int budget);
 }

@@ -1,9 +1,12 @@
 package com.ssafy.pcgg.domain.recommend.service;
 
+import com.ssafy.pcgg.domain.part.dto.*;
+import com.ssafy.pcgg.domain.part.exception.NoSuchPartTypeException;
 import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartAllFailedException;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
+import com.ssafy.pcgg.domain.recommend.exception.NoSuchPriorityException;
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.repository.*;
 import com.ssafy.pcgg.domain.recommend.util.PrioritySelector;
@@ -37,6 +40,7 @@ public class RecommendService {
     private final SsdRepository ssdRepository;
     private final MainboardRepository mainboardRepository;
     private final ChassisRepository chassisRepository;
+    private final CoolerRepository coolerRepository;
     private final ModelMapper modelMapper;
 
 
@@ -86,7 +90,7 @@ public class RecommendService {
             exceptionCount++;
         }
         try{
-            partList = powerRepository.findAllByClassColumn(null);
+            partList = powerRepository.checkByClassColumn(null);
             recommendUtil.classifyPower(partList);
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
@@ -191,7 +195,7 @@ public class RecommendService {
                     for(ChassisEntity chassis : chassisList){
                         if(budgetLeft - ssd.getPrice() - mainboard.getPrice() < chassis.getPrice()) continue; //todo:총액 계산 메소드 제작필요
                         //int totalPower = recommendUtil.getTotalPower(cpu, ram, gpu, ssd, mainboard, chassis)
-                        List<PowerEntity> powerList = powerRepository.findByChassisAndClass(
+                        List<PowerEntity> powerList = powerRepository.checkByChassisAndClass(
                                 chassis.getMaxPowerDepth(),
                                 recommendUtil.getClassByUsageAndPartType(usage,"power")
                         ); //출력, 깊이=샤씨깊이, 분류
@@ -219,46 +223,14 @@ public class RecommendService {
     }
 
     public List<?> getPartRecommend(PartRequestDto partRequestDto) {
+        //1. 용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링 / exclude SSD CHASSIS COOLER
+        List<?> listPart = getPartList(partRequestDto);
 
-        return switch(partRequestDto.getCategory()){
-            case "cpu" -> searchCpu(partRequestDto);
-//            case "ram" ->
-//            case "gpu" ->
-//            case "power" ->
-            default -> null;
-        };
-    }
+        //2. 우선순위에 따라 정렬방식 변경
+        listPart = getComparatorAndSort(listPart, partRequestDto);
 
-    private List<CpuResponseDto> searchCpu(PartRequestDto partRequestDto) {
-
-        //1. 분류된(class가 있는) 부품은 용도에 따른 분류값 지정
-        int cpuClass = recommendUtil.getClassByUsageAndPartType(partRequestDto.getUsage(),"cpu");
-        //2. 성능기준치가 있는 부품은 성능기준치 지정
-        List<CpuEntity> listCpu = cpuRepository.findAllByClassColumn(cpuClass);
-
-        //3. 우선순위에 따라 정렬방식 변경
-        Comparator<CpuEntity> comparator;
-        switch(partRequestDto.getPriority()){
-            case PrioritySelector.PERFORMANCE_FIRST -> {
-                comparator = Comparator.comparingInt(CpuEntity::getSingleScore);
-                listCpu.sort(comparator.reversed());
-            }
-            case PrioritySelector.PRICE_FIRST -> {
-                comparator = Comparator.comparingInt(CpuEntity::getPrice);
-                listCpu.sort(comparator);
-            }
-            case PrioritySelector.PERFORMANCE_PER_PRICE -> {
-                 comparator = Comparator.comparingInt(cpu -> cpu.getSingleScore()/cpu.getPrice());
-                listCpu.sort(comparator.reversed());
-            }
-            default -> throw new ArithmeticException();
-        }
-
-        List<CpuResponseDto> listCpuDto = listCpu.stream()
-                .map(cpu -> modelMapper.map(cpu, CpuResponseDto.class))
-                .collect((Collectors.toList()));
-        listCpuDto.forEach(cpu -> logger.info(cpu.toString()));
-        return listCpuDto;
+        //Entity > DTO 매핑 후 리턴
+        return mapToDto(partRequestDto.getCategory(), listPart);
         /*
                                 private String category;
         private String usage;
@@ -268,9 +240,9 @@ public class RecommendService {
          */
         /*
         1. 용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링 / SSD CHASSIS COOLER
-        2. AS=TRUE & POWER, COOLER면 보증기간 체크
-        3. 가성비/성능/가격 별로 정렬 -> 우선순위 기준. 우선순위 -1 성능 0가성비 1가격
-        3-1. 가격ASC or 성능컬럼/가격DESC or 성능DESC
+        1-2. AS=TRUE & POWER, COOLER면 보증기간도 체크
+        2. 가성비/성능/가격 별로 정렬 -> 우선순위 기준. 우선순위 -1 성능 0가성비 1가격
+        2-1. 가격ASC or 성능컬럼/가격DESC or 성능DESC
          - 성능 >
          CPU : 싱글코어점수single_score
          RAM : 메모리스펙, 메모리클럭
@@ -281,5 +253,270 @@ public class RecommendService {
          SSD : reading_speed
          cooler : fan_count
          */
+
+//        return switch(partRequestDto.getCategory()){
+//            case "cpu" -> searchCpu(partRequestDto);
+////            case "ram" ->
+////            case "gpu" ->
+////            case "power" ->
+//            default -> null;
+//        };
+    }
+
+    private List<?> mapToDto(String category, List<?> listPart) {
+        switch(category){
+            case "cpu" ->{
+                List<CpuResponseDto> listCpuDto = listPart.stream()
+                        .map(cpu -> modelMapper.map(cpu, CpuResponseDto.class))
+                        .collect((Collectors.toList()));
+                listCpuDto.forEach(cpu -> logger.info(cpu.toString()));
+                return listCpuDto;
+            }
+            case "ram" ->{
+                List<RamResponseDto> listRamDto = listPart.stream()
+                        .map(ram -> modelMapper.map(ram, RamResponseDto.class))
+                        .collect((Collectors.toList()));
+                listRamDto.forEach(ram -> logger.info(ram.toString()));
+                return listRamDto;
+            }
+            case "ssd" ->{
+                List<SsdResponseDto> listSsdDto = listPart.stream()
+                        .map(ssd -> modelMapper.map(ssd, SsdResponseDto.class))
+                        .collect((Collectors.toList()));
+                listSsdDto.forEach(ssd -> logger.info(ssd.toString()));
+                return listSsdDto;
+            }
+            case "power" ->{
+                List<PowerResponseDto> listPowerDto = listPart.stream()
+                        .map(power -> modelMapper.map(power, PowerResponseDto.class))
+                        .collect((Collectors.toList()));
+                listPowerDto.forEach(power -> logger.info(power.toString()));
+                return listPowerDto;
+            }
+            case "mainboard" ->{
+                List<MainboardResponseDto> listMainboardDto = listPart.stream()
+                        .map(mainboard -> modelMapper.map(mainboard, MainboardResponseDto.class))
+                        .collect((Collectors.toList()));
+                listMainboardDto.forEach(mainboard -> logger.info(mainboard.toString()));
+                return listMainboardDto;
+            }
+            case "cooler" ->{
+                List<CoolerResponseDto> listCoolerDto = listPart.stream()
+                        .map(cooler -> modelMapper.map(cooler, CoolerResponseDto.class))
+                        .collect((Collectors.toList()));
+                listCoolerDto.forEach(cooler -> logger.info(cooler.toString()));
+                return listCoolerDto;
+            }
+            case "chassis" ->{
+                List<ChassisResponseDto> listChassisDto = listPart.stream()
+                        .map(chassis -> modelMapper.map(chassis, ChassisResponseDto.class))
+                        .collect((Collectors.toList()));
+                listChassisDto.forEach(chassis -> logger.info(chassis.toString()));
+                return listChassisDto;
+            }
+            case "gpu" ->{
+                List<GpuResponseDto> listGpuDto = listPart.stream()
+                        .map(gpu -> modelMapper.map(gpu, GpuResponseDto.class))
+                        .collect((Collectors.toList()));
+                listGpuDto.forEach(gpu -> logger.info(gpu.toString()));
+                return listGpuDto;
+            }
+            default -> {
+                throw new NoSuchPartTypeException();
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<?> getComparatorAndSort(List<?> listPart, PartRequestDto partRequestDto) {
+        /*
+         CPU : 싱글코어점수single_score
+         RAM : 메모리스펙, 메모리클럭
+         GPU : score
+         MAINBOARD : X(class만 사용)
+         POWER : X(class만 사용)
+         CHASSIS : X
+         SSD : reading_speed
+         cooler : fan_count
+         */
+        int priority = partRequestDto.getPriority();
+        switch(partRequestDto.getCategory()){
+            case "cpu"-> {
+                List<CpuEntity> listCpu = (List<CpuEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        listCpu.sort(Comparator.comparingInt(CpuEntity::getSingleScore).reversed());
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listCpu.sort(Comparator.comparingInt(CpuEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        Comparator<CpuEntity> comparator = Comparator.comparingInt(cpu -> cpu.getSingleScore()/cpu.getPrice());
+                        listCpu.sort(comparator.reversed());
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listCpu;
+            }
+            case "ram" -> {
+                List<RamEntity> listRam = (List<RamEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        listRam.sort(Comparator.comparingInt(RamEntity::getMemoryClock).reversed());
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listRam.sort(Comparator.comparingInt(RamEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        Comparator<RamEntity> comparator = Comparator.comparingInt(ram -> ram.getMemoryClock()/ram.getPrice());
+                        listRam.sort(comparator.reversed());
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listRam;
+            }
+            case "gpu" -> {
+                List<GpuEntity> listGpu = (List<GpuEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        listGpu.sort(Comparator.comparingInt(GpuEntity::getScore).reversed());
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listGpu.sort(Comparator.comparingInt(GpuEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        Comparator<GpuEntity> comparator = Comparator.comparingInt(gpu -> gpu.getScore()/gpu.getPrice());
+                        listGpu.sort(comparator.reversed());
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listGpu;
+            }
+            case "mainbaord" -> {
+                List<MainboardEntity> listMainboard = (List<MainboardEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        //성능고려X
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listMainboard.sort(Comparator.comparingInt(MainboardEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        //성능 없으므로 가성비 없음
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listMainboard;
+            }
+            case "power" -> {
+                List<PowerEntity> listPower = (List<PowerEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        //성능고려X
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listPower.sort(Comparator.comparingInt(PowerEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        //성능 없으므로 가성비 없음
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listPower;
+            }
+            case "cooler" -> {
+                List<CoolerEntity> listCooler = (List<CoolerEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        listCooler.sort(Comparator.comparingInt(CoolerEntity::getFanCount).reversed());
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listCooler.sort(Comparator.comparingInt(CoolerEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        Comparator<CoolerEntity> comparator = Comparator.comparingInt(cooler -> cooler.getFanCount()/cooler.getPrice());
+                        listCooler.sort(comparator.reversed());
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listCooler;
+            }
+            case "chassis" -> {
+                List<ChassisEntity> listChassis = (List<ChassisEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        //성능고려X
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listChassis.sort(Comparator.comparingInt(ChassisEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        //성능 없으므로 가성비 없음
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listChassis;
+            }
+            case "ssd" ->{
+                List<SsdEntity> listSsd = (List<SsdEntity>) listPart;
+                switch(priority){
+                    case PrioritySelector.PERFORMANCE_FIRST -> {
+                        listSsd.sort(Comparator.comparingInt(SsdEntity::getReadingSpeed).reversed());
+                    }
+                    case PrioritySelector.PRICE_FIRST -> {
+                        listSsd.sort(Comparator.comparingInt(SsdEntity::getPrice));
+                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                        Comparator<SsdEntity> comparator = Comparator.comparingInt(ssd -> ssd.getReadingSpeed()/ssd.getPrice());
+                        listSsd.sort(comparator.reversed());
+                    }
+                    default -> throw new NoSuchPriorityException(priority);
+                }
+                return listSsd;
+            }
+            default -> {
+                throw new NoSuchPartTypeException(partRequestDto.getCategory());
+            }
+        }
+    }
+
+    private List<?> getPartList(PartRequestDto partRequestDto) {
+        String category = partRequestDto.getCategory();
+        String usage = partRequestDto.getUsage();
+        int budget = partRequestDto.getBudget();
+        int partClass = recommendUtil.getClassByUsageAndPartType(usage,category);
+
+        switch(category){
+            case "cpu"-> {
+                return cpuRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
+            }
+            case "ram" -> {
+                return ramRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
+            }
+            case "gpu" -> {
+                return gpuRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
+            }
+            case "mainbaord" -> {
+                return mainboardRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
+            }
+            // AS==TRUE & POWER, COOLER면 보증기간도 체크
+            case "power" -> {
+                if (partRequestDto.isAs()) return powerRepository.findAllByClassColumnAndWarrantyPeriodAndBudget(partClass, budget);
+                else return powerRepository.checkByClassColumn(partClass);
+            }
+            case "cooler" -> {
+                if (partRequestDto.isAs()) return coolerRepository.findAllByWarrantyPeriodAndBudget(budget);
+                else return coolerRepository.findAll();
+            }
+            case "chassis" -> {
+                return chassisRepository.findAllByBudget(budget);
+            }
+            case "ssd" ->{
+                return ssdRepository.findAllByBudget(budget);
+            }
+            default -> {
+                throw new NoSuchPartTypeException(category);
+            }
+        }
     }
 }

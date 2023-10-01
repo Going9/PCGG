@@ -187,7 +187,7 @@ public class RecommendUtil {
 
 
     public List<PowerEntity> pickPower(Integer classColumn) {
-        return powerRepository.findAllByClassColumn(classColumn);
+        return powerRepository.checkByClassColumn(classColumn);
     }
 
     public List<GpuEntity> pickGpu(Integer classColumn) {
@@ -240,7 +240,10 @@ public class RecommendUtil {
                 case "고사양게임", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
                 default -> throw new QuoteCandidateException("잘못된 usage In power. check " + usage);
             };
-            default -> throw new QuoteCandidateException("PartType이 잘못되었음 : " + partType);
+            default -> {
+                logger.debug("분류되지 않았거나 잘못된 부품명");
+                yield 0;
+            }
         };
         return result;
     }
