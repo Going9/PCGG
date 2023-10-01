@@ -27,4 +27,7 @@ public class ShareResponseDto {
 	private String content;
 	private String summary;
 	private LocalDateTime createdAt;
+	private Long likeCnt;
+	private Long dislikeCnt;
+	private Long reviewCnt;
 }

@@ -29,6 +29,7 @@ import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareResponseDto;
 import com.ssafy.pcgg.domain.share.entity.Share;
 import com.ssafy.pcgg.domain.share.entity.ShareLike;
+import com.ssafy.pcgg.domain.share.repository.ShareCommentRepository;
 import com.ssafy.pcgg.domain.share.repository.ShareLikeRepository;
 import com.ssafy.pcgg.domain.share.repository.ShareRepository;
 import com.ssafy.pcgg.domain.user.UserEntity;
@@ -54,6 +55,7 @@ public class ShareService {
 
 	private final QuoteSavedRepository quoteSavedRepository;
 	private final ShareLikeRepository shareLikeRepository;
+	private final ShareCommentRepository shareCommentRepository;
 
 	@Transactional
 	public Long addShare(UserIdDto userId, ShareAddRequestDto shareAddRequestDto) {
@@ -185,7 +187,8 @@ public class ShareService {
 		return shareResponseDtoList.map(this::convertToDto);
 	}
 
-	private ShareResponseDto convertToDto(Share share){
+	@Transactional
+	public ShareResponseDto convertToDto(Share share){
 		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
@@ -194,6 +197,9 @@ public class ShareService {
 			.content(share.getContent())
 			.summary(share.getSummary())
 			.createdAt(share.getCreatedAt())
+			.likeCnt(shareLikeRepository.countLikesForShareWithId(share.getId(), 1))
+			.dislikeCnt(shareLikeRepository.countLikesForShareWithId(share.getId(), -1))
+			.reviewCnt(shareCommentRepository.countReviewsForShareWithId(share.getId()))
 			.build();
 
 		return shareResponseDto;
