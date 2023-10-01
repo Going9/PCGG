@@ -54,6 +54,9 @@ dependencies {
 
 	// OAuth2.0
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// ModelWrapper
+	implementation 'org.modelmapper:modelmapper:3.1.1'
 }
 
 tasks.named('test') {

@@ -82,6 +82,7 @@ public class RecommendUtil {
         }
     }
 
+    @Transactional
     public List<List<?>> makePartList(UsageNsEntity usage) {
         List<CpuEntity> cpuList;
         List<RamEntity> ramList;

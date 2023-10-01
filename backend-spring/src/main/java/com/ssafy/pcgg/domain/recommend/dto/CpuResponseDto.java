@@ -2,7 +2,9 @@ package com.ssafy.pcgg.domain.recommend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @AllArgsConstructor
 public class CpuResponseDto extends PartDto {

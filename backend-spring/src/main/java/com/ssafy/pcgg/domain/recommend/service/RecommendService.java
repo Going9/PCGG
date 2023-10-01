@@ -6,14 +6,12 @@ import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartAllFailedException;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.repository.*;
-import com.ssafy.pcgg.domain.recommend.util.PerformanceRequirement;
 import com.ssafy.pcgg.domain.recommend.util.PrioritySelector;
 import com.ssafy.pcgg.domain.recommend.util.RecommendUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +21,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class RecommendService {
     private final RecommendUtil recommendUtil;
     private final Logger logger = LoggerFactory.getLogger(RecommendService.class.getName());
-
     private final QuoteCandidateRepository quoteCandidateRepository;
     private final UsageNsRepository usageNsRepository;
     //    private final QuoteRepository quoteRepository;
@@ -40,6 +38,7 @@ public class RecommendService {
     private final SsdRepository ssdRepository;
     private final MainboardRepository mainboardRepository;
     private final ChassisRepository chassisRepository;
+    private final ModelMapper modelMapper;
 
 
     public HttpStatus classifyAndCreateCandidate() {
@@ -157,7 +156,7 @@ public class RecommendService {
             boolean as = quoteRequestDto.isAs();*/
 
             //1.SSD는 사용자가 선택한 용량에 따라 필터링
-            List<SsdEntity> ssdList = ssdRepository.findByCapacity(new BigDecimal(quoteRequestDto.getSsdSize()/1000.0));
+            List<SsdEntity> ssdList = ssdRepository.findByCapacity(BigDecimal.valueOf(quoteRequestDto.getSsdSize() / 1000.0));
             logger.debug("ssd 용량기반으로 리스트화 완료, "+ssdList.size());
             for(SsdEntity ssd : ssdList){
                 if(budgetLeft < ssd.getPrice()) continue;
@@ -221,16 +220,13 @@ public class RecommendService {
 
     public List<?> getPartRecommend(PartRequestDto partRequestDto) {
 
-        //카테고리별로 함수에서 진행
-        List<?> partDtoList = switch(partRequestDto.getCategory()){
+        return switch(partRequestDto.getCategory()){
             case "cpu" -> searchCpu(partRequestDto);
 //            case "ram" ->
 //            case "gpu" ->
 //            case "power" ->
-            default -> { yield null;}
+            default -> null;
         };
-
-        return partDtoList;
     }
 
     private List<CpuResponseDto> searchCpu(PartRequestDto partRequestDto) {
@@ -244,22 +240,25 @@ public class RecommendService {
         Comparator<CpuEntity> comparator;
         switch(partRequestDto.getPriority()){
             case PrioritySelector.PERFORMANCE_FIRST -> {
-                comparator = Comparator.comparingInt(cpu -> cpu.getSingleScore());
-                Collections.sort(listCpu, comparator.reversed());
+                comparator = Comparator.comparingInt(CpuEntity::getSingleScore);
+                listCpu.sort(comparator.reversed());
             }
             case PrioritySelector.PRICE_FIRST -> {
-                comparator = Comparator.comparingInt(cpu -> cpu.getPrice());
-                Collections.sort(listCpu, comparator);
+                comparator = Comparator.comparingInt(CpuEntity::getPrice);
+                listCpu.sort(comparator);
             }
             case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                  comparator = Comparator.comparingInt(cpu -> cpu.getSingleScore()/cpu.getPrice());
-                Collections.sort(listCpu, comparator.reversed());
+                listCpu.sort(comparator.reversed());
             }
             default -> throw new ArithmeticException();
         }
-        ModelMapper modelMapper = new ModelMapper();
-//        List<CpuResponseDto> listCpuDto = modelMapper.map(cpuEntity, CpuResponseDto.class);
-        return null;
+
+        List<CpuResponseDto> listCpuDto = listCpu.stream()
+                .map(cpu -> modelMapper.map(cpu, CpuResponseDto.class))
+                .collect((Collectors.toList()));
+        listCpuDto.forEach(cpu -> logger.info(cpu.toString()));
+        return listCpuDto;
         /*
                                 private String category;
         private String usage;
