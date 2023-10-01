@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
+import com.ssafy.pcgg.domain.share.dto.ShareAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
 import com.ssafy.pcgg.domain.share.dto.ShareMarkRequestDto;
@@ -88,6 +89,15 @@ public class ShareController {
 		logger.info("markLikes(), articleId = {}", articleId);
 		shareService.markLikes(userId, articleId, markRequestDto);
 		return ResponseEntity.ok().body(markRequestDto.getMark());
+	}
+
+	@Operation(summary = "공유마당 게시글(견적) 마이페이지 저장", description = "공유마당 게시글을 마이페이지에 저장합니다.")
+	@PostMapping("/{articleId}/quotes")
+	@CurrentUserId("userId")
+	public ResponseEntity<Long> saveShare(UserIdDto userId, HttpServletRequest request, @RequestBody ShareAddQuoteRequestDto shareAddQuoteRequestDto) {
+		logger.info("saveShare()");
+		// shareService.saveShare(userId, shareAddQuoteRequestDto);
+		return ResponseEntity.ok().body(shareService.saveShare(userId, shareAddQuoteRequestDto));
 	}
 
 }
