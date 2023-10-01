@@ -1,8 +1,5 @@
 package com.ssafy.pcgg.domain.part.dto;
 
-import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
-import com.ssafy.pcgg.domain.recommend.util.PerformanceRequirement;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

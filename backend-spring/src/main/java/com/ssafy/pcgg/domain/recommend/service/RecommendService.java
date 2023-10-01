@@ -321,9 +321,7 @@ public class RecommendService {
                 listGpuDto.forEach(gpu -> logger.info(gpu.toString()));
                 return listGpuDto;
             }
-            default -> {
-                throw new NoSuchPartTypeException();
-            }
+            default -> throw new NoSuchPartTypeException();
         }
     }
 
@@ -344,12 +342,8 @@ public class RecommendService {
             case "cpu"-> {
                 List<CpuEntity> listCpu = (List<CpuEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        listCpu.sort(Comparator.comparingInt(CpuEntity::getSingleScore).reversed());
-                    }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listCpu.sort(Comparator.comparingInt(CpuEntity::getPrice));
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> listCpu.sort(Comparator.comparingInt(CpuEntity::getSingleScore).reversed());
+                    case PrioritySelector.PRICE_FIRST -> listCpu.sort(Comparator.comparingInt(CpuEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         Comparator<CpuEntity> comparator = Comparator.comparingInt(cpu -> cpu.getSingleScore()/cpu.getPrice());
                         listCpu.sort(comparator.reversed());
@@ -361,12 +355,8 @@ public class RecommendService {
             case "ram" -> {
                 List<RamEntity> listRam = (List<RamEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        listRam.sort(Comparator.comparingInt(RamEntity::getMemoryClock).reversed());
-                    }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listRam.sort(Comparator.comparingInt(RamEntity::getPrice));
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> listRam.sort(Comparator.comparingInt(RamEntity::getMemoryClock).reversed());
+                    case PrioritySelector.PRICE_FIRST -> listRam.sort(Comparator.comparingInt(RamEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         Comparator<RamEntity> comparator = Comparator.comparingInt(ram -> ram.getMemoryClock()/ram.getPrice());
                         listRam.sort(comparator.reversed());
@@ -378,12 +368,8 @@ public class RecommendService {
             case "gpu" -> {
                 List<GpuEntity> listGpu = (List<GpuEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        listGpu.sort(Comparator.comparingInt(GpuEntity::getScore).reversed());
-                    }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listGpu.sort(Comparator.comparingInt(GpuEntity::getPrice));
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> listGpu.sort(Comparator.comparingInt(GpuEntity::getScore).reversed());
+                    case PrioritySelector.PRICE_FIRST -> listGpu.sort(Comparator.comparingInt(GpuEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         Comparator<GpuEntity> comparator = Comparator.comparingInt(gpu -> gpu.getScore()/gpu.getPrice());
                         listGpu.sort(comparator.reversed());
@@ -398,9 +384,7 @@ public class RecommendService {
                     case PrioritySelector.PERFORMANCE_FIRST -> {
                         //성능고려X
                     }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listMainboard.sort(Comparator.comparingInt(MainboardEntity::getPrice));
-                    }
+                    case PrioritySelector.PRICE_FIRST -> listMainboard.sort(Comparator.comparingInt(MainboardEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         //성능 없으므로 가성비 없음
                     }
@@ -414,9 +398,7 @@ public class RecommendService {
                     case PrioritySelector.PERFORMANCE_FIRST -> {
                         //성능고려X
                     }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listPower.sort(Comparator.comparingInt(PowerEntity::getPrice));
-                    }
+                    case PrioritySelector.PRICE_FIRST -> listPower.sort(Comparator.comparingInt(PowerEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         //성능 없으므로 가성비 없음
                     }
@@ -427,12 +409,8 @@ public class RecommendService {
             case "cooler" -> {
                 List<CoolerEntity> listCooler = (List<CoolerEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        listCooler.sort(Comparator.comparingInt(CoolerEntity::getFanCount).reversed());
-                    }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listCooler.sort(Comparator.comparingInt(CoolerEntity::getPrice));
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> listCooler.sort(Comparator.comparingInt(CoolerEntity::getFanCount).reversed());
+                    case PrioritySelector.PRICE_FIRST -> listCooler.sort(Comparator.comparingInt(CoolerEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         Comparator<CoolerEntity> comparator = Comparator.comparingInt(cooler -> cooler.getFanCount()/cooler.getPrice());
                         listCooler.sort(comparator.reversed());
@@ -447,9 +425,7 @@ public class RecommendService {
                     case PrioritySelector.PERFORMANCE_FIRST -> {
                         //성능고려X
                     }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listChassis.sort(Comparator.comparingInt(ChassisEntity::getPrice));
-                    }
+                    case PrioritySelector.PRICE_FIRST -> listChassis.sort(Comparator.comparingInt(ChassisEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         //성능 없으므로 가성비 없음
                     }
@@ -460,12 +436,8 @@ public class RecommendService {
             case "ssd" ->{
                 List<SsdEntity> listSsd = (List<SsdEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        listSsd.sort(Comparator.comparingInt(SsdEntity::getReadingSpeed).reversed());
-                    }
-                    case PrioritySelector.PRICE_FIRST -> {
-                        listSsd.sort(Comparator.comparingInt(SsdEntity::getPrice));
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> listSsd.sort(Comparator.comparingInt(SsdEntity::getReadingSpeed).reversed());
+                    case PrioritySelector.PRICE_FIRST -> listSsd.sort(Comparator.comparingInt(SsdEntity::getPrice));
                     case PrioritySelector.PERFORMANCE_PER_PRICE -> {
                         Comparator<SsdEntity> comparator = Comparator.comparingInt(ssd -> ssd.getReadingSpeed()/ssd.getPrice());
                         listSsd.sort(comparator.reversed());
@@ -474,9 +446,7 @@ public class RecommendService {
                 }
                 return listSsd;
             }
-            default -> {
-                throw new NoSuchPartTypeException(partRequestDto.getCategory());
-            }
+            default -> throw new NoSuchPartTypeException(partRequestDto.getCategory());
         }
     }
 
@@ -511,12 +481,10 @@ public class RecommendService {
             case "chassis" -> {
                 return chassisRepository.findAllByBudget(budget);
             }
-            case "ssd" ->{
+            case "ssd" -> {
                 return ssdRepository.findAllByBudget(budget);
             }
-            default -> {
-                throw new NoSuchPartTypeException(category);
-            }
+            default -> throw new NoSuchPartTypeException(category);
         }
     }
 }

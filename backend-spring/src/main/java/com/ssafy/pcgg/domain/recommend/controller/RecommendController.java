@@ -75,7 +75,7 @@ public class RecommendController {
         System.out.println("it's in");
         logger.info(partRequestDto.toString());
         try{
-            List<PartDto> partDtoList = (List<PartDto>) recommendService.getPartRecommend(partRequestDto);
+            List<?> partDtoList = recommendService.getPartRecommend(partRequestDto);
             return ResponseEntity.ok().body(partDtoList);
         }catch(Exception e){
             return ResponseEntity.internalServerError().build();

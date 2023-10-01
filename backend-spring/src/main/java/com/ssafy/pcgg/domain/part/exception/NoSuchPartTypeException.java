@@ -1,7 +1,5 @@
 package com.ssafy.pcgg.domain.part.exception;
 
-import javax.naming.NamingException;
-
 public class NoSuchPartTypeException extends IllegalArgumentException {
     public NoSuchPartTypeException() {}
 

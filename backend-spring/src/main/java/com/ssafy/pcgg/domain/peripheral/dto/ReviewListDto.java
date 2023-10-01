@@ -1,7 +1,5 @@
 package com.ssafy.pcgg.domain.peripheral.dto;
 
-import java.util.List;
-
 import org.springframework.data.domain.Slice;
 
 import lombok.AllArgsConstructor;

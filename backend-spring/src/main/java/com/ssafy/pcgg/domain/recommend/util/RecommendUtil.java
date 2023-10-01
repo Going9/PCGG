@@ -1,5 +1,6 @@
 package com.ssafy.pcgg.domain.recommend.util;
 
+import com.ssafy.pcgg.domain.part.exception.NoSuchPartTypeException;
 import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.repository.*;
@@ -204,7 +205,8 @@ public class RecommendUtil {
 
     public int getClassByUsageAndPartType(String usage, String partType) throws QuoteCandidateException{
         //용도에 따른 부품의 별 성능수준(Class)을 반환하는 Util 메소드
-        int result = switch (partType) {
+        int result;
+        return result = switch (partType) {
             //읽는법: cpu의 용도가 "가성비사무"면 요구하는 성능수준은 LOW(1)
             case "cpu" -> switch (usage) {
                 case "가성비사무", "저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
@@ -240,12 +242,8 @@ public class RecommendUtil {
                 case "고사양게임", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
                 default -> throw new QuoteCandidateException("잘못된 usage In power. check " + usage);
             };
-            default -> {
-                logger.debug("분류되지 않았거나 잘못된 부품명");
-                yield 0;
-            }
+            default -> throw new NoSuchPartTypeException();
         };
-        return result;
     }
 }
 
