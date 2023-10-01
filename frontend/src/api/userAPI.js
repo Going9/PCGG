@@ -18,7 +18,7 @@ async function getUserInfoAPI(success, fail) {
   await apiAuth.get("/users").then(success).catch(fail);
 }
 
-// 주변기기
+// 내 주변기기 가져오기
 async function getMyPeripheralAPI(category, success, fail) {
   await apiAuth.get(`/users/${category}`).then(success).catch(fail);
 }
