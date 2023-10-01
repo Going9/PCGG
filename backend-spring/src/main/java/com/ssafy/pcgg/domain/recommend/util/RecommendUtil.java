@@ -204,48 +204,44 @@ public class RecommendUtil {
 
     public int getClassByUsageAndPartType(String usage, String partType) throws QuoteCandidateException{
         //용도에 따른 부품의 별 성능수준(Class)을 반환하는 Util 메소드
-        int result;
-        //읽는법: cpu의 용도가 "가성비사무"면 요구하는 성능수준은 LOW(1)
-        if(partType.equals("cpu")){
-            result = switch(usage){
-                case "가성비사무","저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
+        int result = switch (partType) {
+            //읽는법: cpu의 용도가 "가성비사무"면 요구하는 성능수준은 LOW(1)
+            case "cpu" -> switch (usage) {
+                case "가성비사무", "저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
                 case "고성능사무", "중사양게임" -> PerformanceRequirement.MIDDLE;
                 case "일반영상편집", "일반방송", "캐주얼게임방송", "고사양개발" -> PerformanceRequirement.GOOD;
                 case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
-                default -> throw new QuoteCandidateException("잘못된 usage In cpu. check "+usage);
+                default -> throw new QuoteCandidateException("잘못된 usage In cpu. check " + usage);
             };
-        } else if(partType.equals("mainboard")){
-            result = switch(usage){
-                case "가성비사무","저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
+            case "mainboard" -> switch (usage) {
+                case "가성비사무", "저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
                 case "고성능사무", "중사양게임", "일반영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.MIDDLE;
                 case "고사양개발" -> PerformanceRequirement.GOOD;
                 case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
-                default -> throw new QuoteCandidateException("잘못된 usage In mainboard. check "+usage);
+                default -> throw new QuoteCandidateException("잘못된 usage In mainboard. check " + usage);
             };
-        } else if(partType.equals("ram")){
-            result = switch(usage){
-                case "가성비사무","저사양개발", "일반방송" -> PerformanceRequirement.LOW;
-                case "고성능사무", "캐주얼게임", "중사양게임", "일반영상편집", "캐주얼게임방송"  -> PerformanceRequirement.MIDDLE;
+            case "ram" -> switch (usage) {
+                case "가성비사무", "저사양개발", "일반방송" -> PerformanceRequirement.LOW;
+                case "고성능사무", "캐주얼게임", "중사양게임", "일반영상편집", "캐주얼게임방송" -> PerformanceRequirement.MIDDLE;
                 case "고사양게임" -> PerformanceRequirement.GOOD;
                 case "전문영상편집", "3d디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
-                default -> throw new QuoteCandidateException("잘못된 usage In ram. check "+usage);
+                default -> throw new QuoteCandidateException("잘못된 usage In ram. check " + usage);
             };
-        } else if(partType.equals("gpu")){
-            result = switch(usage){
-                case "가성비사무","저사양개발", "고성능사무", "캐주얼게임" -> PerformanceRequirement.LOW;
+            case "gpu" -> switch (usage) {
+                case "가성비사무", "저사양개발", "고성능사무", "캐주얼게임" -> PerformanceRequirement.LOW;
                 case "중사양게임", "일반영상편집" -> PerformanceRequirement.MIDDLE;
                 case "고사양게임", "3d디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
                 case "전문영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.GOOD;
-                default -> throw new QuoteCandidateException("잘못된 usage In gpu. check "+usage);
+                default -> throw new QuoteCandidateException("잘못된 usage In gpu. check " + usage);
             };
-        } else if(partType.equals("power")){
-            result = switch(usage){
-                case "가성비사무","저사양개발", "캐주얼게임", "일반영상편집" -> PerformanceRequirement.LOW;
+            case "power" -> switch (usage) {
+                case "가성비사무", "저사양개발", "캐주얼게임", "일반영상편집" -> PerformanceRequirement.LOW;
                 case "고성능사무", "중사양게임", "전문영상편집", "일반방송", "캐주얼게임방송", "고사양개발" -> PerformanceRequirement.MIDDLE;
                 case "고사양게임", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
-                default -> throw new QuoteCandidateException("잘못된 usage In power. check "+usage);
+                default -> throw new QuoteCandidateException("잘못된 usage In power. check " + usage);
             };
-        } else throw new QuoteCandidateException("PartType이 잘못되었음 : "+partType);
+            default -> throw new QuoteCandidateException("PartType이 잘못되었음 : " + partType);
+        };
         return result;
     }
 }

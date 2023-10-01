@@ -6,12 +6,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "part_type_ns")
 public class PartTypeNsEntity {
 
     @Id
-    @Getter
     @Column(length = 10)
     private String name;
 }

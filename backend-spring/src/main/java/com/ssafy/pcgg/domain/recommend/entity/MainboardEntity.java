@@ -4,8 +4,6 @@ import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.util.PerformanceRequirement;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
-import java.time.LocalDate;
 
 @Entity
 @Getter
