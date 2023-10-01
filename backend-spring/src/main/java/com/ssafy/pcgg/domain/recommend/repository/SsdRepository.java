@@ -21,4 +21,6 @@ public interface SsdRepository extends JpaRepository<SsdEntity, Long> {
 
     @Query("SELECT s FROM SsdEntity s WHERE s.price < :budget")
     List<SsdEntity> findAllByBudget(@Param("budget") int budget);
+
+    Slice<SsdEntity> findSliceBy(Pageable pageable);
 }

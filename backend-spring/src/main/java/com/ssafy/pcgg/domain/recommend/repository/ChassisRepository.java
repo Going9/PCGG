@@ -34,6 +34,8 @@ public interface ChassisRepository extends JpaRepository<ChassisEntity, Long> {
 
     Slice<ChassisEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
+    Slice<ChassisEntity> findSliceBy(Pageable pageable);
+
     @Query("SELECT c FROM ChassisEntity c WHERE c.price < :budget")
     List<ChassisEntity> findAllByBudget(@Param("budget") int budget);
 }

@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Table(name = "part_chassis")
-public class
-ChassisEntity {
+public class ChassisEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

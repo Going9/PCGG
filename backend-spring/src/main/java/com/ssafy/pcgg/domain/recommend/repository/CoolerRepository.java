@@ -15,6 +15,8 @@ import java.util.List;
 public interface CoolerRepository extends JpaRepository<CoolerEntity, Long> {
 	Slice<CoolerEntity> findSliceByNameContaining(Pageable pageable, String name);
 
+	Slice<CoolerEntity> findSliceBy(Pageable pageable);
+
     @Query("SELECT c FROM CoolerEntity c WHERE c.freeWarrantyPeriod > 0 AND c.price < :budget")
     List<CoolerEntity> findAllByWarrantyPeriodAndBudget(@Param("budget")int budget);
 }

@@ -15,8 +15,7 @@ import java.util.List;
 public interface MainboardRepository extends JpaRepository<MainboardEntity, Long> {
 
     @Query("SELECT m " +
-            "FROM MainboardEntity" +
-            " m " +
+            "FROM MainboardEntity m " +
             "WHERE m.size = :caseSize " +
                 "AND m.socketInfo = :socketInfo " +
                 "AND m.classColumn = :class " +
@@ -39,4 +38,7 @@ public interface MainboardRepository extends JpaRepository<MainboardEntity, Long
     List<MainboardEntity> findAllByClassColumn(int partClass);
 
     List<MainboardEntity> findAllByClassColumnAndPriceLessThanEqual(int partClass, int budget);
+
+    Slice<MainboardEntity> findSliceBy(Pageable pageable);
+
 }

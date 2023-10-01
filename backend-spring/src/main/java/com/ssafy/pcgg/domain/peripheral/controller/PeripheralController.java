@@ -96,4 +96,12 @@ public class PeripheralController {
 		return ResponseEntity.status(201).body(peripheralService.savePeripheral(userId, category, peripheralId));
 	}
 
+	@Operation(summary = "저장된 주변기기 삭제", description = "마이페이지에 저장된 주변기기를 삭제합니다.")
+	@DeleteMapping("/{myperipheralId}")
+	@CurrentUserId("userId")
+	public ResponseEntity<Void> deleteMyPeripheral(UserIdDto userId, HttpServletRequest request, @PathVariable Long myperipheralId) {
+		peripheralService.deleteMyPeripheral(userId, myperipheralId);
+		return ResponseEntity.ok().build();
+	}
+
 }

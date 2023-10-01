@@ -25,4 +25,6 @@ public interface PowerRepository extends JpaRepository<PowerEntity, Long> {
     @Query("SELECT p FROM PowerEntity p WHERE p.classColumn = :class AND p.freeWarrantyPeriod > 0 AND p.price < :budget")
     List<PowerEntity> findAllByClassColumnAndWarrantyPeriodAndBudget(@Param("class")int partClass, @Param("budget")int budget);
 
+
+    Slice<PowerEntity> findSliceBy(Pageable pageable);
 }
