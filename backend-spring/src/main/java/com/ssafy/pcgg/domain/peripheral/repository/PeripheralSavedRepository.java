@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.ssafy.pcgg.domain.peripheral.entity.PeripheralSaved;
 
+import java.util.List;
+
 @Repository
 public interface PeripheralSavedRepository extends JpaRepository<PeripheralSaved, Long> {
+    List<PeripheralSaved> findByUser_UserIdAndPeripheralTypeNs_Name(Long userId, String category);
 }

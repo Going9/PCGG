@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name="part_mainboard")
 public class MainboardEntity {
     @Id
@@ -17,7 +18,7 @@ public class MainboardEntity {
     @Column(length = 100)
     private String name;
 
-    @Getter
+    // @Getter
     private Integer price;
 
     @Column(name="image_source", length=100)
@@ -34,7 +35,7 @@ public class MainboardEntity {
     @Column(name="memory_spec", length=10)
     private String memorySpec;
 
-    @Getter
+    // @Getter
     @Column(length=30)
     private String size;
 
