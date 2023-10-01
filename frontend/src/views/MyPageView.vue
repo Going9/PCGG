@@ -24,7 +24,7 @@
       </v-btn-toggle>
     </div>
     <div class="productinfo">
-      <profile-component v-if="category === 'profile'" />
+      <profile-component v-if="category === 'share'" />
       <saved-quote-component v-if="category === 'savedQuote'" />
       <peripheral-component v-if="category === 'peripheral'" />
       <used-market-component v-if="category === 'usedMarket'" />
@@ -35,7 +35,7 @@
 <script setup>
 import { userStore } from "@/store/userStore";
 import { onMounted, ref } from "vue";
-import ProfileComponent from "../components/MyPageViewComponents/profileComponent.vue";
+import ProfileComponent from "../components/MyPageViewComponents/shareComponent.vue";
 import SavedQuoteComponent from "../components/MyPageViewComponents/savedQuoteComponent.vue";
 import PeripheralComponent from "../components/MyPageViewComponents/peripheralComponent.vue";
 import UsedMarketComponent from "../components/MyPageViewComponents/usedMarketComponent.vue";
@@ -45,7 +45,7 @@ const userInfo = store.getUserInfo;
 const nickname = ref(userInfo.nickname);
 const category = ref(null);
 const buttonItems = [
-  { label: "프로필", value: "profile" },
+  { label: "공유마당", value: "share" },
   { label: "저장견적", value: "savedQuote" },
   { label: "주변기기", value: "peripheral" },
   { label: "중고장터", value: "usedMarket" },
@@ -70,7 +70,7 @@ const buttonEvent = async (value) => {
     1
   );
   width: 100%;
-  height: 500vh;
+  height: 2000px;
   position: absolute;
 }
 .userinfo {
