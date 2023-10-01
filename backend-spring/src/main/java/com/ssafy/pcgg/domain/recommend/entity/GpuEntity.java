@@ -3,10 +3,8 @@ package com.ssafy.pcgg.domain.recommend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -28,6 +26,7 @@ public class GpuEntity {
 
     private Boolean extinct;
 
+    @Getter
     @Column(name = "needed_power")
     private Integer neededPower;
 
@@ -45,11 +44,4 @@ public class GpuEntity {
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
 
-    public Integer getNeededPower() {
-        return neededPower;
-    }
-
-    public void setNeededPower(Integer neededPower) {
-        this.neededPower = neededPower;
-    }
 }
