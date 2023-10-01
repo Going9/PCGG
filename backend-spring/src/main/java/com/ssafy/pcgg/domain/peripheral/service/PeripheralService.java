@@ -221,6 +221,8 @@ public class PeripheralService {
 		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
 
+		// TODO: 해당 주변기기의 존재 유무 체크하기
+
 		PeripheralSaved peripheralSaved = PeripheralSaved.builder()
 			.peripheralTypeNs(peripheralTypeNs)
 			.user(userEntity)
