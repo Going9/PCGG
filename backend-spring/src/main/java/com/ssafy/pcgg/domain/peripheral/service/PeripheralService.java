@@ -230,4 +230,14 @@ public class PeripheralService {
 		return peripheralSavedRepository.save(peripheralSaved).getId();
 	}
 
+	@Transactional
+	public void deleteMyPeripheral(UserIdDto userId, Long myperipheralId){
+		PeripheralSaved peripheralSaved = peripheralSavedRepository.findById(myperipheralId)
+			.orElseThrow(() -> new IllegalArgumentException("저장된 주변기기가 존재하지 않습니다."));
+		if(!Objects.equals(userId.getUserId(), peripheralSaved.getUser().getUserId())){
+			throw new IllegalArgumentException("자신이 저장한 주변기기만 삭제할 수 있습니다.");
+		}
+		peripheralSavedRepository.delete(peripheralSaved);
+	}
+
 }
