@@ -90,7 +90,7 @@ public class RecommendService {
             exceptionCount++;
         }
         try{
-            partList = powerRepository.checkByClassColumn(null);
+            partList = powerRepository.findByClassColumn(null);
             recommendUtil.classifyPower(partList);
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
@@ -502,7 +502,7 @@ public class RecommendService {
             // AS==TRUE & POWER, COOLER면 보증기간도 체크
             case "power" -> {
                 if (partRequestDto.isAs()) return powerRepository.findAllByClassColumnAndWarrantyPeriodAndBudget(partClass, budget);
-                else return powerRepository.checkByClassColumn(partClass);
+                else return powerRepository.findByClassColumn(partClass);
             }
             case "cooler" -> {
                 if (partRequestDto.isAs()) return coolerRepository.findAllByWarrantyPeriodAndBudget(budget);

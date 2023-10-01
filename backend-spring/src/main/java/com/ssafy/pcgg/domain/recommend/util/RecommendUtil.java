@@ -187,7 +187,7 @@ public class RecommendUtil {
 
 
     public List<PowerEntity> pickPower(Integer classColumn) {
-        return powerRepository.checkByClassColumn(classColumn);
+        return powerRepository.findByClassColumn(classColumn);
     }
 
     public List<GpuEntity> pickGpu(Integer classColumn) {

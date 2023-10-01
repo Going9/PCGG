@@ -15,7 +15,8 @@ import java.util.List;
 public interface MainboardRepository extends JpaRepository<MainboardEntity, Long> {
 
     @Query("SELECT m " +
-            "FROM MainboardResponseDto m " +
+            "FROM MainboardEntity" +
+            " m " +
             "WHERE m.size = :caseSize " +
                 "AND m.socketInfo = :socketInfo " +
                 "AND m.classColumn = :class " +
