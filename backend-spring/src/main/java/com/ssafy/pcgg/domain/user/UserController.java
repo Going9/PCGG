@@ -3,7 +3,6 @@ package com.ssafy.pcgg.domain.user;
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
-import com.ssafy.pcgg.domain.user.dto.UserListResponse;
 import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
 import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
 import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
@@ -50,7 +49,7 @@ public class UserController {
     @GetMapping("/quotes")
     @CurrentUserId("userId")
     public ResponseEntity<Slice<QuoteEntity>> getMyQuotes(UserIdDto userId, HttpServletRequest request, @RequestParam(value = "pages", defaultValue = "0") int pages) {
-        return ResponseEntity.ok().body(userService.getMyQuotes(userId.getUserId(), pages));
+        return ResponseEntity.ok().body(userService.getMyQuotes(userId, pages));
     }
 
 //    @GetMapping

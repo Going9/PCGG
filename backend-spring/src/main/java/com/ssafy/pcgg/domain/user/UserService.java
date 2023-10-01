@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.user;
 
 import com.ssafy.pcgg.domain.auth.AuthorityEntity;
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.entity.*;
 import com.ssafy.pcgg.domain.peripheral.repository.*;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
@@ -118,9 +119,9 @@ public class UserService {
     }
 
     @Transactional
-    public Slice<QuoteEntity> getMyQuotes(Long userId, int pages){
+    public Slice<QuoteEntity> getMyQuotes(UserIdDto userId, int pages){
         PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Slice<QuoteEntity> quoteEntities = quoteSavedRepository.findQuotesByUserId(userId, pageRequest);
+        Slice<QuoteEntity> quoteEntities = quoteSavedRepository.findQuotesByUserId(userId.getUserId(), pageRequest);
 
         return quoteEntities;
     }
