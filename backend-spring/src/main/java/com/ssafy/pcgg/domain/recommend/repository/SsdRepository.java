@@ -16,4 +16,6 @@ public interface SsdRepository extends JpaRepository<SsdEntity, Long> {
     List<SsdEntity> findByCapacity(BigDecimal ssdSize);
 
     Slice<SsdEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    Slice<SsdEntity> findSliceBy(Pageable pageable);
 }

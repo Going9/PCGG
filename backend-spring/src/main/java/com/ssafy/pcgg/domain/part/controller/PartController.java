@@ -28,14 +28,18 @@ public class PartController {
 	/**
 	 * PC부품 검색
 	 * @param type
-	 * @param name
+	 * @param keyword
 	 * @return
 	 */
 	@Operation(summary = "PC부품 검색", description = "PC부품을 검색합니다.")
 	@GetMapping("/{type}")
-	public ResponseEntity<Slice<?>> searchParts(@PathVariable String type, @RequestParam(name = "q") String name, @RequestParam(value = "pages", defaultValue = "0") int pages) {
-		logger.info("searchParts(), type = {}, name = {}, pages = {}", type, name, pages);
-		return ResponseEntity.ok().body(partService.searchParts(type, pages, name));
+	public ResponseEntity<Slice<?>> searchParts(@PathVariable String type, @RequestParam(name = "q", required = false) String keyword, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+		if(keyword == null || keyword.isEmpty()) {
+			logger.info("searchParts(), type = {}, pages = {}", type, pages);
+			return ResponseEntity.ok().body(partService.getParts(type, pages));
+		}
+		logger.info("searchParts(), type = {}, keyword = {}, pages = {}", type, keyword, pages);
+		return ResponseEntity.ok().body(partService.searchParts(type, pages, keyword));
 	}
 
 }

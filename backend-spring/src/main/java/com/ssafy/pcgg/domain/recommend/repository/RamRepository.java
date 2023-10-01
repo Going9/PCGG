@@ -16,4 +16,6 @@ public interface RamRepository extends JpaRepository<RamEntity, Long> {
 
     Slice<RamEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
+    Slice<RamEntity> findSliceBy(Pageable pageable);
+
 }
