@@ -3,10 +3,8 @@ package com.ssafy.pcgg.domain.recommend.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Null;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Getter

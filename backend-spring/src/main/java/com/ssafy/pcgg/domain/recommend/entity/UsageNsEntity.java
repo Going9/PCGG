@@ -6,12 +6,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "usage_ns")
 public class UsageNsEntity {
 
     @Id
-    @Getter
     @Column(length = 10)
     private String name;
 }

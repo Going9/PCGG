@@ -1,14 +1,15 @@
 package com.ssafy.pcgg.domain.recommend.service;
 
-import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
-import com.ssafy.pcgg.domain.recommend.dto.QuoteResponseDto;
+import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartAllFailedException;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.repository.*;
+import com.ssafy.pcgg.domain.recommend.util.PrioritySelector;
 import com.ssafy.pcgg.domain.recommend.util.RecommendUtil;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class RecommendService {
     private final RecommendUtil recommendUtil;
     private final Logger logger = LoggerFactory.getLogger(RecommendService.class.getName());
-
     private final QuoteCandidateRepository quoteCandidateRepository;
     private final UsageNsRepository usageNsRepository;
     //    private final QuoteRepository quoteRepository;
@@ -35,8 +37,10 @@ public class RecommendService {
     private final SsdRepository ssdRepository;
     private final MainboardRepository mainboardRepository;
     private final ChassisRepository chassisRepository;
+    private final ModelMapper modelMapper;
 
 
+    @Transactional
     public HttpStatus classifyAndCreateCandidate() {
         //분류
         try{
@@ -152,7 +156,7 @@ public class RecommendService {
             boolean as = quoteRequestDto.isAs();*/
 
             //1.SSD는 사용자가 선택한 용량에 따라 필터링
-            List<SsdEntity> ssdList = ssdRepository.findByCapacity(new BigDecimal(quoteRequestDto.getSsdSize()/1000.0));
+            List<SsdEntity> ssdList = ssdRepository.findByCapacity(BigDecimal.valueOf(quoteRequestDto.getSsdSize() / 1000.0));
             logger.debug("ssd 용량기반으로 리스트화 완료, "+ssdList.size());
             for(SsdEntity ssd : ssdList){
                 if(budgetLeft < ssd.getPrice()) continue;
@@ -212,5 +216,70 @@ public class RecommendService {
         //todo:연산이 너무 많음. 중간중간에서 리스트의 가지수를 줄이는 로직 추가 필요.
 
         return responseList;
+    }
+
+    public List<?> getPartRecommend(PartRequestDto partRequestDto) {
+
+        return switch(partRequestDto.getCategory()){
+            case "cpu" -> searchCpu(partRequestDto);
+//            case "ram" ->
+//            case "gpu" ->
+//            case "power" ->
+            default -> null;
+        };
+    }
+
+    private List<CpuResponseDto> searchCpu(PartRequestDto partRequestDto) {
+
+        //1. 분류된(class가 있는) 부품은 용도에 따른 분류값 지정
+        int cpuClass = recommendUtil.getClassByUsageAndPartType(partRequestDto.getUsage(),"cpu");
+        //2. 성능기준치가 있는 부품은 성능기준치 지정
+        List<CpuEntity> listCpu = cpuRepository.findAllByClassColumn(cpuClass);
+
+        //3. 우선순위에 따라 정렬방식 변경
+        Comparator<CpuEntity> comparator;
+        switch(partRequestDto.getPriority()){
+            case PrioritySelector.PERFORMANCE_FIRST -> {
+                comparator = Comparator.comparingInt(CpuEntity::getSingleScore);
+                listCpu.sort(comparator.reversed());
+            }
+            case PrioritySelector.PRICE_FIRST -> {
+                comparator = Comparator.comparingInt(CpuEntity::getPrice);
+                listCpu.sort(comparator);
+            }
+            case PrioritySelector.PERFORMANCE_PER_PRICE -> {
+                 comparator = Comparator.comparingInt(cpu -> cpu.getSingleScore()/cpu.getPrice());
+                listCpu.sort(comparator.reversed());
+            }
+            default -> throw new ArithmeticException();
+        }
+
+        List<CpuResponseDto> listCpuDto = listCpu.stream()
+                .map(cpu -> modelMapper.map(cpu, CpuResponseDto.class))
+                .collect((Collectors.toList()));
+        listCpuDto.forEach(cpu -> logger.info(cpu.toString()));
+        return listCpuDto;
+        /*
+                                private String category;
+        private String usage;
+        private int budget;
+        private int priority;
+        private boolean as;
+         */
+        /*
+        1. 용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링 / SSD CHASSIS COOLER
+        2. AS=TRUE & POWER, COOLER면 보증기간 체크
+        3. 가성비/성능/가격 별로 정렬 -> 우선순위 기준. 우선순위 -1 성능 0가성비 1가격
+        3-1. 가격ASC or 성능컬럼/가격DESC or 성능DESC
+         - 성능 >
+         CPU : 싱글코어점수single_score
+         RAM : 메모리스펙, 메모리클럭
+         GPU : score
+         MAINBOARD : X(class만 사용)
+         POWER : X(class만 사용)
+         CHASSIS : X
+         SSD : reading_speed
+         cooler : fan_count
+         */
     }
 }

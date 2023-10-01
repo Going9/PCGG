@@ -3,9 +3,6 @@ package com.ssafy.pcgg.domain.recommend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDate;
 
 @Entity
 @Getter
