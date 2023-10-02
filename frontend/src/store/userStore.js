@@ -1,7 +1,13 @@
 // Utilities
 // 먼저 피니아에서 스토어를 가져와 줘야한다고 함
 import { defineStore } from "pinia";
-import { loginAPI, getUserInfoAPI, getMyPeripheralAPI } from "@/api/userAPI";
+import {
+  loginAPI,
+  getUserInfoAPI,
+  getMyPeripheralAPI,
+  getMyShareAPI,
+  getMyShareLikeAPI,
+} from "@/api/userAPI";
 import router from "@/router";
 
 // defineStore의 첫번째 인자는 스토어의 이름. 보통 파일 이름과 같이 하면 된다고 함. 이 이름이 나중에 데브툴에서 보이는 이름이라는 듯
@@ -19,6 +25,8 @@ export const userStore = defineStore("userStore", {
     mypageCategory: "share",
     peripheralCategory: "keyboard",
     peripheralList: [],
+    shareList: [],
+    shareLikeList: [],
   }),
   persist: {
     enabled: true,
@@ -56,12 +64,17 @@ export const userStore = defineStore("userStore", {
     getperipheralList: (state) => {
       return state.peripheralList;
     },
+    getShareList: (state) => {
+      return state.shareList;
+    },
+    getShareLikeList: (state) => {
+      return state.shareLikeList;
+    },
   },
   // 이게 actions랑 mutations합친거인듯. 액션에서 뮤테이션 보내고 뮤테이션에서 스테이트 바꾸고 하는게 아니고 한번에 바꿈
   // vuex배울때 이러면 뭔가 문제가 될수 있다 그랬던거 같은데 기억안남
   actions: {
     async login(loginInput) {
-
       await loginAPI(
         loginInput,
         ({ data }) => {
@@ -92,7 +105,7 @@ export const userStore = defineStore("userStore", {
       this.userInfo = {
         nickname: "",
       };
-      this.mypageCategory = "profile";
+      this.mypageCategory = "share";
       this.peripheralCategory = "keyboard";
     },
     triggerActivation() {
@@ -112,6 +125,26 @@ export const userStore = defineStore("userStore", {
         category,
         ({ data }) => {
           this.peripheralList = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async getMyShare() {
+      await getMyShareAPI(
+        ({ data }) => {
+          this.shareList = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async getMyShareLike() {
+      await getMyShareLikeAPI(
+        ({ data }) => {
+          this.shareLikeList = data;
         },
         (error) => {
           console.log(error);

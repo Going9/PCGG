@@ -23,4 +23,20 @@ async function getMyPeripheralAPI(category, success, fail) {
   await apiAuth.get(`/users/${category}`).then(success).catch(fail);
 }
 
-export { signupAPI, loginAPI, getUserInfoAPI, getMyPeripheralAPI };
+// 내 공유마당 글 가져오기
+async function getMyShareAPI(success, fail) {
+  await apiAuth.get("/users/share").then(success).catch(fail);
+}
+
+async function getMyShareLikeAPI(success, fail) {
+  await apiAuth.get("/users/sharelike").then(success).catch(fail);
+}
+
+export {
+  signupAPI,
+  loginAPI,
+  getUserInfoAPI,
+  getMyPeripheralAPI,
+  getMyShareAPI,
+  getMyShareLikeAPI,
+};
