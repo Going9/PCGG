@@ -33,4 +33,6 @@ public interface ChassisRepository extends JpaRepository<ChassisEntity, Long> {
     List<ChassisEntity> findByCaseSizeAndDepth(@Param("caseSize")String caseSize, @Param("width")BigDecimal width);
 
     Slice<ChassisEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    Slice<ChassisEntity> findSliceBy(Pageable pageable);
 }

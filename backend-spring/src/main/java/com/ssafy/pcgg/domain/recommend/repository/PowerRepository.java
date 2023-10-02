@@ -21,4 +21,6 @@ public interface PowerRepository extends JpaRepository<PowerEntity, Long> {
     List<PowerEntity> findByChassisAndClass(@Param("maxPowerDepth") BigDecimal maxPowerDepth, @Param("class")int classColumn);
 
     Slice<PowerEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    Slice<PowerEntity> findSliceBy(Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.domain.user;
 
 import com.ssafy.pcgg.domain.auth.AuthorityEntity;
+import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.entity.*;
 import com.ssafy.pcgg.domain.peripheral.repository.*;
 import com.ssafy.pcgg.domain.share.entity.Share;
@@ -8,8 +9,18 @@ import com.ssafy.pcgg.domain.share.entity.ShareLike;
 import com.ssafy.pcgg.domain.share.repository.ShareLikeRepository;
 import com.ssafy.pcgg.domain.share.repository.ShareRepository;
 import com.ssafy.pcgg.domain.user.dto.*;
+import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
+import com.ssafy.pcgg.domain.recommend.repository.QuoteSavedRepository;
+import com.ssafy.pcgg.domain.user.dto.UserListResponse;
+import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
+import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
+import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
 import com.ssafy.pcgg.domain.user.exception.DuplicateUserException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +47,8 @@ public class UserService {
     private final MouseRepository mouseRepository;
     private final PrinterRepository printerRepository;
     private final EtcRepository etcRepository;
+
+    private final QuoteSavedRepository quoteSavedRepository;
 
     public void signup(UserSignupRequest userSignupRequest) {
         String email = userSignupRequest.getEmail();
@@ -159,6 +172,14 @@ public class UserService {
         return userShareResponseList;
     }
 
+    @Transactional
+    public Slice<QuoteEntity> getMyQuotes(UserIdDto userId, int pages){
+        PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Slice<QuoteEntity> quoteEntities = quoteSavedRepository.findQuotesByUserId(userId.getUserId(), pageRequest);
+
+        return quoteEntities;
+    }
+    
 //    public List<UserListResponse> getUsers() {
 //        return userRepository.findAll().stream()
 //                .map(UserListResponse::new)

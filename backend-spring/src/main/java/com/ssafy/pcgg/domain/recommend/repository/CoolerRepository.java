@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CoolerRepository extends JpaRepository<CoolerEntity, Long> {
 	Slice<CoolerEntity> findSliceByNameContaining(Pageable pageable, String name);
+
+	Slice<CoolerEntity> findSliceBy(Pageable pageable);
 }

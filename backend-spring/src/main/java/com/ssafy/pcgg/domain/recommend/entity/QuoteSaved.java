@@ -1,10 +1,9 @@
-package com.ssafy.pcgg.domain.share.entity;
+package com.ssafy.pcgg.domain.recommend.entity;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
 import com.ssafy.pcgg.domain.user.UserEntity;
 
 import jakarta.persistence.Column;
@@ -24,33 +23,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "share")
+@Table(name = "quote_saved")
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Share {
+public class QuoteSaved {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
 	private UserEntity user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "quote_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@JoinColumn(name = "quote_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
 	private QuoteEntity quote;
 
-	@Column(length = 50, nullable = false)
-	private String title;
+	@Column(name = "user_id")
+	private Long userId;
 
-	@Column(columnDefinition = "TEXT", nullable = false)
-	private String content;
-
-	@Column(length = 100, nullable = false)
-	private String summary;
+	@Column(name = "quote_id")
+	private Long quoteId;
 
 	@CreationTimestamp
 	@Column(name = "created_at")

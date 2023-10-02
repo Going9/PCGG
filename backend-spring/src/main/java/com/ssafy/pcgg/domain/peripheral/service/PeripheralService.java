@@ -221,6 +221,8 @@ public class PeripheralService {
 		UserEntity userEntity = userRepository.findById(userIdDto.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 유저가 존재하지 않습니다."));
 
+		// TODO: 해당 주변기기의 존재 유무 체크하기
+
 		PeripheralSaved peripheralSaved = PeripheralSaved.builder()
 			.peripheralTypeNs(peripheralTypeNs)
 			.user(userEntity)
@@ -228,6 +230,16 @@ public class PeripheralService {
 			.build();
 
 		return peripheralSavedRepository.save(peripheralSaved).getId();
+	}
+
+	@Transactional
+	public void deleteMyPeripheral(UserIdDto userId, Long myperipheralId){
+		PeripheralSaved peripheralSaved = peripheralSavedRepository.findById(myperipheralId)
+			.orElseThrow(() -> new IllegalArgumentException("저장된 주변기기가 존재하지 않습니다."));
+		if(!Objects.equals(userId.getUserId(), peripheralSaved.getUser().getUserId())){
+			throw new IllegalArgumentException("자신이 저장한 주변기기만 삭제할 수 있습니다.");
+		}
+		peripheralSavedRepository.delete(peripheralSaved);
 	}
 
 }

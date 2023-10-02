@@ -3,9 +3,17 @@ package com.ssafy.pcgg.domain.user;
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.user.dto.*;
+import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
+import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
+import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
+import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +58,11 @@ public class UserController {
     public ResponseEntity<List<UserShareResponse>> getMyShareLike(UserIdDto userId, HttpServletRequest request) {
         List<UserShareResponse> userShareResponseList = userService.getMyShareLike(userId.getUserId());
         return ResponseEntity.ok().body(userShareResponseList);
+    @Operation(summary = "저장된 견적 목록 조회", description = "마이페이지에 저장된 견적 목록을 조회합니다.")
+    @GetMapping("/quotes")
+    @CurrentUserId("userId")
+    public ResponseEntity<Slice<QuoteEntity>> getMyQuotes(UserIdDto userId, HttpServletRequest request, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+        return ResponseEntity.ok().body(userService.getMyQuotes(userId, pages));
     }
 
 //    @GetMapping
