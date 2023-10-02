@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="text">
-      <span class="username">{{ user.userInfo[0] }}</span
+    <div class="text" v-if="user.loginActivated">
+      <span class="username">{{ user.userInfo["nickname"] }}</span
       ><span>님께 추천드리는 </span>
       <span v-if="store.peripheralCategory === 'keyboard'">키보드</span>
       <span v-if="store.peripheralCategory === 'mouse'">마우스</span>
@@ -9,9 +9,13 @@
       <span v-if="store.peripheralCategory === 'printer'">프린터와 복합기</span>
       <span v-if="store.peripheralCategory === 'etc'">주변기기</span>
     </div>
-    <!-- <PeripheralCardComponentVue class="recommend" /> -->
+    <!-- <PeripheralCardComponentVue class="recommend"  v-if="user.loginActivated" /> -->
     <!-- 분리선 -->
-    <v-divider class="border-opacity-100" style="margin-top: 2rem"></v-divider>
+    <v-divider
+      class="border-opacity-100"
+      style="margin-top: 2rem"
+      v-if="user.loginActivated"
+    ></v-divider>
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
