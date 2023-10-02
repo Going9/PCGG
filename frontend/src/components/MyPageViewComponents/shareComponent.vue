@@ -1,6 +1,7 @@
 <template>
   <div class="share-container">
     <v-container>
+      내가 쓴 글
       <v-row>
         <v-col
           cols="12"
@@ -18,7 +19,9 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-divider />
     <v-container>
+      좋아요 누른 글
       <v-row>
         <v-col
           cols="12"

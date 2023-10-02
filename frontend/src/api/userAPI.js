@@ -23,11 +23,17 @@ async function getMyPeripheralAPI(category, success, fail) {
   await apiAuth.get(`/users/${category}`).then(success).catch(fail);
 }
 
+// 내 주변기기 삭제하기
+async function deleteMyPeripheralAPI(peripheral, success, fail) {
+  await apiAuth.delete(`/peripherals/${peripheral}`).then(success).catch(fail);
+}
+
 // 내 공유마당 글 가져오기
 async function getMyShareAPI(success, fail) {
   await apiAuth.get("/users/share").then(success).catch(fail);
 }
 
+// 내 좋아요 공유마당 글 가져오기
 async function getMyShareLikeAPI(success, fail) {
   await apiAuth.get("/users/sharelike").then(success).catch(fail);
 }
@@ -37,6 +43,7 @@ export {
   loginAPI,
   getUserInfoAPI,
   getMyPeripheralAPI,
+  deleteMyPeripheralAPI,
   getMyShareAPI,
   getMyShareLikeAPI,
 };
