@@ -1,4 +1,4 @@
-package com.ssafy.pcgg.domain.recommend.dto;
+package com.ssafy.pcgg.domain.part.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

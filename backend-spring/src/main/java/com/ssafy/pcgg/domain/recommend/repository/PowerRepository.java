@@ -15,12 +15,16 @@ import java.util.List;
 @Repository
 public interface PowerRepository extends JpaRepository<PowerEntity, Long> {
 
-    List<PowerEntity> findAllByClassColumn(Integer classColumn);
+    List<PowerEntity> findByClassColumn(Integer classColumn);
 
     @Query("SELECT p FROM PowerEntity p WHERE p.classColumn = :class AND p.depth < :maxPowerDepth")
-    List<PowerEntity> findByChassisAndClass(@Param("maxPowerDepth") BigDecimal maxPowerDepth, @Param("class")int classColumn);
+    List<PowerEntity> checkByChassisAndClass(@Param("maxPowerDepth") BigDecimal maxPowerDepth, @Param("class")int classColumn);
 
     Slice<PowerEntity> findSliceByNameContaining(Pageable pageable, String keyword);
+
+    @Query("SELECT p FROM PowerEntity p WHERE p.classColumn = :class AND p.freeWarrantyPeriod > 0 AND p.price < :budget")
+    List<PowerEntity> findAllByClassColumnAndWarrantyPeriodAndBudget(@Param("class")int partClass, @Param("budget")int budget);
+
 
     Slice<PowerEntity> findSliceBy(Pageable pageable);
 }

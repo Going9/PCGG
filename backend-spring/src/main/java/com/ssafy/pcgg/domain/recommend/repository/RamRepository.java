@@ -14,6 +14,9 @@ public interface RamRepository extends JpaRepository<RamEntity, Long> {
 
     List<RamEntity> findAllByClassColumn(Integer classColumn);
 
+    List<RamEntity> findAllByClassColumnAndPriceLessThanEqual(Integer classColumn, Integer price);
+
+
     Slice<RamEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
     Slice<RamEntity> findSliceBy(Pageable pageable);
