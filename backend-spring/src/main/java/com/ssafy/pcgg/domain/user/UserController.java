@@ -58,6 +58,8 @@ public class UserController {
     public ResponseEntity<List<UserShareResponse>> getMyShareLike(UserIdDto userId, HttpServletRequest request) {
         List<UserShareResponse> userShareResponseList = userService.getMyShareLike(userId.getUserId());
         return ResponseEntity.ok().body(userShareResponseList);
+    }
+    
     @Operation(summary = "저장된 견적 목록 조회", description = "마이페이지에 저장된 견적 목록을 조회합니다.")
     @GetMapping("/quotes")
     @CurrentUserId("userId")
