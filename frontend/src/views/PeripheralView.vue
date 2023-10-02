@@ -10,7 +10,6 @@
           <v-btn
             v-for="item in buttonItems"
             :key="item.value"
-            :value="item.value"
             :class="{
               'active-button': toggle === item.value,
               'inactive-button': toggle !== item.value,
@@ -61,8 +60,9 @@ const setToggle = (value) => {
   store.isPeripheralCategory(value);
   const data = { category: toggle.value, page: 0 };
   store.callList(data);
-  console.log(store.peripheralCategory);
 };
+
+// const infiniteScroll = () => {};
 
 const buttonItems = [
   { label: "키보드", value: "keyboard" },
