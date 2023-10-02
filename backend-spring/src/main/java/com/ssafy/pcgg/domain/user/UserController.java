@@ -2,6 +2,7 @@ package com.ssafy.pcgg.domain.user;
 
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
+import com.ssafy.pcgg.domain.user.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
 import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
 import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
@@ -45,6 +46,18 @@ public class UserController {
         return ResponseEntity.ok().body(userPeripheralResponseList);
     }
 
+    @GetMapping("/share")
+    @CurrentUserId("userId")
+    public ResponseEntity<List<UserShareResponse>> getMyShare(UserIdDto userId, HttpServletRequest request) {
+        List<UserShareResponse> userShareResponseList = userService.getMyShare(userId.getUserId());
+        return ResponseEntity.ok().body(userShareResponseList);
+    }
+
+    @GetMapping("/sharelike")
+    @CurrentUserId("userId")
+    public ResponseEntity<List<UserShareResponse>> getMyShareLike(UserIdDto userId, HttpServletRequest request) {
+        List<UserShareResponse> userShareResponseList = userService.getMyShareLike(userId.getUserId());
+        return ResponseEntity.ok().body(userShareResponseList);
     @Operation(summary = "저장된 견적 목록 조회", description = "마이페이지에 저장된 견적 목록을 조회합니다.")
     @GetMapping("/quotes")
     @CurrentUserId("userId")

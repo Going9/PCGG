@@ -7,7 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import com.ssafy.pcgg.domain.share.entity.Share;
 
+import java.util.List;
+
 @Repository
 public interface ShareRepository extends JpaRepository<Share, Long> {
 	Slice<Share> findSliceBy(Pageable pageable);
+
+	List<Share> findByUser_UserId(Long userId);
 }

@@ -4,6 +4,11 @@ import com.ssafy.pcgg.domain.auth.AuthorityEntity;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.peripheral.entity.*;
 import com.ssafy.pcgg.domain.peripheral.repository.*;
+import com.ssafy.pcgg.domain.share.entity.Share;
+import com.ssafy.pcgg.domain.share.entity.ShareLike;
+import com.ssafy.pcgg.domain.share.repository.ShareLikeRepository;
+import com.ssafy.pcgg.domain.share.repository.ShareRepository;
+import com.ssafy.pcgg.domain.user.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
 import com.ssafy.pcgg.domain.recommend.repository.QuoteSavedRepository;
 import com.ssafy.pcgg.domain.user.dto.UserListResponse;
@@ -32,6 +37,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final ShareRepository shareRepository;
+    private final ShareLikeRepository shareLikeRepository;
+
     private final PeripheralSavedRepository peripheralSavedRepository;
     private final KeyboardRepository keyboardRepository;
     private final MonitorRepository monitorRepository;
@@ -90,23 +99,23 @@ public class UserService {
             if (category.equals("keyboard")) {
                 Keyboard userPeripheral = keyboardRepository.findById(ps.getPeripheralId())
                         .orElseThrow(() -> new RuntimeException());
-                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+                userPeripheralResponse = UserPeripheralResponse.builder().id(ps.getId()).name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
             } else if (category.equals("monitor")) {
                 Monitor userPeripheral = monitorRepository.findById(ps.getPeripheralId())
                         .orElseThrow(() -> new RuntimeException());
-                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+                userPeripheralResponse = UserPeripheralResponse.builder().id(ps.getId()).name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
             } else if (category.equals("mouse")) {
                 Mouse userPeripheral = mouseRepository.findById(ps.getPeripheralId())
                         .orElseThrow(() -> new RuntimeException());
-                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+                userPeripheralResponse = UserPeripheralResponse.builder().id(ps.getId()).name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
             } else if (category.equals("printer")) {
                 Printer userPeripheral = printerRepository.findById(ps.getPeripheralId())
                         .orElseThrow(() -> new RuntimeException());
-                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+                userPeripheralResponse = UserPeripheralResponse.builder().id(ps.getId()).name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
             } else if (category.equals("etc")) {
                 Etc userPeripheral = etcRepository.findById(ps.getPeripheralId())
                         .orElseThrow(() -> new RuntimeException());
-                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+                userPeripheralResponse = UserPeripheralResponse.builder().id(ps.getId()).name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
             } else {
                 throw new IllegalArgumentException();
             }
@@ -118,6 +127,51 @@ public class UserService {
         return userPeripheralResponseList;
     }
 
+    public List<UserShareResponse> getMyShare(Long userId) {
+        List<Share> shareList = shareRepository.findByUser_UserId(userId);
+
+        List<UserShareResponse> userShareResponseList = new ArrayList<>();
+
+        for (Share s : shareList) {
+            userShareResponseList.add(UserShareResponse.builder()
+                            .id(s.getId())
+                            .quoteId(s.getQuote().getId())
+                            .title(s.getTitle())
+                            .content(s.getContent())
+                            .summary(s.getSummary())
+                            .createdAt(s.getCreatedAt())
+                            .build());
+        }
+
+        return userShareResponseList;
+    }
+
+    public List<UserShareResponse> getMyShareLike(Long userId) {
+        List<ShareLike> shareLikeList = shareLikeRepository.findByUser_UserId(userId);
+
+        List<UserShareResponse> userShareResponseList = new ArrayList<>();
+
+        for (ShareLike sl : shareLikeList) {
+            if (sl.getMark() != 1) {
+                continue;
+            }
+
+            Share s = shareRepository.findById(sl.getShare().getId())
+                    .orElseThrow(() -> new RuntimeException());
+
+            userShareResponseList.add(UserShareResponse.builder()
+                            .id(s.getId())
+                            .quoteId(s.getQuote().getId())
+                            .title(s.getTitle())
+                            .content(s.getContent())
+                            .summary(s.getSummary())
+                            .createdAt(s.getCreatedAt())
+                            .build());
+        }
+
+        return userShareResponseList;
+    }
+
     @Transactional
     public Slice<QuoteEntity> getMyQuotes(UserIdDto userId, int pages){
         PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -125,6 +179,7 @@ public class UserService {
 
         return quoteEntities;
     }
+    
 //    public List<UserListResponse> getUsers() {
 //        return userRepository.findAll().stream()
 //                .map(UserListResponse::new)

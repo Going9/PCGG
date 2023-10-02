@@ -9,6 +9,8 @@ import com.ssafy.pcgg.domain.share.entity.Share;
 import com.ssafy.pcgg.domain.share.entity.ShareLike;
 import com.ssafy.pcgg.domain.user.UserEntity;
 
+import java.util.List;
+
 @Repository
 public interface ShareLikeRepository extends JpaRepository<ShareLike, Long> {
 	ShareLike findByShareAndUser(Share share, UserEntity userEntity);
@@ -18,4 +20,6 @@ public interface ShareLikeRepository extends JpaRepository<ShareLike, Long> {
 
 	@Query("SELECT sl.mark FROM ShareLike sl WHERE sl.share.id = :shareId AND sl.user.userId = :userId")
 	Integer findMarkByShareIdAndUserId(@Param("shareId") Long shareId, @Param("userId") Long userId);
+
+	List<ShareLike> findByUser_UserId(Long userId);
 }
