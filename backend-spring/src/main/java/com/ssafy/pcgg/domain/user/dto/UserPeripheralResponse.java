@@ -6,6 +6,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UserPeripheralResponse {
+    private Long id;
     private String name;
     private Integer lprice;
     private Integer hprice;
