@@ -9,6 +9,7 @@ import WhitePartIcon from "./WhitePartIcon.png";
 import BlackPartIcon from "./BlackPartIcon.png";
 import saveIcon from "./saveIcon.png";
 import appendIcon from "./append.png";
+import removeIcon from "./remove.png";
 import pcIcon from "./pc.png";
 import partIcon from "./cpu.png";
 import desktopIcon from "./desktop.png";
@@ -47,6 +48,7 @@ export {
   BlackPartIcon,
   saveIcon,
   appendIcon,
+  removeIcon,
   pcIcon,
   partIcon,
   desktopIcon,

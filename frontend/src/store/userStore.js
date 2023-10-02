@@ -5,6 +5,7 @@ import {
   loginAPI,
   getUserInfoAPI,
   getMyPeripheralAPI,
+  deleteMyPeripheralAPI,
   getMyShareAPI,
   getMyShareLikeAPI,
 } from "@/api/userAPI";
@@ -125,6 +126,17 @@ export const userStore = defineStore("userStore", {
         category,
         ({ data }) => {
           this.peripheralList = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async deleteMyPeripheral(peripheral) {
+      await deleteMyPeripheralAPI(
+        peripheral,
+        () => {
+          console.log("삭제 완료");
         },
         (error) => {
           console.log(error);
