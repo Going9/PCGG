@@ -15,6 +15,6 @@ public class CommentResponseDto {
 	private Long id;
 	private Long shareId;
 	private Long userId;
-	// private String userNickname;	//추후 UserEntity에 nickname 추가시, 수정예정
+	private String userNickname;
 	private String content;
 }

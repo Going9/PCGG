@@ -1,14 +1,26 @@
 package com.ssafy.pcgg.domain.user;
 
 import com.ssafy.pcgg.domain.auth.AuthorityEntity;
+import com.ssafy.pcgg.domain.auth.UserIdDto;
+import com.ssafy.pcgg.domain.peripheral.entity.*;
+import com.ssafy.pcgg.domain.peripheral.repository.*;
+import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
+import com.ssafy.pcgg.domain.recommend.repository.QuoteSavedRepository;
 import com.ssafy.pcgg.domain.user.dto.UserListResponse;
+import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
+import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
 import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
 import com.ssafy.pcgg.domain.user.exception.DuplicateUserException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +32,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PeripheralSavedRepository peripheralSavedRepository;
+    private final KeyboardRepository keyboardRepository;
+    private final MonitorRepository monitorRepository;
+    private final MouseRepository mouseRepository;
+    private final PrinterRepository printerRepository;
+    private final EtcRepository etcRepository;
+
+    private final QuoteSavedRepository quoteSavedRepository;
 
     public void signup(UserSignupRequest userSignupRequest) {
         String email = userSignupRequest.getEmail();
@@ -48,9 +68,66 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public List<UserListResponse> getUsers() {
-        return userRepository.findAll().stream()
-                .map(UserListResponse::new)
-                .collect(Collectors.toList());
+    public UserMyResponse getMyUser(Long userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException());
+
+        return UserMyResponse.builder()
+                .nickname(userEntity.getNickname())
+                .build();
     }
+
+    // peripheral 관련 class 상속 구조로 리팩토링 필요!!
+    public List<UserPeripheralResponse> getMyPeripherals(Long userId, String category) {
+        List<PeripheralSaved> peripheralSaved = peripheralSavedRepository.findByUser_UserIdAndPeripheralTypeNs_Name(userId, category);
+
+        List<UserPeripheralResponse> userPeripheralResponseList= new ArrayList<>();
+
+        for (PeripheralSaved ps : peripheralSaved) {
+
+            UserPeripheralResponse userPeripheralResponse = null;
+
+            if (category.equals("keyboard")) {
+                Keyboard userPeripheral = keyboardRepository.findById(ps.getPeripheralId())
+                        .orElseThrow(() -> new RuntimeException());
+                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+            } else if (category.equals("monitor")) {
+                Monitor userPeripheral = monitorRepository.findById(ps.getPeripheralId())
+                        .orElseThrow(() -> new RuntimeException());
+                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+            } else if (category.equals("mouse")) {
+                Mouse userPeripheral = mouseRepository.findById(ps.getPeripheralId())
+                        .orElseThrow(() -> new RuntimeException());
+                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+            } else if (category.equals("printer")) {
+                Printer userPeripheral = printerRepository.findById(ps.getPeripheralId())
+                        .orElseThrow(() -> new RuntimeException());
+                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+            } else if (category.equals("etc")) {
+                Etc userPeripheral = etcRepository.findById(ps.getPeripheralId())
+                        .orElseThrow(() -> new RuntimeException());
+                userPeripheralResponse = UserPeripheralResponse.builder().name(userPeripheral.getName()).lprice(userPeripheral.getLprice()).hprice(userPeripheral.getHprice()).imageSource(userPeripheral.getImageSource()).link(userPeripheral.getLink()).brand(userPeripheral.getBrand()).build();
+            } else {
+                throw new IllegalArgumentException();
+            }
+
+            userPeripheralResponseList.add(userPeripheralResponse);
+
+        }
+
+        return userPeripheralResponseList;
+    }
+
+    @Transactional
+    public Slice<QuoteEntity> getMyQuotes(UserIdDto userId, int pages){
+        PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Slice<QuoteEntity> quoteEntities = quoteSavedRepository.findQuotesByUserId(userId.getUserId(), pageRequest);
+
+        return quoteEntities;
+    }
+//    public List<UserListResponse> getUsers() {
+//        return userRepository.findAll().stream()
+//                .map(UserListResponse::new)
+//                .collect(Collectors.toList());
+//    }
 }

@@ -1,11 +1,11 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
 @Table(name = "part_cpu")
 public class CpuEntity {
     @Id
@@ -15,22 +15,22 @@ public class CpuEntity {
     @Column(length = 50)
     private String name;
 
+    // @Getter
     private Integer price;
 
-    @Column(name="image_source", length=100)
+    @Column(name="image_source", length=200)
     private String imageSource;
 
     private Boolean extinct;
 
-    @CreationTimestamp
-    //@Column(name="changed_date", columnDefinition="DATE DEFAULT CURRENT_DATE")
-    @Column(name="changed_date", nullable = false)
-    private LocalDate changedDate;
-
+    // @Getter
     @Column(name="socket_info", length=20)
     private String socketInfo;
 
+    // @Getter
     private Boolean ddr4;
+
+    // @Getter
     private Boolean ddr5;
 
     @Column(name = "integrated_graphics")
@@ -38,4 +38,15 @@ public class CpuEntity {
 
     @Column(name = "cooler_included")
     private Boolean coolerIncluded;
+
+    // @Getter
+    @Column(name = "single_score")
+    private Integer singleScore;
+
+    @Column(name = "multi_score")
+    private Integer multiScore;
+
+    @Setter
+    @Column(name = "`class`", columnDefinition = "tinyint")
+    private Integer classColumn;
 }

@@ -1,11 +1,12 @@
 package com.ssafy.pcgg.domain.share.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ShareMarkRequestDto {
-	private Long userId;
 	private Integer mark;
 }

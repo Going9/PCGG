@@ -27,5 +27,7 @@ public class ShareResponseDto {
 	private String content;
 	private String summary;
 	private LocalDateTime createdAt;
-	// private Integer mark;	// 추후 jwt 적용시 추가할 컬럼
+	private Long likeCnt;
+	private Long dislikeCnt;
+	private Long reviewCnt;
 }
