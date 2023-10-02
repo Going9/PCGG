@@ -48,8 +48,13 @@
       </div>
     </div>
     <v-divider class="border-opacity-100" vertical />
-    <v-btn icon="$vuetify" class="peripheralbtn" variant="text">
-      <img :src="appendIcon" alt="no" class="append" />
+    <v-btn
+      icon="$vuetify"
+      class="peripheralbtn"
+      variant="text"
+      @click="removeMyPeripheral(peripheral['id'])"
+    >
+      <img :src="removeIcon" alt="no" class="remove" />
     </v-btn>
   </div>
 </template>
@@ -57,7 +62,7 @@
 <script setup>
 import { userStore } from "@/store/userStore";
 import { onMounted, computed, ref } from "vue";
-import { appendIcon } from "@/assets/Icon";
+import { removeIcon } from "@/assets/Icon";
 
 const store = userStore();
 const category = ref(null);
@@ -81,6 +86,11 @@ const buttonEvent = async (value) => {
   await store.setPeripheralCategory(value);
   await store.getMyPeripheral(value);
   // console.log(store.getperipheralList);
+};
+
+const removeMyPeripheral = async (peripheralId) => {
+  await store.deleteMyPeripheral(peripheralId);
+  await store.getMyPeripheral(category.value);
 };
 </script>
 
@@ -147,7 +157,7 @@ const buttonEvent = async (value) => {
 .peripheralbtn {
   margin-left: 3rem;
 }
-.append {
+.remove {
   width: 100%;
 }
 </style>
