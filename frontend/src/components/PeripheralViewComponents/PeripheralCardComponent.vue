@@ -10,10 +10,10 @@
               <p>제품명: {{ item["name"] }}</p>
             </div>
             <div>
-              <p>최고가: {{ item["hprice"] }}</p>
+              <p>최고가: {{ item["hprice"] }}원</p>
             </div>
             <div>
-              <p>최저가: {{ item["lprice"] }}</p>
+              <p>최저가: {{ item["lprice"] }}원</p>
             </div>
           </div>
           <div class="summary">
@@ -56,8 +56,20 @@
             <span>키보드 좋아요.</span>
           </div>
         </div>
-        <div class="review-input">
-          <v-text-field></v-text-field>
+        <div class="review-input" v-if="user.loginActivated">
+          <v-rating
+            v-model="item.reviewRating"
+            density="compact"
+            hide-details="true"
+            class="review-star"
+          ></v-rating>
+          <v-text-field
+            v-model="item.reviewInputValue"
+            variant="outlined"
+            label="리뷰 입력"
+            hide-details="true"
+            @keyup.enter="goReview(item)"
+          ></v-text-field>
         </div>
       </div>
     </div>
@@ -75,7 +87,10 @@ const store = usePeripehralStore();
 const user = userStore();
 
 const listData = computed(function () {
-  return store.peripheralList;
+  return store.peripheralList.map((item) => {
+    item.reviewRating = 0;
+    return item;
+  });
 });
 
 const saveData = (id) => {
@@ -91,6 +106,23 @@ const toggleReview = (index) => {
   } else {
     expandedItem.value = index;
   }
+};
+
+const goReview = (item) => {
+  const reviewData = {
+    category: store.peripheralCategory,
+    peripheralId: item.id,
+    rating: item.reviewRating,
+    review: item.reviewInputValue,
+  };
+  if (reviewData["review"]) {
+    console.log(reviewData);
+    store.createReview(reviewData);
+  } else {
+    console.log("error");
+  }
+  item.reviewInputValue = "";
+  item.reviewRating = 0;
 };
 </script>
 
@@ -163,6 +195,11 @@ const toggleReview = (index) => {
 }
 
 .review-input {
-  height: 3rem;
+  padding: 0rem 1rem 1rem 1rem;
+  background-color: #d9d9d9;
+}
+
+.review-star {
+  margin-top: 0.3rem;
 }
 </style>
