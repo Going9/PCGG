@@ -83,6 +83,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "api/v1/shares/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/v1/peripherals/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/v1/used-market/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/used-market/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "api/v1/used-market/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
 

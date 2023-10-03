@@ -52,13 +52,17 @@ public class UsedMarket extends BaseTimeEntity {
   private Boolean state;
 
   @Builder
-  public UsedMarket(UserEntity user, String title, String content, String summary, Integer price, Boolean state) {
+  public UsedMarket(UserEntity user, String title, String content, String summary, Integer price, Boolean state, String usedMarketImage) {
     this.user = user;
     this.title = title;
     this.content = content;
     this.summary = summary;
     this.price = price;
     this.state = state;
+  }
+
+  public void complete() {
+    this.state = true;
   }
 
   public void update(UsedMarketUpdateDto usedMarketUpdateDto) {
@@ -68,8 +72,7 @@ public class UsedMarket extends BaseTimeEntity {
     this.price = usedMarketUpdateDto.getPrice();
   }
 
-
-
-
-
 }
+
+
+

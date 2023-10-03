@@ -77,6 +77,7 @@ public class UsedMarketService {
     for (UsedMarket tmp : usedMarketList) {
       UsedMarketListDto usedMarketListDto = new UsedMarketListDto(tmp);
       usedMarketListDtos.add(usedMarketListDto);
+      System.out.println(usedMarketListDto.getTitle());
     }
     return usedMarketListDtos;
 
