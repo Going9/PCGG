@@ -1,26 +1,26 @@
 <script setup>
-  import cpuData from "@/assets/data/part_cpu.json"
   import ItemComponent from './ItemComponent.vue';
   import ItemDetailComponent from './ItemDetailComponent.vue';
   import { defineProps, defineEmits, ref, onUpdated, onMounted } from 'vue';
 
-  // onUpdated(()=>{
-  //   selectedItem.value =""
-  // })
-
   const selectedItem = ref("")
+  const props = defineProps({
+  partList : Object,
+});
 
   const emit = defineEmits(['msg']);
   function select(item){
     if (item.name != selectedItem.value.name) {
       selectedItem.value = item
-      const newItemName = item
-      emit('msg', newItemName);
+      const newItem = item
+      emit('msg', newItem);
     }
     else{
       selectedItem.value = ""
-      const newItemName = ""
-      emit('msg', newItemName);
+      const newItem = {
+        name : "", id: -1
+      }
+      emit('msg', newItem);
     }
   }
 </script>
@@ -30,7 +30,7 @@
     <v-col class="leftSide"
     :cols=" selectedItem ? 8 : 12">
       <v-col
-        v-for="item in cpuData"
+        v-for="item in partList"
         :key="item.id"
         >
           <ItemComponent

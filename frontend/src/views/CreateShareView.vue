@@ -2,6 +2,7 @@
 import PartSelectionComponent from '@/components/Common/PartSelectionComponent.vue';
 import { ref } from 'vue'
 import { createSharePostAPI } from "@/api/shareAPI";
+import router from '@/router';
 
 const title = ref("")
 const content = ref("")
@@ -14,14 +15,14 @@ const createSharedPostEvent = () => {
       content: content.value,
       summary: summary.value,
       shareAddQuoteRequestDto: {
-      cpuId: 1,
-      mainboardId: 640,
-      ssdId: 302,
-      ramId: 135,
-      gpuId: 1,
-      chassisId: 240,
-      powerId: 301,
-      coolerId: 172,
+      cpuId: partList.value[0].id,
+      mainboardId: partList.value[2].id,
+      ssdId: partList.value[5].id,
+      ramId: partList.value[3].id,
+      gpuId: partList.value[4].id,
+      chassisId: partList.value[6].id,
+      powerId: partList.value[7].id,
+      coolerId: partList.value[1].id,
   } }
   console.log(data)
   createSharePostAPI(
@@ -33,6 +34,9 @@ const createSharedPostEvent = () => {
           msg = "공유 게시글 작성에 실패했습니다.";
         }
         alert(msg);
+        if(data){
+          router.push({name: "Share"})
+        }
       },
       (error) => {
         console.log(error);
@@ -40,11 +44,10 @@ const createSharedPostEvent = () => {
     );
 
   }
-const partlist = ref([])
+const partList = ref([])
 
 const setList = (lst)=>{
-  console.log(lst)
-  partlist.value = lst
+  partList.value = lst.value; // lst를 partList에 할당
 }
 </script>
 

@@ -1,49 +1,31 @@
 import { defineStore } from "pinia";
+import { loadPartListAPI } from "@/api/partAPI";
 
-export const userStore = defineStore("partSelectionStore", {
+export const partSelectionStore = defineStore("partSelectionStore", {
   state: () => ({
-    loginActivated: false,
-    accessToken: "",
-    triggerOne: true,
-    triggerTwo: true,
-    peripheralSwitch: true,
+    partCategory: "cpu",
+    partList: [],
   }),
   getters: {
-    isLogin: (state) => {
-      return state.loginActivated;
+    getlist: (state) => {
+      return state.partList;
     },
-    getAccessToken: (state) => {
-      return state.accessToken;
-    },
-    // getLogon: (state) => !state.loginActivated,
   },
   actions: {
-    async login(loginInput) {
-      await loginAPI(
-        loginInput,
+    isPartCategory(value) {
+      this.partCategory = value;
+      this.partList = [];
+    },
+    async loadPartList(value) {
+      await loadPartListAPI(
+        value,
         ({ data }) => {
-          console.log(data.token)
-          this.loginActivated = true;
-          this.accessToken = data.token;
+          this.partList = data.content;
         },
         (error) => {
           console.log(error);
         }
       );
     },
-    logout() {
-      this.loginActivated = false;
-      this.accessToken = "";
-    },
-    triggerActivation() {
-      this.triggerOne = !this.triggerOne;
-    },
-    changePageLoginSignup() {
-      this.triggerTwo = !this.triggerTwo;
-    },
-    isPeripheralRecommend() {
-      this.peripheralSwitch = !this.peripheralSwitch;
-    },
   },
-  // 위 3개가 끝임.
 });

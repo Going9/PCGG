@@ -8,7 +8,7 @@
     <v-row>
       <img
       class="part-img"
-      :src="selectedItem.image_source" alt="PartImg">
+      :src="selectedItem.imageSource" alt="PartImg">
     </v-row>
     <v-row>
       <div class="part-info">
