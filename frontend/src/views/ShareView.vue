@@ -1,21 +1,33 @@
 <script setup>
 import PostComponent from "@/components/ShareViewComponents/PostComponent.vue";
 import SearchComponent from "@/components/Common/SearchBarComponent.vue";
-import { RouterLink } from "vue-router";
+import { userStore } from '@/store/userStore';
 import { shareStore } from "@/store/shareStore";
 import { onMounted, ref } from "vue";
+import router from "@/router";
 
 const shareList = ref([]);
 const page = ref(0);
 const store = shareStore();
+const isLogin = ref(false);
 
 onMounted(() => {
+  isLogin.value = userStore().isLogin;
   store.loadShareList();
   setTimeout(() => {
     store.moveToPage(0);
     shareList.value = store.isShareList;
   }, 100);
 });
+
+const goToCreateShare = () => {
+    if(isLogin.value){
+      router.push({ name: "CreateShare"});
+    }
+    else{
+      alert("로그인이 필요합니다")
+    }
+  }
 </script>
 
 <template>
@@ -38,9 +50,11 @@ onMounted(() => {
       <SearchComponent />
     </div>
     <div class="writebox">
-      <RouterLink to="/share/createshare">
-        <v-btn color="#4599FC">견적 공유하기</v-btn>
-      </RouterLink>
+      <div>
+        <v-btn
+        @click="goToCreateShare"
+        color="#4599FC">견적 공유하기</v-btn>
+      </div>
     </div>
     <div class="mainbox flex-center">
       <div class="resultbox">
