@@ -5,9 +5,9 @@ import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCommentCreateDto;
 import com.ssafy.pcgg.domain.usedmarket.service.UsedMarketCommentService;
 import com.ssafy.pcgg.domain.user.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+
+    import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +28,12 @@ public class UsedMarketCommentController {
     }
 
 
-//    @DeleteMapping("/{usedMarketId}/comment/{usedMarketCommentId}")
-//    @CurrentUserId("userId")
-//    public ResponseEntity<Long> deleteUsedMarketComment(UserIdDto userID, HttpServletRequest request, @PathVariable Long usedMarketId, @PathVariable) {
-//        Long result = usedMarketCommentService.deleteUsedMarketComment(userId, usedMarke);
-//        return ResponseEntity.status(200).body(result);
-//    }
+    @DeleteMapping("/{usedMarketId}/comment/{usedMarketCommentId}")
+    @CurrentUserId("userId")
+    public ResponseEntity<Void> deleteUsedMarketComment(UserIdDto userId, HttpServletRequest request, @PathVariable Long usedMarketId, @PathVariable Long usedMarketCommentId) {
+        usedMarketCommentService.deleteUsedMarketComment(userId, usedMarketId, usedMarketCommentId);
+        return ResponseEntity.ok().build();
+    }
 //
 //    @GetMapping("/{usedMarketId}/")
 //    public ResponseEntity<List<UsedMarketCommentList>> getUsedMarketCommentList(@PathVariable Long usedMarketId) {
