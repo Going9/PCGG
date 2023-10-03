@@ -2,6 +2,7 @@ package com.ssafy.pcgg.domain.usedmarket.service;
 
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCommentCreateDto;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCommentListDto;
 import com.ssafy.pcgg.domain.usedmarket.entity.UsedMarket;
 import com.ssafy.pcgg.domain.usedmarket.entity.UsedMarketComment;
 import com.ssafy.pcgg.domain.usedmarket.exception.InvalidUserException;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.stream.events.Comment;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +51,20 @@ public class UsedMarketCommentService {
 
         UsedMarketComment usedMarketComment = usedMarketCommentRepository.findById(commentId).orElseThrow(()
           -> new UsedMarketCommentNotFoundException("댓글이 존재하지 않습니다."));
-        System.out.println("sdfsdf");
         if (usedMarketComment.getUser().getUserId() != user.getUserId()) {
             throw new InvalidUserException("작성자가 아닙니다.");
         }
         usedMarketCommentRepository.deleteById(commentId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsedMarketCommentListDto> getUsedMarketCommentList(Long usedMarketId) {
+        List<UsedMarketComment> usedMarketCommentList = usedMarketCommentRepository.findAllByUsedMarketId(usedMarketId);
+        List<UsedMarketCommentListDto> usedMarketCommentListDtos = new ArrayList<>();
+        for (UsedMarketComment tmp : usedMarketCommentList) {
+            UsedMarketCommentListDto usedMarketCommentListDto = new UsedMarketCommentListDto(tmp);
+            usedMarketCommentListDtos.add(usedMarketCommentListDto);
+        }
+        return usedMarketCommentListDtos;
     }
 }

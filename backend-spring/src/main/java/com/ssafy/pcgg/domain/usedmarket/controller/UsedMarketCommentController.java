@@ -3,6 +3,7 @@ package com.ssafy.pcgg.domain.usedmarket.controller;
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
 import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCommentCreateDto;
+import com.ssafy.pcgg.domain.usedmarket.dto.UsedMarketCommentListDto;
 import com.ssafy.pcgg.domain.usedmarket.service.UsedMarketCommentService;
 import com.ssafy.pcgg.domain.user.UserService;
 
@@ -10,6 +11,8 @@ import com.ssafy.pcgg.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,13 +37,11 @@ public class UsedMarketCommentController {
         usedMarketCommentService.deleteUsedMarketComment(userId, usedMarketId, usedMarketCommentId);
         return ResponseEntity.ok().build();
     }
-//
-//    @GetMapping("/{usedMarketId}/")
-//    public ResponseEntity<List<UsedMarketCommentList>> getUsedMarketCommentList(@PathVariable Long usedMarketId) {
-//        List<UsedMarketCommentListDto> getTransactions = usedMarketCommentService.getUsedMarketCommentList(usedMarketId);
-//        return ResponseEntity.ok(getTransactions);
-//
-//    }
 
+    @GetMapping("/{usedMarketId}/comment")
+    public ResponseEntity<List<UsedMarketCommentListDto>> getUsedMarketCommentList(@PathVariable Long usedMarketId) {
+        List<UsedMarketCommentListDto> getTransactions = usedMarketCommentService.getUsedMarketCommentList(usedMarketId);
+        return ResponseEntity.ok(getTransactions);
 
+    }
 }
