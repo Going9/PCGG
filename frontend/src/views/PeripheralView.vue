@@ -80,7 +80,7 @@ const goSearch = () => {
 const handleIntersection = (entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      console.log("끝");
+      console.log("reload");
       data["category"] = store.peripheralCategory;
       store.callList(data);
       data["page"] += 1;
