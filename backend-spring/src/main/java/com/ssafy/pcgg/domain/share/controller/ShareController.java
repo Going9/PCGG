@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.pcgg.domain.auth.CurrentUserId;
 import com.ssafy.pcgg.domain.auth.UserIdDto;
+import com.ssafy.pcgg.domain.share.dto.AuthorMarkInfoDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
@@ -74,12 +75,11 @@ public class ShareController {
 	}
 
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요 조회", description = "공유마당 게시글에 좋아요/싫어요 여부를 조회합니다.")
-	@GetMapping("/{articleId}/marks")
+	@GetMapping("/{articleId}/author-mark-info")
 	@CurrentUserId("userId")
-	public ResponseEntity<Integer> getMarkInfo(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId) {
-		logger.info("getShareDetail(), articleId = {}", articleId);
-		Integer mark = shareService.getMarkInfo(userId, articleId);
-		return ResponseEntity.ok().body(mark);
+	public ResponseEntity<AuthorMarkInfoDto> getAuthorMarkInfo(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId) {
+		logger.info("getAuthorMarkInfo(), articleId = {}", articleId);
+		return ResponseEntity.ok().body(shareService.getAuthorMarkInfo(userId, articleId));
 	}
 
 	@Operation(summary = "공유마당 게시글 좋아요/싫어요", description = "공유마당 게시글에 좋아요/싫어요를 누릅니다.")
