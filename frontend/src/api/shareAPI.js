@@ -8,6 +8,10 @@ async function loadShareListAPI(body, success, fail) {
   await api.get("/shares/", JSON.stringify(params)).then(success).catch(fail);
 }
 
+async function loadShareDetailAPI(data, success, fail) {
+  await api.get(`/shares/${data.articleId}`).then(success).catch(fail);
+}
+
 async function createSharePostAPI( data, success, fail) {
   await apiAuth
   .post(`/shares/`, JSON.stringify(data))
@@ -40,4 +44,4 @@ async function loadLikeHistoryAPI(data, success, fail) {
 
 }
 
-export { loadShareListAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI}
+export { loadShareListAPI,loadShareDetailAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI}
