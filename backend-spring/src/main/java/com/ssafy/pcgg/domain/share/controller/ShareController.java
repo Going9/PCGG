@@ -74,7 +74,7 @@ public class ShareController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "공유마당 게시글 좋아요/싫어요 조회", description = "공유마당 게시글에 좋아요/싫어요 여부를 조회합니다.")
+	@Operation(summary = "공유마당 게시글 좋아요/싫어요, 작성자여부 조회", description = "공유마당 게시글에 좋아요/싫어요 및 작성자 여부를 조회합니다.")
 	@GetMapping("/{articleId}/author-mark-info")
 	@CurrentUserId("userId")
 	public ResponseEntity<AuthorMarkInfoDto> getAuthorMarkInfo(UserIdDto userId, HttpServletRequest request, @PathVariable Long articleId) {
