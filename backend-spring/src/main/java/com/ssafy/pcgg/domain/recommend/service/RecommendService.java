@@ -5,6 +5,7 @@ import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartAllFailedException;
 import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
+import com.ssafy.pcgg.domain.recommend.exception.SavingQuoteException;
 import com.ssafy.pcgg.domain.recommend.repository.*;
 import com.ssafy.pcgg.domain.recommend.util.PrioritySelector;
 import com.ssafy.pcgg.domain.recommend.util.RecommendUtil;
@@ -28,6 +29,8 @@ public class RecommendService {
     private final RecommendUtil recommendUtil;
     private final Logger logger = LoggerFactory.getLogger(RecommendService.class.getName());
     private final QuoteCandidateRepository quoteCandidateRepository;
+    private final QuoteRepository quoteRepository;
+    private final QuoteSavedRepository quoteSavedRepository;
     private final UsageNsRepository usageNsRepository;
     //    private final QuoteRepository quoteRepository;
     private final CpuRepository cpuRepository;
@@ -281,5 +284,29 @@ public class RecommendService {
          SSD : reading_speed
          cooler : fan_count
          */
+    }
+    public void saveQuoteRecommendToMyPage(SaveQuoteRequestDto saveQuoteRequestDto) {
+        try {
+            QuoteEntity quote = QuoteEntity.builder()
+                    .chassisId(saveQuoteRequestDto.getChassisId())
+                    .cpuId(saveQuoteRequestDto.getCpuId())
+                    .gpuId(saveQuoteRequestDto.getGpuId())
+                    .coolerId(saveQuoteRequestDto.getCoolerId())
+                    .mainboardId(saveQuoteRequestDto.getMainboardId())
+                    .powerId(saveQuoteRequestDto.getPowerId())
+                    .ramId(saveQuoteRequestDto.getRamId())
+                    .ssdId(saveQuoteRequestDto.getSsdId())
+                    .build();
+            quoteRepository.save(quote);
+
+            QuoteSaved quoteSaved = QuoteSaved.builder()
+                    .quoteId(quote.getId())
+                    .userId(saveQuoteRequestDto.getUserId())
+                    .build();
+            quoteSavedRepository.save(quoteSaved);
+        }catch(SavingQuoteException e){
+            logger.error("견적 저장 중 에러 발생:",e.getMessage(),e.getCause());
+            throw e;
+        }
     }
 }
