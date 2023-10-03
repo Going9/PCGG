@@ -40,6 +40,8 @@ public class RecommendService {
     private final SsdRepository ssdRepository;
     private final MainboardRepository mainboardRepository;
     private final ChassisRepository chassisRepository;
+    private final LaptopRepository laptopRepository;
+
     private final ModelMapper modelMapper;
 
 
@@ -309,4 +311,11 @@ public class RecommendService {
             throw e;
         }
     }
+
+    public List<LaptopResponseDto> getLaptopRecommend(LaptopRequestDto laptopRequestDto){
+        return laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget());
+        //todo: 현재 OS, budget만 반영되어있음
+
+    }
+
 }
