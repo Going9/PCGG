@@ -12,6 +12,8 @@
   const route = useRoute();
   const id = route.params.id;
   const post = ref([]);
+  const likeCnt = ref(0);
+  const dislikeCnt = ref(0);
   const store = shareStore();
   const isLike = ref(0);
   const isLogin = ref(false);
@@ -30,7 +32,6 @@
       articleId : id,
       mark : value
     }
-    console.log(data)
     likeSharePostAPI(
     data
     ,
@@ -81,6 +82,8 @@
     ,
     ({ data }) => {
       post.value= data
+      likeCnt.value += data.likeCnt
+      dislikeCnt.value += data.dislikeCnt
     }
     ,
     (error) => {
@@ -94,13 +97,22 @@
     isLogin.value = userStore().isLogin;
     const data = { articleId : id,}
 
+    // 해당 id의 post를 가져옴
+    loadShareDetail()
+
     // 만약 해당 유저가 로그인 상태면 해당 글의 유저의 좋아요 기록을 가져옴
     if(isLogin.value){
       loadLikeHistoryAPI(
       data
       ,
       ({data}) => {
-        isLike.value = data
+        isLike.value = data.mark
+        if(data.mark==1){
+          likeCnt.value -= 1
+        }
+        if(data.mark == -1){
+          dislikeCnt.value -= 1
+        }
       }
       ,
       (error) => {
@@ -108,8 +120,6 @@
       }
       );
     }
-    // 해당 id의 post를 가져옴
-    loadShareDetail()
 
   })
 
@@ -200,7 +210,7 @@
         :style="{ color: isLike === 1 ? 'blue': undefined }"
         class="like-cnt"
         cols="5">
-          {{ isLike === 1 ? post.likeCnt+1 : post.likeCnt }}
+          {{ isLike === 1 ? likeCnt+1 : likeCnt }}
         </v-col>
       </v-col>
       <v-col class="dislike">
@@ -220,7 +230,7 @@
         :style="{ color: isLike === -1 ? 'red' : undefined }"
         class="dislike-cnt"
         cols="5">
-        {{ isLike == -1 ? post.dislikeCnt+1 : post.dislikeCnt }}
+        {{ isLike == -1 ? dislikeCnt+1 : dislikeCnt }}
         </v-col>
       </v-col>
     </v-row>

@@ -38,7 +38,7 @@ async function likeSharePostAPI(data, success, fail) {
 
 async function loadLikeHistoryAPI(data, success, fail) {
   await apiAuth
-  .get(`/shares/${data.articleId}/marks`)
+  .get(`/shares/${data.articleId}/author-mark-info`)
   .then(success)
   .catch(fail);
 
