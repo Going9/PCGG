@@ -13,6 +13,9 @@ import java.util.List;
 public interface CpuRepository extends JpaRepository<CpuEntity, Long> {
 
     List<CpuEntity> findAllByClassColumn(Integer classColumn);
+
+    List<CpuEntity> findAllByClassColumnAndPriceLessThanEqual(Integer classColumn, Integer price);
+
     Slice<CpuEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
     Slice<CpuEntity> findSliceBy(Pageable pageable);
