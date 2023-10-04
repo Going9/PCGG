@@ -7,7 +7,7 @@
     ></v-img> -->
 
     <v-card class="mx-auto pa-4" elevation="8" width="100%" rounded="lg">
-      <!-- <div class="text-subtitle-1 text-medium-emphasis">Account</div> -->
+      <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
       <v-text-field
         density="compact"
@@ -15,22 +15,23 @@
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
         v-model="email"
+        @keyup.enter="loginEvent"
       ></v-text-field>
 
-      <!-- <div
+      <div
         class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
       >
         Password
 
-        <a
+        <!-- <a
           class="text-caption text-decoration-none text-blue"
           href="#"
           rel="noopener noreferrer"
           target="_blank"
         >
           Forgot login password?</a
-        >
-      </div> -->
+        > -->
+      </div>
 
       <v-text-field
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
