@@ -55,37 +55,52 @@ const store = usePeripehralStore();
 
 const toggle = ref(null);
 
+const data = { category: store.peripheralCategory, page: 0 };
+
 const setToggle = (value) => {
   toggle.value = value;
   store.isPeripheralCategory(value);
-  const data = { category: toggle.value, page: 0 };
-  store.callList(data);
+  data["page"] = 0;
 };
-
-// const infiniteScroll = () => {};
 
 const buttonItems = [
   { label: "키보드", value: "keyboard" },
   { label: "마우스", value: "mouse" },
   { label: "모니터", value: "monitor" },
   { label: "프린터 / 복합기", value: "printer" },
-  { label: "기타", value: "etc" },
 ];
 
 const searchQuery = ref("");
 
 const goSearch = () => {
-  // 검색을 수행하는 로직을 여기에 추가
   console.log("검색어:", searchQuery.value);
-
-  // 검색 후 입력 내용 초기화
   searchQuery.value = "";
+};
+
+const handleIntersection = (entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      console.log("reload");
+      data["category"] = store.peripheralCategory;
+      store.callList(data);
+      data["page"] += 1;
+    }
+  });
 };
 
 onMounted(() => {
   toggle.value = store.peripheralCategory;
-  const data = { category: toggle.value, page: 0 };
-  store.callList(data);
+  data["page"] = 0;
+
+  const footer = document.querySelector(".footer-back");
+  const options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.1,
+  };
+
+  const observer = new IntersectionObserver(handleIntersection, options);
+  observer.observe(footer);
 });
 </script>
 
