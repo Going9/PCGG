@@ -5,7 +5,7 @@
         <img :src="item['imageSource']" alt="noimage!" class="itemimg" />
         <v-divider class="border-opacity-100" vertical></v-divider>
         <div class="itemsummary" @click="toggleReview(index, item)">
-          <div class="summary1">
+          <div class="summary">
             <div>
               <p>제품명: {{ item["name"] }}</p>
             </div>
@@ -16,7 +16,7 @@
               <p>최저가: {{ item["lprice"] }}원</p>
             </div>
           </div>
-          <div class="summary2">
+          <div class="summary">
             <div>
               <p>브랜드: {{ item["brand"] }}</p>
             </div>
@@ -126,10 +126,11 @@ import { usePeripehralStore } from "@/store/peripheralStore";
 import { userStore } from "@/store/userStore";
 
 const store = usePeripehralStore();
+
 const user = userStore();
 
 const listData = computed(function () {
-  return store.peripheralList.map((item) => {
+  return store.recommendPeripheral.map((item) => {
     item.reviewRating = 0;
     expandedItem.value = -1;
     return item;
@@ -160,7 +161,7 @@ const toggleReview = (index, item) => {
     expandedItem.value = index;
     const data = { category: store.peripheralCategory, peripheralId: item.id };
     console.log(store.peripheralCategory);
-    store.callReview(data);
+    store.callRecommend(data);
   }
   updating.value = -1;
 };
@@ -190,7 +191,7 @@ const updatedReview = async (item, reviewId) => {
     await store.updateReview(reviewData);
     updating.value = -1;
     const data = { category: store.peripheralCategory, peripheralId: item.id };
-    store.callReview(data);
+    store.callRecommend(data);
   } else {
     console.log("error");
   }
@@ -205,7 +206,7 @@ const deleteReview = async (item, reviewId) => {
   };
   await store.deleteReview(reviewData);
   const data = { category: store.peripheralCategory, peripheralId: item.id };
-  store.callReview(data);
+  store.callRecommend(data);
 };
 
 const goReview = async (item) => {
@@ -219,7 +220,7 @@ const goReview = async (item) => {
     console.log(reviewData);
     await store.createReview(reviewData);
     const data = { category: store.peripheralCategory, peripheralId: item.id };
-    store.callReview(data);
+    store.callRecommend(data);
   } else {
     console.log("error");
   }
@@ -245,34 +246,26 @@ const goReview = async (item) => {
 
 .itemimg {
   height: 5rem;
-  width: 5rem;
-  margin-right: 1rem;
+  margin-right: 3rem;
 }
 
 .itemsummary {
   display: flex;
   padding: 3px 1rem;
-  width: 90%;
+  width: 80%;
   cursor: pointer;
   justify-content: space-between;
 }
 
-.summary1 {
+.summary {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-right: 2rem;
 }
 
-.summary2 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
 .itembtn {
-  margin-left: 1rem;
+  margin-left: 3rem;
 }
 .append {
   width: 100%;

@@ -6,15 +6,15 @@
   import { useRoute } from 'vue-router';
   import router from '@/router';
   import { like, dislike } from '@/assets/Icon';
-  import { likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI } from '@/api/shareAPI';
+  import { likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI, loadShareDetailAPI } from '@/api/shareAPI';
   import Review from '@/components/Common/TotalReviewComponent.vue';
 
   const route = useRoute();
   const id = route.params.id;
   const post = ref([]);
-  const store = shareStore();
   const likeCnt = ref(0);
   const dislikeCnt = ref(0);
+  const store = shareStore();
   const isLike = ref(0);
   const isLogin = ref(false);
 
@@ -32,7 +32,6 @@
       articleId : id,
       mark : value
     }
-    console.log(data)
     likeSharePostAPI(
     data
     ,
@@ -74,10 +73,32 @@
   );
   }
 
+  const loadShareDetail = () => {
+    const data = {
+      articleId : id,
+    }
+    loadShareDetailAPI(
+    data
+    ,
+    ({ data }) => {
+      post.value= data
+      likeCnt.value += data.likeCnt
+      dislikeCnt.value += data.dislikeCnt
+    }
+    ,
+    (error) => {
+      console.log(error);
+    }
+  );
+  }
+
+
   onMounted(()=>{
     isLogin.value = userStore().isLogin;
-    const shareList = store.isShareList;
     const data = { articleId : id,}
+
+    // 해당 id의 post를 가져옴
+    loadShareDetail()
 
     // 만약 해당 유저가 로그인 상태면 해당 글의 유저의 좋아요 기록을 가져옴
     if(isLogin.value){
@@ -85,7 +106,13 @@
       data
       ,
       ({data}) => {
-        isLike.value = data
+        isLike.value = data.mark
+        if(data.mark==1){
+          likeCnt.value -= 1
+        }
+        if(data.mark == -1){
+          dislikeCnt.value -= 1
+        }
       }
       ,
       (error) => {
@@ -93,10 +120,6 @@
       }
       );
     }
-    // 리스트에서 해당 id의 post를 가져옴
-    setTimeout(()=>{
-      post.value= shareList.filter((post)=> post.id == id )[0]
-    },100)
 
   })
 
@@ -131,11 +154,18 @@
         글 삭제하기</v-btn>
       </div>
     </v-row>
-    <v-row class="content">
-      <div>
-        <h1>
-          컴퓨터 견적 내용 {{ post?.quoteld }}
-        </h1>
+    <v-row class="body">
+      <div class="ml-5 my-5">
+        <h2>
+          <div v-for="(component, componentName) in post?.quoteEntity" :key="componentName">
+            <div>{{ component.name ? componentName : "" }} {{ component.name ? ": " + component.name : ""}}</div>
+          </div>
+        </h2>
+      </div>
+      <div class="ml-5 my-5">
+        <h2>
+          {{ post?.content }}
+        </h2>
       </div>
     </v-row>
 
@@ -149,7 +179,7 @@
       <v-col
         cols="2">
         <h3>
-          추천인 : {{ post?.userId }}
+          추천인 : {{ post?.userNickname }}
         </h3>
       </v-col>
       <v-col
@@ -259,17 +289,26 @@
 }
 
 
-.content {
+.body {
   display: flex;
   width: 80%;
   height: 600px;
   flex-direction: column;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   border: 1px solid rgba(187, 181, 181, 0.667);
   border-radius: 2rem;
   margin-bottom: 2%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+
 }
 
 .sub-title {

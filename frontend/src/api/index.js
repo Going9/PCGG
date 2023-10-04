@@ -23,4 +23,14 @@ function apiSpringAuthInstance() {
   return setInterceptors(instance);
 }
 
-export { apiSpringInstance, apiSpringAuthInstance };
+function apiDjangoInstance() {
+  const instance = axios.create({
+    baseURL: import.meta.env.VITE_ENV_VUE_APP_API_django_URL,
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+  return instance;
+}
+
+export { apiSpringInstance, apiSpringAuthInstance, apiDjangoInstance };
