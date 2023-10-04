@@ -65,12 +65,9 @@ public class RecommendService {
     public void classifyPart() throws ClassifyPartException{
         List<?> partList;
         int exceptionCount = 0;
-        logger.trace("ClassifyPart 메소드 진입");
         //exception이 발생해도 다른 부품 분류 계속 진행
         try {
-            logger.trace("ClassifyPart - cpu 분류 시작");
             partList = cpuRepository.findAllByClassColumn(null);
-            logger.trace("클래스가 null인 cpu 목록 사이즈 "+partList.size());
             recommendUtil.classifyCpu(partList);
             logger.trace("ClassifyPart - cpu 분류 종료");
         } catch(ClassifyPartException e){
@@ -79,9 +76,7 @@ public class RecommendService {
         }
 
         try{
-            logger.trace("ClassifyPart - RAM 분류 시작");
             partList = ramRepository.findAllByClassColumn(null);
-            logger.trace("클래스가 null인 ram 목록 사이즈 "+partList.size());
             recommendUtil.classifyRam(partList);
             logger.trace("ClassifyPart - RAM 분류 종료");
         } catch(ClassifyPartException e){
@@ -89,9 +84,7 @@ public class RecommendService {
             exceptionCount++;
         }
         try{
-            logger.trace("ClassifyPart - GPU 분류 시작");
             partList = gpuRepository.findAllByClassColumn(null);
-            logger.trace("클래스가 null인 gpu 목록 사이즈 "+partList.size());
             recommendUtil.classifyGpu(partList);
             logger.trace("ClassifyPart - GPU 분류 시작");
         } catch(ClassifyPartException e){
@@ -99,9 +92,7 @@ public class RecommendService {
             exceptionCount++;
         }
         try{
-            logger.trace("ClassifyPart - POWER 분류 시작");
             partList = powerRepository.findByClassColumn(null);
-            logger.trace("클래스가 null인 power 목록 사이즈 "+partList.size());
             recommendUtil.classifyPower(partList);
             logger.trace("ClassifyPart - POWER 분류 시작");
         } catch(ClassifyPartException e){
@@ -110,9 +101,7 @@ public class RecommendService {
         }
 
         try{
-            logger.trace("ClassifyPart - Mainboard 분류 시작");
             partList = mainboardRepository.findByClassColumn(null);
-            logger.trace("클래스가 null인 Mainboard 목록 사이즈 "+partList.size());
             recommendUtil.classifyMainboard(partList);
             logger.trace("ClassifyPart - POWER 분류 시작");
         } catch(ClassifyPartException e){
@@ -126,8 +115,6 @@ public class RecommendService {
 
     @Transactional
     public void deleteAndCreateQuoteCandidate() {
-//        final int CPU=0, RAM=1, GPU=2, POWER=3;
-//        final int[] partIndex = {CPU, RAM, GPU, POWER};
         //생성 전 기존 리스트 제거
         //deleteCandidate
 
@@ -158,55 +145,34 @@ public class RecommendService {
     }
 
     public List<QuoteResponseDto> createRecommend(QuoteRequestDto quoteRequestDto){
-        /*
-        cpu, ram, gpu는 quotecandidate로 정해져있음.
-        남은 ssd, mainboard, case, power를 정해야함.
-        ssd는 유저 입력값에 따라 조절하고
-        mainboard는 cpu, ram, ssd, 용도에 따라 정하고
-        case는 mainboard, gpu에 따라 정해져있다.
-        power는 위 부품들의 필요전력 이상, 용도에 해당하는 등급 이상으로 추천한다.
-         */
         Integer budget = quoteRequestDto.getBudget();
         UsageNsEntity usage = usageNsRepository.findById(quoteRequestDto.getUsage()).orElseThrow(() -> new NullPointerException("해당 이름을 가지는 UsageEntity 없음"));
         String caseSize = quoteRequestDto.getCaseSize();
 
         List<QuoteCandidateEntity> quoteCandidateList = new ArrayList<>();
         //해당 용도의 견적후보중에서 가성비, 성능, 가격이 제일 좋은 후보 하나씩 pick
-        quoteCandidateList.add(quoteCandidateRepository.findMostPriceEfficientByUsage(usage));
-        quoteCandidateList.add(quoteCandidateRepository.findCheapestByUsage(usage));
-        quoteCandidateList.add(quoteCandidateRepository.findBestPerformanceByUsage(usage));
+//        quoteCandidateList.add(quoteCandidateRepository.findMostPriceEfficientByUsage(usage));
+//        quoteCandidateList.add(quoteCandidateRepository.findCheapestByUsage(usage));
+//        quoteCandidateList.add(quoteCandidateRepository.findBestPerformanceByUsage(usage));
 
-        logger.trace("quoteList 갯수 = "+quoteCandidateList.size()+quoteCandidateList.get(0).getId()+"/"+quoteCandidateList.get(1).getId()+"/"+quoteCandidateList.get(2).getId());
+        //후보군이 너무 적으면 여러개 pick
+        for(QuoteCandidateEntity quoteCandidate : quoteCandidateRepository.findAllMostPriceEfficientByUsage(usage)){
+            quoteCandidateList.add(quoteCandidate);
+        }
+        for(QuoteCandidateEntity quoteCandidate : quoteCandidateRepository.findAllCheapestByUsage(usage)){
+            quoteCandidateList.add(quoteCandidate);
+        }
+        for(QuoteCandidateEntity quoteCandidate : quoteCandidateRepository.findAllBestPerformanceByUsage(usage)){
+            quoteCandidateList.add(quoteCandidate);
+        }
+        logger.trace("최초후보 사이즈 "+quoteCandidateList.size());
         List<QuoteResponseDto> responseCandidateList = new ArrayList<>();
-        //SSD > Mainboard > Chassis > Power 순으로 List 생성
+        //Mainboard > Chassis > Power 순으로 List 생성
         for(QuoteCandidateEntity quoteCandidate : quoteCandidateList){
             CpuEntity cpu = quoteCandidate.getCpu();
             RamEntity ram = quoteCandidate.getRam();
             GpuEntity gpu = quoteCandidate.getGpu();
             int budgetLeft = budget - quoteCandidate.getTotalPrice();
-            logger.trace("남은 예산 :"+budgetLeft);
-
-            /* 현재 미사용중
-            double ssdSize = quoteRequestDto.getSsdSize();
-            int priority = quoteRequestDto.getPriority();
-            boolean as = quoteRequestDto.isAs();*/
-
-//            //1.SSD는 사용자가 선택한 용량에 따라 필터링
-//            Double[] wantingCapacity = switch(quoteRequestDto.getSsdSize()){
-//                case 100 -> new Double[]{0.10, 0.14};
-//                case 200 -> new Double[]{0.23, 0.30};
-//                case 500 -> new Double[]{0.39, 0.65};
-//                case 1000 -> new Double[]{0.75, 1.25};
-//                case 2000 -> new Double[]{1.75, 2.25};
-//                case 4000 -> new Double[]{3.75, 4.25};
-//                case 8000 -> new Double[]{7.0, 9.0};
-////                default -> new Double[]{0.0, 9.0};
-//                default -> throw new NoSuchElementException();
-//            };
-//            List<SsdEntity> ssdList = ssdRepository.findByCapacityBetween(wantingCapacity[0], wantingCapacity[1]);
-//            logger.debug("ssd 용량기반으로 리스트화 완료, "+ssdList.size());
-//            for(SsdEntity ssd : ssdList){
-//                if(budgetLeft < ssd.getPrice()) continue;
                 /*
                 2. Mainboard는
                     유저가 고른 caseSize와 mainboard의 size가 맞아야하고
@@ -216,16 +182,12 @@ public class RecommendService {
                     class가 quoteRequestDto의 usage에 따른 class와 일치해야한다.
                  */
                 int requiredClass = recommendUtil.getClassByUsageAndPartType(usage.getName(),"mainboard");
-                logger.trace("요구 Class "+requiredClass);
 
                 List<MainboardEntity> mainboardList = mainboardRepository.findByCaseSizeSocketAndClassAndMemoryAndPcie(
                         caseSize
-//                        ,quoteCandidate.getCpu().getSocketInfo()
                         ,requiredClass
                         ,quoteCandidate.getRam().getMemorySpec()
-//                        ,ssd.getPcieVer()
                 );
-//                if(mainboardList.size()>0) logger.debug("사용자쿼리 findBySocketAndClassAndMemoryAndPcie 성공, "+mainboardList.size());
 
                 for(MainboardEntity mainboard : mainboardList){
                     if(budgetLeft < mainboard.getPrice()) continue;
@@ -238,7 +200,6 @@ public class RecommendService {
                     logger.trace("size:"+caseSize+" width "+gpu.getWidth()+"에 맞는 case목록 :"+chassisList.size());
                     for(ChassisEntity chassis : chassisList){
                         if(budgetLeft - mainboard.getPrice() < chassis.getPrice()) continue;
-                        //int totalPower = recommendUtil.getTotalPower(cpu, ram, gpu, ssd, mainboard, chassis)
                         List<PowerEntity> powerList = powerRepository.findByChassisAndClass(
                                 chassis.getMaxPowerDepth(),
                                 recommendUtil.getClassByUsageAndPartType(usage.getName(),"power")
@@ -249,7 +210,6 @@ public class RecommendService {
                                     .cpu(cpu)
                                     .ram(ram)
                                     .gpu(gpu)
-//                                    .ssd(ssd)
                                     .mainboard(mainboard)
                                     .chassis(chassis)
                                     .power(power)
@@ -257,20 +217,20 @@ public class RecommendService {
                                     .benchScore(cpu.getSingleScore()+ram.getCapacity()+gpu.getScore()+mainboard.getClassColumn()*1000+power.getClassColumn()*1000)
                                     .build();
                             responseCandidateList.add(responseDto);
-                            if(responseCandidateList.size()%1000==0) logger.trace("결과목록 갯수: "+responseCandidateList.size()+" / "+responseDto.toString());
                         }
                     }
                 }
             }
         List<QuoteResponseDto> responseList = new ArrayList<>();
-        responseCandidateList.sort(Comparator.comparingInt(QuoteResponseDto::getTotalPrice));
-        responseList.add(responseCandidateList.get(0));
-        responseCandidateList.sort(Comparator.comparingInt(QuoteResponseDto::getBenchScore).reversed());
-        responseList.add(responseCandidateList.get(0));
-        Comparator<QuoteResponseDto> comparator = Comparator.comparingInt(quote -> quote.getBenchScore()/ quote.getTotalPrice());
-        responseCandidateList.sort(comparator.reversed());
-        responseList.add(responseCandidateList.get(0));
-
+        if(!responseCandidateList.isEmpty()) {
+            responseCandidateList.sort(Comparator.comparingInt(QuoteResponseDto::getTotalPrice));
+            responseList.add(responseCandidateList.get(0));
+            responseCandidateList.sort(Comparator.comparingInt(QuoteResponseDto::getBenchScore).reversed());
+            responseList.add(responseCandidateList.get(0));
+            Comparator<QuoteResponseDto> comparator = Comparator.comparingInt(quote -> quote.getBenchScore() / quote.getTotalPrice());
+            responseCandidateList.sort(comparator.reversed());
+            responseList.add(responseCandidateList.get(0));
+        }
         return responseList;
     }
 
@@ -349,19 +309,6 @@ public class RecommendService {
 
     @SuppressWarnings("unchecked")
     private List<?> getComparatorAndSort(List<?> listPart, PartRequestDto partRequestDto) {
-        /*
-        가성비/성능/가격 별로 정렬 -> 우선순위 기준. 우선순위 -1 성능 0가성비 1가격
-        가격ASC or 성능컬럼/가격DESC or 성능DESC
-            - 성능
-            CPU : 싱글코어점수single_score
-            RAM : 메모리스펙, 메모리클럭
-            GPU : score
-            MAINBOARD : X(class만 사용)
-            POWER : X(class만 사용)
-            CHASSIS : X
-            SSD : reading_speed
-            cooler : fan_count
-        */
         int priority = partRequestDto.getPriority();
         switch(partRequestDto.getCategory()){
             case "cpu"-> {
@@ -406,13 +353,9 @@ public class RecommendService {
             case "mainbaord" -> {
                 List<MainboardEntity> listMainboard = (List<MainboardEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        //성능고려X
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> {/*파워는 성능고려X*/}
                     case PrioritySelector.PRICE_FIRST -> listMainboard.sort(Comparator.comparingInt(MainboardEntity::getPrice));
-                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
-                        //성능 없으므로 가성비 없음
-                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {/*성능 없으므로 가성비 없음*/}
                     default -> throw new NoSuchPriorityException(priority);
                 }
                 return listMainboard;
@@ -420,13 +363,9 @@ public class RecommendService {
             case "power" -> {
                 List<PowerEntity> listPower = (List<PowerEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        //성능고려X
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> {/*파워는 성능고려X*/}
                     case PrioritySelector.PRICE_FIRST -> listPower.sort(Comparator.comparingInt(PowerEntity::getPrice));
-                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
-                        //성능 없으므로 가성비 없음
-                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {/*성능 없으므로 가성비 없음*/}
                     default -> throw new NoSuchPriorityException(priority);
                 }
                 return listPower;
@@ -447,13 +386,9 @@ public class RecommendService {
             case "chassis" -> {
                 List<ChassisEntity> listChassis = (List<ChassisEntity>) listPart;
                 switch(priority){
-                    case PrioritySelector.PERFORMANCE_FIRST -> {
-                        //성능고려X
-                    }
+                    case PrioritySelector.PERFORMANCE_FIRST -> {/*케이스는 성능고려X*/}
                     case PrioritySelector.PRICE_FIRST -> listChassis.sort(Comparator.comparingInt(ChassisEntity::getPrice));
-                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {
-                        //성능 없으므로 가성비 없음
-                    }
+                    case PrioritySelector.PERFORMANCE_PER_PRICE -> {/*성능 없으므로 가성비 없음*/}
                     default -> throw new NoSuchPriorityException(priority);
                 }
                 return listChassis;
@@ -481,7 +416,7 @@ public class RecommendService {
         int budget = partRequestDto.getBudget();
         int partClass = recommendUtil.getClassByUsageAndPartType(usage,category);
 
-        //용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링
+        //용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링, AS==TRUE & POWER, COOLER면 보증기간도 체크
         switch(category){
             case "cpu"-> {
                 return cpuRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
@@ -495,7 +430,6 @@ public class RecommendService {
             case "mainbaord" -> {
                 return mainboardRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
             }
-            // AS==TRUE & POWER, COOLER면 보증기간도 체크
             case "power" -> {
                 if (partRequestDto.isAs()) return powerRepository.findAllByClassColumnAndWarrantyPeriodAndBudget(partClass, budget);
                 else return powerRepository.findByClassColumn(partClass);
@@ -540,8 +474,6 @@ public class RecommendService {
 
     public List<LaptopResponseDto> getLaptopRecommend(LaptopRequestDto laptopRequestDto){
         return laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget());
-        //todo: 현재 OS, budget만 반영되어있음
-
     }
 
 }

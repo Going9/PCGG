@@ -245,7 +245,6 @@ public class RecommendUtil {
                         }
                     }
                 } //else continue
-
             }
         }
         logger.info(count+"건 생성");
@@ -262,8 +261,6 @@ public class RecommendUtil {
         }else throw new QuoteCandidateException("부품 정보에 이상있음.");
     }
     private boolean checkAddable(QuoteCandidateEntity tmpCandidate, GpuEntity gpu) {
-//        logger.trace("checkAddable 메소드 진입");
-        //CPU와 호환여부 체크
         //https://m-sooriya.tistory.com/944
         //CPU <> GPU의 병목현상 정도를 계산해서 최악일 경우 걸러줄 수 있겠지만 cpu가 최악이 아닌 이상 유의미한 차이 없음
         //차후 추천로직 심화 시 반영 가능
@@ -279,57 +276,37 @@ public class RecommendUtil {
                 case "가성비사무", "저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
                 case "고성능사무", "중사양게임" -> PerformanceRequirement.MIDDLE;
                 case "일반영상편집", "일반방송", "캐주얼게임방송", "고사양개발" -> PerformanceRequirement.GOOD;
-                case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
+                case "고사양게임", "전문영상편집", "3D디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
                 default -> throw new QuoteCandidateException("잘못된 usage In cpu. check " + usage);
             };
             case "mainboard" -> switch (usage) {
                 case "가성비사무", "저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
                 case "고성능사무", "중사양게임", "일반영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.MIDDLE;
                 case "고사양개발" -> PerformanceRequirement.GOOD;
-                case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
+                case "고사양게임", "전문영상편집", "3D디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
                 default -> throw new QuoteCandidateException("잘못된 usage In mainboard. check " + usage);
             };
             case "ram" -> switch (usage) {
                 case "가성비사무", "저사양개발", "일반방송" -> PerformanceRequirement.LOW;
                 case "고성능사무", "캐주얼게임", "중사양게임", "일반영상편집", "캐주얼게임방송" -> PerformanceRequirement.MIDDLE;
                 case "고사양게임" -> PerformanceRequirement.GOOD;
-                case "전문영상편집", "3d디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
+                case "전문영상편집", "3D디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
                 default -> throw new QuoteCandidateException("잘못된 usage In ram. check " + usage);
             };
             case "gpu" -> switch (usage) {
                 case "가성비사무", "저사양개발", "고성능사무", "캐주얼게임" -> PerformanceRequirement.LOW;
                 case "중사양게임", "일반영상편집" -> PerformanceRequirement.MIDDLE;
-                case "고사양게임", "3d디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
+                case "고사양게임", "3D디자인", "고성능게임방송", "고사양개발" -> PerformanceRequirement.HIGH;
                 case "전문영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.GOOD;
                 default -> throw new QuoteCandidateException("잘못된 usage In gpu. check " + usage);
             };
             case "power" -> switch (usage) {
                 case "가성비사무", "저사양개발", "캐주얼게임", "일반영상편집" -> PerformanceRequirement.LOW;
                 case "고성능사무", "중사양게임", "전문영상편집", "일반방송", "캐주얼게임방송", "고사양개발" -> PerformanceRequirement.MIDDLE;
-                case "고사양게임", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
+                case "고사양게임", "3D디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
                 default -> throw new QuoteCandidateException("잘못된 usage In power. check " + usage);
             };
             default -> throw new NoSuchPartTypeException();
         };
     }
-
-
 }
-
-/*
-            result = switch(usage){
-                case "가성비사무","저사양개발" -> PerformanceRequirement.;
-                case "고성능사무" -> PerformanceRequirement.;
-                case "캐주얼게임" -> PerformanceRequirement.;
-                case "중사양게임" -> PerformanceRequirement.;
-                case "고사양게임" -> PerformanceRequirement.;
-                case "일반영상편집" -> PerformanceRequirement.;
-                case "전문영상편집" -> PerformanceRequirement.;
-                case "3d디자인" -> PerformanceRequirement.;
-                case "일반방송" -> PerformanceRequirement.;
-                case "캐주얼게임방송" -> PerformanceRequirement.;
-                case "고성능게임방송" -> PerformanceRequirement.;
-                case "고사양개발" -> PerformanceRequirement.;
-                default -> throw new QuoteCandidateException("용도 매칭되지 않음. usage_ns의 레코드 점검필요");
-            }
- */

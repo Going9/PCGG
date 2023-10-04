@@ -36,10 +36,9 @@ public class RecommendController {
     public ResponseEntity<?> createDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
         try{
             List<QuoteResponseDto> responseDtoList = recommendService.createRecommend(quoteRequestDto);
-            logger.trace("최종결과목록 "+responseDtoList.size());
             return ResponseEntity.ok().body(responseDtoList);
         }catch(Exception e){
-            logger.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
