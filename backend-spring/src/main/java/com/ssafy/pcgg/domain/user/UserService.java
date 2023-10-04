@@ -16,19 +16,26 @@ import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
 import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
 import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
 import com.ssafy.pcgg.domain.user.exception.DuplicateUserException;
+import com.ssafy.pcgg.global.handler.ErrorHandler.CustomException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.Duration;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +57,66 @@ public class UserService {
 
     private final QuoteSavedRepository quoteSavedRepository;
 
+    private final JavaMailSender javaMailSender;
+    private final RedisService redisService;
+    private static final String AUTH_CODE_PREFIX = "AuthCode";
+
+    @Value("${spring.mail.auth-code-expiration-millis}")
+    private long authCodeExpirationMillis;
+
+    public void sendEmail(String toEmail) {
+
+        // 이메일 중복 검사
+        Optional<UserEntity> userEntity = userRepository.findByEmail(toEmail);
+        if (userEntity.isPresent()) {
+            throw new CustomException(EMAIL_DUPLICATE);
+        }
+
+        String title = "Travel with me 이메일 인증 번호";
+        String text = createCode();
+        SimpleMailMessage emilaForm = createEmailForm(toEmail, title, text);
+
+        try {
+            javaMailSender.send(emilaForm);
+            redisService.setValues(AUTH_CODE_PREFIX + toEmail, text, Duration.ofMillis(this.authCodeExpirationMillis));
+        } catch (RuntimeException e) {
+            throw new CustomException(EMAIL_ERROR);
+        }
+    }
+
+    public boolean verifiedCode(EmailRequest emailRequest) {
+        String email = emailRequest.getEmail();
+        String authCode = emailRequest.getAuthCode();
+
+        String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
+        boolean authResult = redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode);
+
+        return authResult;
+    }
+
+    private String createCode() {
+        int length = 6;
+        try {
+            Random random = SecureRandom.getInstanceStrong();
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                builder.append(random.nextInt(10));
+            }
+            return builder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new CustomException(EMAIL_CODE_ERROR);
+        }
+    }
+
+    public SimpleMailMessage createEmailForm(String toEmail, String title, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject(title);
+        message.setText(text);
+
+        return message;
+    }
+
     public void signup(UserSignupRequest userSignupRequest) {
         String email = userSignupRequest.getEmail();
 
@@ -60,6 +127,11 @@ public class UserService {
         String password = userSignupRequest.getPassword();
         String name = userSignupRequest.getName();
         String nickname = userSignupRequest.getNickname();
+
+//        Optional<UserEntity> ue = userRepository.findByNickname(nickname);
+//        if (ue.isPresent()) {
+//            throw new CustomException(NICKNAME_DUPLICATE);
+//        }
 
         AuthorityEntity authorityEntity = AuthorityEntity.builder()
                 .authorityName("ROLE_USER")
@@ -82,6 +154,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException());
 
         return UserMyResponse.builder()
+                .userId(userId)
                 .nickname(userEntity.getNickname())
                 .build();
     }

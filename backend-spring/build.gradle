@@ -57,6 +57,12 @@ dependencies {
 
 	// ModelWrapper
 	implementation 'org.modelmapper:modelmapper:3.1.1'
+
+	// mail
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {

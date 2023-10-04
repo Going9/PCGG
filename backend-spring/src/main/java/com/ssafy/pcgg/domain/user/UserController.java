@@ -11,6 +11,7 @@ import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Slice;
@@ -25,6 +26,19 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @PostMapping("/{email}")
+    public ResponseEntity<String> emailAuth(@PathVariable String email) {
+        userService.sendEmail(email);
+        return ResponseEntity.status(201).body("인증번호 발송");
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<Boolean> verifiedCode(@RequestBody EmailRequest emailRequest) {
+        boolean authResult = userService.verifiedCode(emailRequest);
+        System.out.println(authResult);
+        return ResponseEntity.ok().body(authResult);
+    }
 
     @PostMapping
     public ResponseEntity<String> singup(@Valid @RequestBody UserSignupRequest userSignupRequest) {

@@ -82,7 +82,7 @@ public class SecurityConfig {
                         .requestMatchers("api/v1/recommends/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/v1/shares/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/v1/peripherals/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/users/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
