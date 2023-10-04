@@ -18,8 +18,8 @@ export const userStore = defineStore("userStore", {
     loginActivated: false,
     accessToken: "",
     userInfo: {
+      userid: "",
       nickname: "",
-      id: 0,
     },
     triggerOne: true,
     triggerTwo: true,
@@ -41,6 +41,8 @@ export const userStore = defineStore("userStore", {
           "mypageCategory",
           "peripheralCategory",
           "peripheralList",
+          "shareList",
+          "shareLikeList",
         ],
       },
     ],
@@ -83,6 +85,7 @@ export const userStore = defineStore("userStore", {
           this.accessToken = data.token;
         },
         (error) => {
+          alert(error.response.data.message);
           console.log(error);
         }
       );
@@ -90,6 +93,7 @@ export const userStore = defineStore("userStore", {
     async loginUser() {
       await getUserInfoAPI(
         ({ data }) => {
+          this.userid = data.userid;
           this.userInfo.nickname = data.nickname;
           router.push({ name: "Home" });
         },
@@ -108,6 +112,9 @@ export const userStore = defineStore("userStore", {
       };
       this.mypageCategory = "share";
       this.peripheralCategory = "keyboard";
+      this.peripheralList = [];
+      this.shareList = [];
+      this.shareLikeList = [];
     },
     triggerActivation() {
       this.triggerOne = !this.triggerOne;
