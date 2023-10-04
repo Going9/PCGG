@@ -1,9 +1,8 @@
 package com.ssafy.pcgg.domain.recommend.controller;
 
-import com.ssafy.pcgg.domain.part.dto.PartDto;
 import com.ssafy.pcgg.domain.recommend.dto.PartRequestDto;
 import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
-import com.ssafy.pcgg.domain.recommend.dto.SaveQuoteRequestDto;
+import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -49,22 +48,17 @@ public class RecommendController {
 
     }
 
-    @Operation(summary = "(미완성)Laptop 추천받기", description = "Laptop을 추천받습니다.")
+    @Operation(summary = "Laptop 추천받기", description = "Laptop을 추천받습니다.")
     @PostMapping("/laptop")
-    public ResponseEntity<?> getLaptopRecommend(){
-        Map<String,Object> resultMap;
-        HttpStatus httpStatus;
+    public ResponseEntity<?> getLaptopRecommend(@RequestParam LaptopRequestDto laptopRequestDto){
+        logger.trace("노트북추천 controller 진입");
+        logger.info(laptopRequestDto.toString());
         try{
-//            resultMap = recommendService.bussinessLogic();
-            httpStatus = HttpStatus.OK;
+            List<LaptopResponseDto> laptopResponseList = recommendService.getLaptopRecommend(laptopRequestDto);
+            return ResponseEntity.ok().body(laptopResponseList);
         }catch(Exception e){
-            resultMap = new HashMap<>();
-            resultMap.put("message","unexpected ERROR");
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            return ResponseEntity.internalServerError().build();
         }
-//        return new ResponseEntity<>(resultMap, httpStatus);
-        //todo:미완성
-        return null;
     }
 
     @Operation(summary = "부품 추천받기", description = "부품을 추천받습니다.")
@@ -80,7 +74,7 @@ public class RecommendController {
         }
     }
 
-    @Operation(summary = "(미완성)추천 결과 상세조회", description = "선택한 추천결과를 조회합니다.")
+    @Operation(summary = "추천 결과 상세조회", description = "선택한 추천결과를 조회합니다.")
     @GetMapping("/{category}/{resultNo}")
     public ResponseEntity<?> getRecommendDetail(@PathVariable String category, @PathVariable int resultNo){
         Map<String,Object> resultMap;
@@ -94,7 +88,7 @@ public class RecommendController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 //        return new ResponseEntity<>(resultMap, httpStatus);
-        //todo:미완성
+        //todo:추천결과 리턴형태에 따라 작성필요. 현재형태는 작성 X
         return null;
     }
 
