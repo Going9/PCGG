@@ -109,6 +109,7 @@ public class RecommendService {
             logger.error("cpu 분류 중 에러 발생", e);
             exceptionCount++;
         }
+        logger.trace("exceptionCount = "+exceptionCount);
         if(exceptionCount==4) throw new ClassifyPartAllFailedException();
         logger.trace("ClassifyPart 메소드 종료");
     }
