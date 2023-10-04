@@ -35,6 +35,8 @@ public interface MainboardRepository extends JpaRepository<MainboardEntity, Long
 
     Slice<MainboardEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
+    List<MainboardEntity> findAllByClassColumnAndPriceLessThanEqual(int partClass, int budget);
+
     Slice<MainboardEntity> findSliceBy(Pageable pageable);
 
 }

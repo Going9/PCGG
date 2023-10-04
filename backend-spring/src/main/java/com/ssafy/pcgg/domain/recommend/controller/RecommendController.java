@@ -1,5 +1,7 @@
 package com.ssafy.pcgg.domain.recommend.controller;
 
+import com.ssafy.pcgg.domain.recommend.dto.PartRequestDto;
+import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
 import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,7 +67,7 @@ public class RecommendController {
         logger.trace("부품추천 controller 진입");
         logger.info(partRequestDto.toString());
         try{
-            List<PartDto> partDtoList = (List<PartDto>) recommendService.getPartRecommend(partRequestDto);
+            List<?> partDtoList = recommendService.getPartRecommend(partRequestDto);
             return ResponseEntity.ok().body(partDtoList);
         }catch(Exception e){
             return ResponseEntity.internalServerError().build();

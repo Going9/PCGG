@@ -22,6 +22,7 @@ import com.ssafy.pcgg.domain.recommend.repository.QuoteRepository;
 import com.ssafy.pcgg.domain.recommend.repository.QuoteSavedRepository;
 import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
 import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
+import com.ssafy.pcgg.domain.share.dto.AuthorMarkInfoDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddQuoteRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareAddRequestDto;
 import com.ssafy.pcgg.domain.share.dto.ShareDetailDto;
@@ -192,6 +193,7 @@ public class ShareService {
 		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
+			.userNickname(share.getUser().getNickname())
 			.quoteId(share.getQuote().getId())
 			.title(share.getTitle())
 			.content(share.getContent())
@@ -206,12 +208,20 @@ public class ShareService {
 	}
 
 	/**
-	 * 공유마당 좋아요/싫어요 확인
+	 * 공유마당 좋아요/싫어요, 작성자 확인
 	 */
-	public Integer getMarkInfo(UserIdDto userId, Long shareId){
+	public AuthorMarkInfoDto getAuthorMarkInfo(UserIdDto userId, Long shareId){
 		Integer mark = shareLikeRepository.findMarkByShareIdAndUserId(shareId, userId.getUserId());
 		mark = (mark == null) ? 0 : mark;
-		return mark;
+
+		Share share = shareRepository.findById(shareId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 id에 일치하는 공유마당 게시글이 존재하지 않습니다."));
+		boolean isAuthor = (share.getUser().getUserId() == userId.getUserId()) ? true : false;
+
+		return AuthorMarkInfoDto.builder()
+			.mark(mark)
+			.isAuthor(isAuthor)
+			.build();
 	}
 
 	/**
