@@ -139,12 +139,6 @@
         color="rgba(112, 110, 110, 0.7)"
         @click="returnToList"
         >목록으로 돌아가기</v-btn>
-        <!-- <v-btn
-        v-if="isLogin"
-        class="btn"
-        color="rgba(112, 110, 110, 0.7)">
-        글 수정하기</v-btn> -->
-        <!-- userInfo에 userId 정보가 추가되거나 글쓴 사람을 확인하는 api 만들어지면 수정 예정 -->
         <v-btn
         v-if="isLogin"
         class="btn"
@@ -158,7 +152,7 @@
       <div class="ml-5 my-5">
         <h2>
           <div v-for="(component, componentName) in post?.quoteEntity" :key="componentName">
-            <div>{{ component.name ? componentName : "" }} {{ component.name ? ": " + component.name : ""}}</div>
+            <div>{{ component && component.name ? componentName : "" }} {{ component && component.name ? ": " + component.name : ""}}</div>
           </div>
         </h2>
       </div>
