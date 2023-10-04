@@ -13,24 +13,31 @@ const props = defineProps({
 const partList = ref([]);
 const store = partSelectionStore();
 const selectedPart = ref("");
-const page = ref(0);
-const q = ref("");
+const q = ref("")
 const emit = defineEmits(['closeModal']);
 
 onUpdated(() => {
-  callPartList(props.label)
+  store.isPartCategory(props.label)
+  callPartList()
   })
 
-const callPartList = (label) => {
+const callPartList = () => {
   const data = {
       q : q.value,
-      page : page.value,
-      partCategory : label,
     }
     store.loadPartList(data);
     setTimeout(()=>{
       partList.value = store.getlist;
     },100)
+}
+
+const setQ = (value) => {
+  q.value = value
+  store.search(value)
+  callPartList()
+  setTimeout(()=>{
+    partList.value = store.getlist;
+  },200)
 }
 
 // 선택된 부품 정보를 partSelectionComponent로 보냄
@@ -49,8 +56,6 @@ const closeModal = () => {
 const setItem = (item) => {
   selectedPart.value = item
 };
-
-
 
 </script>
 <template>
@@ -90,9 +95,11 @@ const setItem = (item) => {
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <SearchBarComponent/>
+        <SearchBarComponent
+         @q="setQ"/>
         <ResultListComponent
         :partList="partList"
+        @increase="callPartList"
         @msg="setItem"/>
       </v-card>
     </v-dialog>

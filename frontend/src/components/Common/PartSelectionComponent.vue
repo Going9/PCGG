@@ -38,6 +38,7 @@
   import SelectedPartButtonComponent from './SelectedPartButtonComponent.vue'
   import ModalComponent from './ModalComponent.vue';
   import { ref, defineEmits, onUpdated} from 'vue';
+  import { partSelectionStore } from '@/store/partSelectionStore';
 
   const emit = defineEmits(['partList']);
 
@@ -46,6 +47,7 @@
     emit('partList', newPartList);
   })
 
+  const store = partSelectionStore();
   const partCategory = ref("");
   const label = ref("cpu");
   const isModal = ref(false);
@@ -70,6 +72,7 @@ function toggleModal(part) {
   isModal.value = !isModal.value;
   partCategory.value = part;
   label.value = computedLabel();
+  store.isPartCategory(label.value)
 }
 
 // 모달을 끄고 모달에서 선택된 부품을 리스트에 수정하는 함수를 불러옵니다.

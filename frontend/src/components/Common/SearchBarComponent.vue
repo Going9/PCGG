@@ -20,14 +20,15 @@
 </template>
 
 <script setup>
-  import {ref} from 'vue';
+  import {ref , defineEmits} from 'vue';
   import { searchIcon } from "@/assets/Icon";
+  const emit = defineEmits(['q']);
   const searchQuery = ref("");
 
   const goSearch = () => {
     // 검색을 수행하는 로직을 여기에 추가
     console.log("검색어:", searchQuery.value);
-
+    emit('q',searchQuery.value);
     // 검색 후 입력 내용 초기화
     searchQuery.value = "";
   };

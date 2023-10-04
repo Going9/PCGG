@@ -10,15 +10,40 @@ const shareList = ref([]);
 const page = ref(0);
 const store = shareStore();
 const isLogin = ref(false);
+const loading = ref(false);
 
 onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  loading.value = true
   isLogin.value = userStore().isLogin;
-  store.loadShareList();
+  console.log('reset')
+  store.resetPage();
   setTimeout(() => {
-    store.moveToPage(0);
     shareList.value = store.isShareList;
-  }, 100);
+    console.log(shareList.value);
+    loading.value = false
+  }, 200);
 });
+
+
+// 스크롤 이벤트 핸들러
+const handleScroll = () => {
+  const scrollY = window.scrollY;
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+  const scrollPercentage = (scrollY + windowHeight) / documentHeight;
+  // 스크롤이 하단에 도달하면 데이터 불러오기
+  if (1 > scrollPercentage >= 0.9 && !loading.value) {
+    page.value += 1
+    store.increasePage();
+    loading.value = true
+    setTimeout(()=>{
+      shareList.value = store.isShareList;
+      loading.value = false
+    },1000)
+  }
+};
+
 
 const goToCreateShare = () => {
     if(isLogin.value){

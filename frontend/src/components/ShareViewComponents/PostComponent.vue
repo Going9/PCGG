@@ -25,7 +25,9 @@
   <div class="header">
     <div
     class="date">
-      작성일 : {{ formatDate(post.createdAt) }}
+      <b>
+        작성일 : {{ formatDate(post.createdAt) }}
+      </b>
     </div>
     <hr/>
     <div class="title">
