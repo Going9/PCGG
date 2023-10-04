@@ -1,5 +1,15 @@
 <template>
   <div class="container">
+    <div v-if="store.searchToggle">
+      <p>검색결과</p>
+      <PeripheralSearchComponentVue />
+    </div>
+    <v-divider
+      class="border-opacity-100"
+      style="margin-top: 2rem"
+      v-if="store.searchToggle"
+    ></v-divider>
+    <!-- 분리선 -->
     <div class="text" v-if="user.loginActivated">
       <span class="username">{{ user.userInfo["nickname"] }}</span
       ><span>님께 추천드리는 </span>
@@ -9,7 +19,10 @@
       <span v-if="store.peripheralCategory === 'printer'">프린터와 복합기</span>
       <span v-if="store.peripheralCategory === 'etc'">주변기기</span>
     </div>
-    <!-- <PeripheralCardComponentVue class="recommend"  v-if="user.loginActivated" /> -->
+    <PeripheralRecommedComponentVue
+      class="recommend"
+      v-if="user.loginActivated"
+    />
     <!-- 분리선 -->
     <v-divider
       class="border-opacity-100"
@@ -46,6 +59,8 @@ import { onMounted, ref } from "vue";
 import { usePeripehralStore } from "@/store/peripheralStore";
 import { userStore } from "@/store/userStore";
 import PeripheralCardComponentVue from "./PeripheralCardComponent.vue";
+import PeripheralRecommedComponentVue from "./PeripheralRecommedComponent.vue";
+import PeripheralSearchComponentVue from "./PeripheralSearchComponent.vue";
 
 const store = usePeripehralStore();
 
@@ -59,8 +74,6 @@ const setToggle = (value) => {
 };
 
 const buttonItems = [
-  { label: "인기상품순", value: "popularity" },
-  { label: "신상품순", value: "new" },
   { label: "낮은가격순", value: "low" },
   { label: "높은가격순", value: "high" },
   { label: "상품명순", value: "name" },
