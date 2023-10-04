@@ -48,6 +48,7 @@ public class RecommendService {
     @Transactional
     public HttpStatus classifyAndCreateCandidate() {
         //분류
+        logger.trace("견적후보 생성 service 레이어 진입");
         try{
             classifyPart();
         } catch(ClassifyPartException e){
@@ -56,7 +57,9 @@ public class RecommendService {
         }
         //QuoteCandidate 삭제 후 생성
         try{
+            logger.trace("deleteAndCreateQuoteCandidate 메소드 진입");
             deleteAndCreateQuoteCandidate();
+            logger.trace("deleteAndCreateQuoteCandidate 메소드 정상 종료");
         } catch(QuoteCandidateException e){
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -66,39 +69,48 @@ public class RecommendService {
     public void classifyPart() throws ClassifyPartException{
         List<?> partList;
         int exceptionCount = 0;
-
+        logger.trace("ClassifyPart 메소드 진입");
         //exception이 발생해도 다른 부품 분류 계속 진행
         try {
+            logger.trace("ClassifyPart - cpu 분류 시작");
             partList = cpuRepository.findAllByClassColumn(null);
+            logger.trace("클래스가 null인 cpu 목록 사이즈 "+partList.size());
             recommendUtil.classifyCpu(partList);
+            logger.trace("ClassifyPart - cpu 분류 종료");
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
             exceptionCount++;
         }
 
         try{
+            logger.trace("ClassifyPart - RAM 분류 시작");
             partList = ramRepository.findAllByClassColumn(null);
             recommendUtil.classifyRam(partList);
+            logger.trace("ClassifyPart - RAM 분류 시작");
         } catch(ClassifyPartException e){
             logger.error("ram 분류 중 에러 발생", e);
             exceptionCount++;
         }
         try{
+            logger.trace("ClassifyPart - GPU 분류 시작");
             partList = gpuRepository.findAllByClassColumn(null);
             recommendUtil.classifyGpu(partList);
+            logger.trace("ClassifyPart - GPU 분류 시작");
         } catch(ClassifyPartException e){
             logger.error("gpu 분류 중 에러 발생", e);
             exceptionCount++;
         }
         try{
+            logger.trace("ClassifyPart - POWER 분류 시작");
             partList = powerRepository.findByClassColumn(null);
             recommendUtil.classifyPower(partList);
+            logger.trace("ClassifyPart - POWER 분류 시작");
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
             exceptionCount++;
         }
-
         if(exceptionCount==4) throw new ClassifyPartAllFailedException();
+        logger.trace("ClassifyPart 메소드 종료");
     }
 
     @Transactional
@@ -112,6 +124,7 @@ public class RecommendService {
         //createCandidatea
         List<UsageNsEntity> usageList = usageNsRepository.findAll();
         for(UsageNsEntity usage : usageList){
+            logger.trace("loop반복중. 현재 usage = ",usage.toString());
             //용도별로 삭제 후 다시 insert
             quoteCandidateRepository.deleteByUsage(usage);
             //부품별 미분류된 리스트 추출

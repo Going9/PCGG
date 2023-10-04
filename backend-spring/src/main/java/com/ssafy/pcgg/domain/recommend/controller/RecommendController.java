@@ -112,6 +112,7 @@ public class RecommendController {
         Map<String,Object> resultMap = new HashMap<>();
         HttpStatus httpStatus;
         try{
+            logger.trace("견적후보 생성 controller 진입");
             httpStatus = recommendService.classifyAndCreateCandidate();
             resultMap.put("message","요청 처리됨");
         }catch(Exception e){

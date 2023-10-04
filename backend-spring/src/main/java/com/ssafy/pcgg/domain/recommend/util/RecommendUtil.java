@@ -75,12 +75,17 @@ public class RecommendUtil {
     public void classifyCpu(List<?> partList) {
         int performance;
         for(CpuEntity cpu : (List<CpuEntity>)partList){
-            performance = 8; //cpu.getSingleScore(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
-            if(performance<1600) cpu.setClassColumn(LOW);
+            performance = cpu.getSingleScore();
+            logger.trace("cpu 분류중. 현재 cpu의 singlescore :"+performance);
+            logger.trace(cpu.getName()+" / class:"+cpu.getClassColumn()+" / Id:"+cpu.getId()+" / price:"+cpu.getPrice());
+            if(performance==0) {continue;}
+            else if(performance<1600) cpu.setClassColumn(LOW);
             else if(performance<1800) cpu.setClassColumn(MIDDLE);
             else if(performance<2000) cpu.setClassColumn(GOOD);
             else if(performance>=2000) cpu.setClassColumn(HIGH);
+            logger.trace("다음 클래스로 분류됨 : "+cpu.getClassColumn());
         }
+        logger.trace("classifyCpu 종료");
     }
 
     @Transactional
@@ -133,6 +138,7 @@ public class RecommendUtil {
 
     @Transactional
     public void generateScenario(UsageNsEntity usage, List<CpuEntity> cpuList, List<RamEntity> ramList, List<GpuEntity> gpuList) {
+        logger.trace("generateScenario 메소드 진입");
         //만약 list들의 크기가 너무 크다면 pick단계에서 적절히 조절해야한다.
         QuoteCandidateEntity tmpCandidate = new QuoteCandidateEntity();
         int count=0;
@@ -179,6 +185,7 @@ public class RecommendUtil {
         }else throw new QuoteCandidateException("부품 정보에 이상있음.");
     }
     private boolean checkAddable(QuoteCandidateEntity tmpCandidate, GpuEntity gpu) {
+        logger.trace("checkAddable 메소드 진입");
         //CPU와 호환여부 체크
         //https://m-sooriya.tistory.com/944
         //CPU <> GPU의 병목현상 정도를 계산해서 최악일 경우 걸러줄 수 있겠지만 cpu가 최악이 아닌 이상 유의미한 차이 없음
