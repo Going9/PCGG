@@ -44,4 +44,11 @@ async function loadLikeHistoryAPI(data, success, fail) {
 
 }
 
-export { loadShareListAPI,loadShareDetailAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI}
+async function saveMyQuoteAPI(data, success, fail){
+  await apiAuth
+  .post(`/recommends`, JSON.stringify(data))
+  .then(success)
+  .catch(fail);
+}
+
+export { loadShareListAPI,loadShareDetailAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI, saveMyQuoteAPI}
