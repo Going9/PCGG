@@ -6,7 +6,7 @@
   import { useRoute } from 'vue-router';
   import router from '@/router';
   import { like, dislike } from '@/assets/Icon';
-  import { likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI, loadShareDetailAPI } from '@/api/shareAPI';
+  import { likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI, loadShareDetailAPI, saveMyQuoteAPI } from '@/api/shareAPI';
   import Review from '@/components/Common/TotalReviewComponent.vue';
 
   const route = useRoute();
@@ -71,6 +71,31 @@
       console.log(error);
     }
   );
+  }
+  const saveMyQuote = () => {
+    const data = {
+      cpuId: post.value.quoteEntity.cpu ? post.value.quoteEntity.cpu.id : null ,
+      mainboardId: post.value.quoteEntity.mainboard ? post.value.quoteEntity.mainboard.id : null,
+      ssdId: post.value.quoteEntity.ssd ? post.value.quoteEntity.ssd.id : null,
+      ramId: post.value.quoteEntity.ram ? post.value.quoteEntity.ram.id : null,
+      gpuId: post.value.quoteEntity.gpu ? post.value.quoteEntity.gpu.id : null,
+      chassisId: post.value.quoteEntity.chassis ? post.value.quoteEntity.chassis.id : null,
+      powerId: post.value.quoteEntity.power ? post.value.quoteEntity.power.id : null,
+      coolerId: post.value.quoteEntity.cooler ? post.value.quoteEntity.cooler.id : null,
+    }
+    saveMyQuoteAPI(
+    data
+    ,
+    ({ data }) => {
+      console.log(data)
+    }
+    ,
+    (error) => {
+      console.log(error);
+    }
+  );
+
+
   }
 
   const loadShareDetail = () => {
@@ -139,12 +164,6 @@
         color="rgba(112, 110, 110, 0.7)"
         @click="returnToList"
         >목록으로 돌아가기</v-btn>
-        <!-- <v-btn
-        v-if="isLogin"
-        class="btn"
-        color="rgba(112, 110, 110, 0.7)">
-        글 수정하기</v-btn> -->
-        <!-- userInfo에 userId 정보가 추가되거나 글쓴 사람을 확인하는 api 만들어지면 수정 예정 -->
         <v-btn
         v-if="isLogin"
         class="btn"
@@ -152,13 +171,20 @@
         @click="deletSharePost"
         >
         글 삭제하기</v-btn>
+        <v-btn
+        v-if="isLogin"
+        class="btn"
+        color="rgba(112, 110, 110, 0.7)"
+        @click="saveMyQuote"
+        >
+        마이견적에 저장하기</v-btn>
       </div>
     </v-row>
     <v-row class="body">
       <div class="ml-5 my-5">
         <h2>
           <div v-for="(component, componentName) in post?.quoteEntity" :key="componentName">
-            <div>{{ component.name ? componentName : "" }} {{ component.name ? ": " + component.name : ""}}</div>
+            <div>{{ component && component.name ? componentName : "" }} {{ component && component.name ? ": " + component.name : ""}}</div>
           </div>
         </h2>
       </div>
