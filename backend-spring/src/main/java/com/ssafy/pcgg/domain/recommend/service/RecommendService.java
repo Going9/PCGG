@@ -45,7 +45,6 @@ public class RecommendService {
     private final ModelMapper modelMapper;
 
 
-    @Transactional
     public HttpStatus classifyAndCreateCandidate() {
         //분류
         logger.trace("견적후보 생성 service 레이어 진입");
@@ -85,6 +84,7 @@ public class RecommendService {
         try{
             logger.trace("ClassifyPart - RAM 분류 시작");
             partList = ramRepository.findAllByClassColumn(null);
+            logger.trace("클래스가 null인 ram 목록 사이즈 "+partList.size());
             recommendUtil.classifyRam(partList);
             logger.trace("ClassifyPart - RAM 분류 시작");
         } catch(ClassifyPartException e){
@@ -94,6 +94,7 @@ public class RecommendService {
         try{
             logger.trace("ClassifyPart - GPU 분류 시작");
             partList = gpuRepository.findAllByClassColumn(null);
+            logger.trace("클래스가 null인 gpu 목록 사이즈 "+partList.size());
             recommendUtil.classifyGpu(partList);
             logger.trace("ClassifyPart - GPU 분류 시작");
         } catch(ClassifyPartException e){
@@ -103,12 +104,14 @@ public class RecommendService {
         try{
             logger.trace("ClassifyPart - POWER 분류 시작");
             partList = powerRepository.findByClassColumn(null);
+            logger.trace("클래스가 null인 power 목록 사이즈 "+partList.size());
             recommendUtil.classifyPower(partList);
             logger.trace("ClassifyPart - POWER 분류 시작");
         } catch(ClassifyPartException e){
             logger.error("cpu 분류 중 에러 발생", e);
             exceptionCount++;
         }
+        logger.trace("exceptionCount = "+exceptionCount);
         if(exceptionCount==4) throw new ClassifyPartAllFailedException();
         logger.trace("ClassifyPart 메소드 종료");
     }

@@ -47,12 +47,13 @@ public class RecommendUtil {
     public void classifyGpu(List<?> partList) {
         Integer performance;
         for(GpuEntity gpu : (List<GpuEntity>)partList) {
-            performance = 100;//gpu.getPerformance(); //todo:gpu 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
-            if(performance<1000) gpu.setClassColumn(LOW);
-            else if(performance<2000) gpu.setClassColumn(MIDDLE);
-            else if(performance<3000) gpu.setClassColumn(GOOD);
-            else if(performance<4000) gpu.setClassColumn(HIGH);
-            else if(performance==null) logger.error(gpu.getName()+"의 performance 값 없음");
+            performance = gpu.getScore();
+            if(performance==null) logger.error(gpu.getName()+"의 performance 값 없음");
+            else if(performance<21000) gpu.setClassColumn(LOW);
+            else if(performance<25000) gpu.setClassColumn(MIDDLE);
+            else if(performance<30000) gpu.setClassColumn(GOOD);
+            else gpu.setClassColumn(HIGH);
+
         }
     }
 
@@ -62,7 +63,7 @@ public class RecommendUtil {
         int capacity;
 //        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
-            capacity = 8;//ram.getCapacity(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
+            capacity = ram.getCapacity(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             if(capacity==4) ram.setClassColumn(LOW);
             else if(capacity==8) ram.setClassColumn(MIDDLE);
             else if(capacity==16) ram.setClassColumn(GOOD);
