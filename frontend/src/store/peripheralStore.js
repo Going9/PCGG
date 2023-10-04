@@ -49,6 +49,11 @@ export const usePeripehralStore = defineStore("peripheral", {
       }
     },
 
+    // 검색 초기화
+    isSearchInit() {
+      this.searchToggle = false;
+    },
+
     // 추천받기
     async callRecommend(value) {
       await isCallPeripheralRecommend(

@@ -1,7 +1,18 @@
 <template>
   <div class="container">
     <div v-if="store.searchToggle">
-      <p>검색결과</p>
+      <p style="align-items: center; font-weight: bold">검색결과</p>
+      <div
+        v-if="store.searchResults.length == 0"
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: bold;
+        "
+      >
+        <p>검색 결과가 없습니다.</p>
+      </div>
       <PeripheralSearchComponentVue />
     </div>
     <v-divider
@@ -32,22 +43,6 @@
     <div class="text">
       <div class="all-products">
         <div class="products-list">전체상품</div>
-        <v-btn-toggle
-          v-model="toggle"
-          size="small"
-          density="compact"
-          color="primary"
-          variant="plain"
-        >
-          <v-btn
-            v-for="item in buttonItems"
-            :key="item.value"
-            :value="item.value"
-            @click="setToggle(item.value)"
-          >
-            {{ item.label }}
-          </v-btn>
-        </v-btn-toggle>
       </div>
       <PeripheralCardComponentVue />
     </div>
@@ -55,7 +50,6 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
 import { usePeripehralStore } from "@/store/peripheralStore";
 import { userStore } from "@/store/userStore";
 import PeripheralCardComponentVue from "./PeripheralCardComponent.vue";
@@ -65,23 +59,6 @@ import PeripheralSearchComponentVue from "./PeripheralSearchComponent.vue";
 const store = usePeripehralStore();
 
 const user = userStore();
-
-const toggle = ref(null);
-
-const setToggle = (value) => {
-  toggle.value = value;
-  console.log(toggle);
-};
-
-const buttonItems = [
-  { label: "낮은가격순", value: "low" },
-  { label: "높은가격순", value: "high" },
-  { label: "상품명순", value: "name" },
-];
-
-onMounted(() => {
-  console.log(user.userInfo);
-});
 </script>
 
 <style scoped>

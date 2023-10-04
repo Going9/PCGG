@@ -132,6 +132,7 @@ const user = userStore();
 const listData = computed(function () {
   return store.recommendPeripheral.map((item) => {
     item.reviewRating = 0;
+    expandedItem.value = -1;
     return item;
   });
 });
@@ -290,7 +291,6 @@ const goReview = async (item) => {
 
 .review.open {
   max-height: 1000px;
-  border-color: #000000;
 }
 
 .review-list {
