@@ -32,8 +32,12 @@ public class RecommendUtil {
     @SuppressWarnings("unchecked")
     @Transactional
     public void classifyPower(List<?> partList) {
+        String grade;
         for(PowerEntity power : (List<PowerEntity>)partList){
-            switch(power.getGrade()){
+            grade = power.getGrade();
+            if (grade==null) continue;
+            switch(grade){
+                case "" -> {}
                 case "standard","bronze" -> power.setClassColumn(LOW);
                 case "silver","gold" -> power.setClassColumn(MIDDLE);
                 case "platinum","titanium" -> power.setClassColumn(HIGH);
@@ -48,7 +52,7 @@ public class RecommendUtil {
         Integer performance;
         for(GpuEntity gpu : (List<GpuEntity>)partList) {
             performance = gpu.getScore();
-            if(performance==null) logger.error(gpu.getName()+"의 performance 값 없음");
+            if(performance==null || performance==0) {}
             else if(performance<21000) gpu.setClassColumn(LOW);
             else if(performance<25000) gpu.setClassColumn(MIDDLE);
             else if(performance<30000) gpu.setClassColumn(GOOD);
@@ -63,8 +67,7 @@ public class RecommendUtil {
         Integer capacity;
 //        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
-            logger.trace("ram 분류중"+ram.getName()+"/"+ram.getPrice()+"/"+ram.getCapacity());
-            capacity = ram.getCapacity(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
+            capacity = ram.getCapacity();
             if(capacity==null || capacity==0) {continue;}
             else if(capacity==4) ram.setClassColumn(LOW);
             else if(capacity==8) ram.setClassColumn(MIDDLE);
