@@ -178,9 +178,11 @@ public class PeripheralService {
 	}
 
 	@Transactional
-	public ReviewListDto getReviews(int pages, Long peripheralId){
+	public ReviewListDto getReviews(int pages, String category, Long peripheralId){
 		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Slice<PeripheralReview> peripheralReviews = peripheralReviewRepository.findSliceByPeripheralId(peripheralId, pageRequest);
+		PeripheralTypeNs peripheralTypeNs = peripheralTypeNsRepository.findByName(category)
+			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다."));
+		Slice<PeripheralReview> peripheralReviews = peripheralReviewRepository.findSliceByTypeNameAndPeripheralId(peripheralTypeNs.getName(), peripheralId, pageRequest);
 
 		List<Integer> ratingList = peripheralReviews.stream()
 			.map(review -> review.getRating())

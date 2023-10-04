@@ -15,6 +15,6 @@ public interface PeripheralReviewRepository extends JpaRepository<PeripheralRevi
 	@Query("SELECT AVG(pr.rating) FROM PeripheralReview pr WHERE pr.peripheralTypeNs.name = :typeName AND pr.peripheralId = :peripheralId")
 	Double findAverageRatingByTypeNameAndPeripheralId(@Param("typeName") String typeName, @Param("peripheralId") Long peripheralId);
 
-	@Query("SELECT pr FROM PeripheralReview pr WHERE pr.peripheralId = :peripheralId")
-	Slice<PeripheralReview> findSliceByPeripheralId(@Param("peripheralId") Long peripheralId, Pageable pageable);
+	@Query("SELECT pr FROM PeripheralReview pr WHERE pr.peripheralTypeNs.name = :typeName AND pr.peripheralId = :peripheralId")
+	Slice<PeripheralReview> findSliceByTypeNameAndPeripheralId(@Param("typeName") String typeName, @Param("peripheralId") Long peripheralId, Pageable pageable);
 }
