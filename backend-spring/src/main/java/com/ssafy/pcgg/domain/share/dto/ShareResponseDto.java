@@ -22,6 +22,7 @@ import lombok.Setter;
 public class ShareResponseDto {
 	private Long id;
 	private Long userId;
+	private String userNickname;
 	private Long quoteId;
 	private String title;
 	private String content;
