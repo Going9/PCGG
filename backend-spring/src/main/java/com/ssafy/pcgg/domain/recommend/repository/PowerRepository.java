@@ -18,7 +18,7 @@ public interface PowerRepository extends JpaRepository<PowerEntity, Long> {
     List<PowerEntity> findByClassColumn(Integer classColumn);
 
     @Query("SELECT p FROM PowerEntity p WHERE p.classColumn = :class AND p.depth < :maxPowerDepth")
-    List<PowerEntity> checkByChassisAndClass(@Param("maxPowerDepth") BigDecimal maxPowerDepth, @Param("class")int classColumn);
+    List<PowerEntity> findByChassisAndClass(@Param("maxPowerDepth") BigDecimal maxPowerDepth, @Param("class")int classColumn);
 
     Slice<PowerEntity> findSliceByNameContaining(Pageable pageable, String keyword);
 
