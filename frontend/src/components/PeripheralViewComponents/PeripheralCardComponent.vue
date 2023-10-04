@@ -5,7 +5,7 @@
         <img :src="item['imageSource']" alt="noimage!" class="itemimg" />
         <v-divider class="border-opacity-100" vertical></v-divider>
         <div class="itemsummary" @click="toggleReview(index, item)">
-          <div class="summary">
+          <div class="summary1">
             <div>
               <p>제품명: {{ item["name"] }}</p>
             </div>
@@ -16,7 +16,7 @@
               <p>최저가: {{ item["lprice"] }}원</p>
             </div>
           </div>
-          <div class="summary">
+          <div class="summary2">
             <div>
               <p>브랜드: {{ item["brand"] }}</p>
             </div>
@@ -245,26 +245,34 @@ const goReview = async (item) => {
 
 .itemimg {
   height: 5rem;
-  margin-right: 3rem;
+  width: 5rem;
+  margin-right: 1rem;
 }
 
 .itemsummary {
   display: flex;
   padding: 3px 1rem;
-  width: 80%;
+  width: 90%;
   cursor: pointer;
   justify-content: space-between;
 }
 
-.summary {
+.summary1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-right: 2rem;
 }
 
+.summary2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .itembtn {
-  margin-left: 3rem;
+  margin-left: 1rem;
 }
 .append {
   width: 100%;
@@ -290,7 +298,6 @@ const goReview = async (item) => {
 
 .review.open {
   max-height: 1000px;
-  border-color: #000000;
 }
 
 .review-list {

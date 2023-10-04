@@ -60,6 +60,7 @@ const data = { category: store.peripheralCategory, page: 0 };
 const setToggle = (value) => {
   toggle.value = value;
   store.isPeripheralCategory(value);
+  store.isSearchInit();
   data["page"] = 0;
 };
 
@@ -73,9 +74,8 @@ const buttonItems = [
 const searchQuery = ref("");
 
 const goSearch = () => {
-  console.log("검색어:", searchQuery.value);
   store.isSearchPeripheral(searchQuery.value);
-  console.log(store.searchResults);
+  searchQuery.value = "";
 };
 
 const handleIntersection = (entries) => {

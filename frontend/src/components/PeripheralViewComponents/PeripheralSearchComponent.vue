@@ -108,46 +108,4 @@ const saveData = (id) => {
 .append {
   width: 100%;
 }
-
-.reviews {
-  display: flex;
-  padding: 0.5rem 1rem 0rem 1rem;
-  justify-content: space-between;
-}
-
-.review {
-  max-height: 0;
-  transition: max-height 0.3s ease-in-out, border-color 0.3s ease-in-out;
-  overflow: hidden;
-  margin: 0rem 3rem;
-  background-color: #fff;
-  border: solid 1px #000000;
-  border-radius: 0rem 0rem 1rem 1rem;
-  border-top: none;
-  border-color: #00000000;
-}
-
-.review.open {
-  max-height: 1000px;
-  border-color: #000000;
-}
-
-.review-list {
-  display: block;
-  padding: 1rem 1rem 0rem 1rem;
-}
-
-.review-item {
-  height: 2rem;
-}
-
-.review-input {
-  margin-top: 0.5rem;
-  padding: 0rem 1rem 1rem 1rem;
-  background-color: #d9d9d9;
-}
-
-.review-star {
-  margin-top: 0.3rem;
-}
 </style>

@@ -1,12 +1,17 @@
-import { apiSpringInstance, apiSpringAuthInstance } from "./index.js";
+import {
+  apiSpringInstance,
+  apiSpringAuthInstance,
+  apiDjangoInstance,
+} from "./index.js";
 
 const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
+const apiDjango = apiDjangoInstance();
 
 // 추천 api는?
 async function isCallPeripheralRecommend(data, success, fail) {
-  await apiAuth
-    .get(`/peripherals/${data.category}/recommends`)
+  await apiDjango
+    .get(`/recommends/${data.category}/27/`)
     .then(success)
     .catch(fail);
 }
