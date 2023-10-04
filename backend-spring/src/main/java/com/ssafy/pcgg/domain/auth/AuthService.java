@@ -4,29 +4,44 @@ import com.ssafy.pcgg.domain.auth.dto.AuthLoginRequest;
 import com.ssafy.pcgg.domain.auth.dto.AuthLoginResponse;
 import com.ssafy.pcgg.domain.user.UserEntity;
 import com.ssafy.pcgg.domain.user.UserRepository;
-import com.ssafy.pcgg.domain.user.UserService;
+import com.ssafy.pcgg.global.handler.ErrorHandler.CustomException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+
+import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.EMAIL_NOT_FOUND;
+import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.PWD_NOT_MATCH;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class AuthService {
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public AuthLoginResponse login(HttpServletResponse response, AuthLoginRequest authLoginRequest) throws UnsupportedEncodingException {
         String email = authLoginRequest.getEmail();
         String password = authLoginRequest.getPassword();
+
+        // email이 존재하지 않으면
+        UserEntity userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(EMAIL_NOT_FOUND));
+
+        // password가 틀리면
+        if (!passwordEncoder.matches(password, userEntity.getPassword())) {
+            throw new CustomException(PWD_NOT_MATCH);
+        }
 
         // email 대신에 userId 를 활용해 보려 했으나 user 관련 객체에 모두 String 값(email)이 들어가야 해서 포기.
         // 대신 토큰 내용에 userId 넣기로 결정 -> createToken
