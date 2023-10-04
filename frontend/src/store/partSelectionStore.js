@@ -7,7 +7,8 @@ export const partSelectionStore = defineStore("partSelectionStore", {
     partList: [],
     page : 0,
     maxPage : 0,
-    q : ""
+    q : "",
+    isLoading : false,
   }),
   getters: {
     getlist: (state) => {
@@ -25,6 +26,11 @@ export const partSelectionStore = defineStore("partSelectionStore", {
       this.loadPartList()
     },
     async loadPartList() {
+      if(this.isLoading){
+        return
+      }else{
+        this.isLoading = true
+      }
       const data = {
         partCategory : this.partCategory,
         q : this.q,
@@ -34,11 +40,15 @@ export const partSelectionStore = defineStore("partSelectionStore", {
         ({ data }) => {
           this.partList.push(...data.content);
           if(data.content.length > 0){
-            this.maxPage = this.page
+            this.maxPage = this.page;
           }
+          setTimeout(()=>{
+            this.isLoading = false;
+          },100)
         },
         (error) => {
           console.log(error);
+          this.isLoading = false;
         }
       );
     },
