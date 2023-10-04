@@ -63,6 +63,7 @@ public class RecommendUtil {
         int capacity;
 //        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
+            logger.trace("ram 분류중"+ram.getName()+"/"+ram.getPrice()+"/"+ram.getCapacity());
             capacity = ram.getCapacity(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
             if(capacity==4) ram.setClassColumn(LOW);
             else if(capacity==8) ram.setClassColumn(MIDDLE);

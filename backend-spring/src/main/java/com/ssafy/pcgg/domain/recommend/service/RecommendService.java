@@ -86,7 +86,7 @@ public class RecommendService {
             partList = ramRepository.findAllByClassColumn(null);
             logger.trace("클래스가 null인 ram 목록 사이즈 "+partList.size());
             recommendUtil.classifyRam(partList);
-            logger.trace("ClassifyPart - RAM 분류 시작");
+            logger.trace("ClassifyPart - RAM 분류 종료");
         } catch(ClassifyPartException e){
             logger.error("ram 분류 중 에러 발생", e);
             exceptionCount++;
