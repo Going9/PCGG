@@ -110,7 +110,8 @@ public class UserService {
 
     public SimpleMailMessage createEmailForm(String toEmail, String title, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
+        message.setFrom(toEmail);
+        message.setTo("a01037103261@gmail.com");
         message.setSubject(title);
         message.setText(text);
 
