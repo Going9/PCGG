@@ -84,7 +84,7 @@ public class PeripheralController {
 	@GetMapping("/{category}/{peripheralId}/reviews")
 	public ResponseEntity<ReviewListDto> getReviews(@PathVariable String category, @PathVariable Long peripheralId, @RequestParam(value = "pages", defaultValue = "0") int pages) {
 		logger.debug("getReviews(), category = {}, pages = {}", category, pages);
-		return ResponseEntity.ok().body(peripheralService.getReviews(pages, peripheralId));
+		return ResponseEntity.ok().body(peripheralService.getReviews(pages, category, peripheralId));
 	}
 
 	@Operation(summary = "주변기기 마이페이지 저장", description = "주변기기를 마이페이지에 저장합니다.")
