@@ -25,6 +25,7 @@
     </div>
     <div class="productinfo">
       <profile-component v-if="category === 'share'" />
+      
       <saved-quote-component v-if="category === 'savedQuote'" />
       <peripheral-component v-if="category === 'peripheral'" />
       <used-market-component v-if="category === 'usedMarket'" />
