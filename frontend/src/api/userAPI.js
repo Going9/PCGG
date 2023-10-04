@@ -3,6 +3,19 @@ import { apiSpringInstance, apiSpringAuthInstance } from "./index.js";
 const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
 
+// 이메일 인증번호 발송
+async function sendToEmailAPI(email, success, fail) {
+  await api.post(`/users/${email}`).then(success).catch(fail);
+}
+
+// 이메일 인증
+async function verifiedCodeAPI(emailCode, success, fail) {
+  await api
+    .post("/users/email", JSON.stringify(emailCode))
+    .then(success)
+    .catch(fail);
+}
+
 // 회원가입
 async function signupAPI(user, success, fail) {
   await api.post("/users", JSON.stringify(user)).then(success).catch(fail);
@@ -38,7 +51,13 @@ async function getMyShareLikeAPI(success, fail) {
   await apiAuth.get("/users/sharelike").then(success).catch(fail);
 }
 
+async function getMySavedQuoteAPI(success, fail) {
+  await apiAuth.get("/users/quotes").then(success).catch(fail);
+}
+
 export {
+  sendToEmailAPI,
+  verifiedCodeAPI,
   signupAPI,
   loginAPI,
   getUserInfoAPI,
@@ -46,4 +65,5 @@ export {
   deleteMyPeripheralAPI,
   getMyShareAPI,
   getMyShareLikeAPI,
+  getMySavedQuoteAPI,
 };

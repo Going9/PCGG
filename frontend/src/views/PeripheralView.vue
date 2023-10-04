@@ -25,13 +25,13 @@
             type="text"
             placeholder="검색"
             id="searchbar-inner"
-            @keyup.enter="goSearch"
+            @keyup.enter="goSearch()"
             class="searchbar-inner"
           />
           <img
             :src="searchIcon"
             alt="돋보기"
-            @click="goSearch"
+            @click="goSearch()"
             class="searchmark"
           />
         </div>
@@ -60,6 +60,7 @@ const data = { category: store.peripheralCategory, page: 0 };
 const setToggle = (value) => {
   toggle.value = value;
   store.isPeripheralCategory(value);
+  store.isSearchInit();
   data["page"] = 0;
 };
 
@@ -73,7 +74,7 @@ const buttonItems = [
 const searchQuery = ref("");
 
 const goSearch = () => {
-  console.log("검색어:", searchQuery.value);
+  store.isSearchPeripheral(searchQuery.value);
   searchQuery.value = "";
 };
 
@@ -83,6 +84,7 @@ const handleIntersection = (entries) => {
       console.log("reload");
       data["category"] = store.peripheralCategory;
       store.callList(data);
+      store.callRecommend(data);
       data["page"] += 1;
     }
   });
@@ -210,11 +212,5 @@ onMounted(() => {
   width: 2.5rem; /* 이미지의 크기 조정 (원하는 크기로 설정) */
   height: 2.5rem;
   cursor: pointer; /* 마우스 커서 모양을 포인터로 변경하여 클릭 가능한 것처럼 보이게 함 */
-}
-
-.footer-back {
-  margin-top: 50px;
-  background-color: #000;
-  height: 300px;
 }
 </style>

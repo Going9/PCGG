@@ -8,6 +8,7 @@ import {
   deleteMyPeripheralAPI,
   getMyShareAPI,
   getMyShareLikeAPI,
+  getMySavedQuoteAPI,
 } from "@/api/userAPI";
 import router from "@/router";
 
@@ -18,8 +19,8 @@ export const userStore = defineStore("userStore", {
     loginActivated: false,
     accessToken: "",
     userInfo: {
+      userid: "",
       nickname: "",
-      id: 0,
     },
     triggerOne: true,
     triggerTwo: true,
@@ -28,6 +29,7 @@ export const userStore = defineStore("userStore", {
     peripheralList: [],
     shareList: [],
     shareLikeList: [],
+    savedQuoteList: [],
   }),
   persist: {
     enabled: true,
@@ -41,6 +43,9 @@ export const userStore = defineStore("userStore", {
           "mypageCategory",
           "peripheralCategory",
           "peripheralList",
+          "shareList",
+          "shareLikeList",
+          "savedQuoteList",
         ],
       },
     ],
@@ -71,6 +76,11 @@ export const userStore = defineStore("userStore", {
     getShareLikeList: (state) => {
       return state.shareLikeList;
     },
+    getMySavedQuoteList: (state) => {
+      return state.savedQuoteList;
+    }
+
+    
   },
   // 이게 actions랑 mutations합친거인듯. 액션에서 뮤테이션 보내고 뮤테이션에서 스테이트 바꾸고 하는게 아니고 한번에 바꿈
   // vuex배울때 이러면 뭔가 문제가 될수 있다 그랬던거 같은데 기억안남
@@ -83,6 +93,7 @@ export const userStore = defineStore("userStore", {
           this.accessToken = data.token;
         },
         (error) => {
+          alert(error.response.data.message);
           console.log(error);
         }
       );
@@ -90,6 +101,7 @@ export const userStore = defineStore("userStore", {
     async loginUser() {
       await getUserInfoAPI(
         ({ data }) => {
+          this.userid = data.userid;
           this.userInfo.nickname = data.nickname;
           router.push({ name: "Home" });
         },
@@ -108,6 +120,9 @@ export const userStore = defineStore("userStore", {
       };
       this.mypageCategory = "share";
       this.peripheralCategory = "keyboard";
+      this.peripheralList = [];
+      this.shareList = [];
+      this.shareLikeList = [];
     },
     triggerActivation() {
       this.triggerOne = !this.triggerOne;
@@ -163,6 +178,17 @@ export const userStore = defineStore("userStore", {
         }
       );
     },
+
+    async getMySavedQuote() {
+      await getMySavedQuoteAPI(
+        ({ data }) => {
+          this.savedQuoteList = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+    }
   },
   // 위 3개가 끝임.
 });

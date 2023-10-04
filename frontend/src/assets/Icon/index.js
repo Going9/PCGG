@@ -37,6 +37,7 @@ import dislike from "./dislike.png";
 import deleteIcon from "./Delete.png";
 import editIcon from "./Edit.png";
 import review from "./review.png"
+import close from "./close.png";
 
 export {
   like,
@@ -78,4 +79,5 @@ export {
   XBIcon,
   deleteIcon,
   editIcon,
+  close,
 };

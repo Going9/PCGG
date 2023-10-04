@@ -1,9 +1,20 @@
-import { apiSpringInstance, apiSpringAuthInstance } from "./index.js";
+import {
+  apiSpringInstance,
+  apiSpringAuthInstance,
+  apiDjangoInstance,
+} from "./index.js";
 
 const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
+const apiDjango = apiDjangoInstance();
 
 // 추천 api는?
+async function isCallPeripheralRecommend(data, success, fail) {
+  await apiDjango
+    .get(`/recommends/${data.category}/27/`)
+    .then(success)
+    .catch(fail);
+}
 
 // 목록 조회
 async function isCallPeripheralList(data, success, fail) {
@@ -68,6 +79,7 @@ async function isSaveMyPeripheral(data, success, fail) {
 }
 
 export {
+  isCallPeripheralRecommend,
   isCallPeripheralList,
   isCallPeripheralReview,
   isCreatePeripheralReview,
