@@ -23,13 +23,16 @@ public interface ChassisRepository extends JpaRepository<ChassisEntity, Long> {
             "FROM ChassisEntity c " +
             "WHERE " +
                 "CASE " +
-                    "WHEN :caseSize='mini_itx' THEN c.miniItx " +
-                    "WHEN :caseSize='micro_atx' THEN c.microAtx " +
-                    "WHEN :caseSize='standard_atx' THEN c.standardAtx " +
-                    "WHEN :caseSize='extended_atx' THEN c.extendedAtx " +
+                    "WHEN :caseSize='M-iTX' THEN c.miniItx " +
+                    "WHEN :caseSize='M-ATX' THEN c.microAtx " +
+                    "WHEN :caseSize='ATX' THEN c.standardAtx " +
+                    "WHEN :caseSize='30' THEN c.extendedAtx " +
                     "ELSE FALSE " +
                 "END " +
-            "AND c.maxGpuDepth > :width")
+            "AND c.maxGpuDepth > :width " +
+            "AND c.maxPowerDepth != 0 " +
+            "AND c.maxCoolerDepth != 0" +
+            "AND c.price != 0")
     List<ChassisEntity> findByCaseSizeAndDepth(@Param("caseSize")String caseSize, @Param("width")BigDecimal width);
 
     Slice<ChassisEntity> findSliceByNameContaining(Pageable pageable, String keyword);

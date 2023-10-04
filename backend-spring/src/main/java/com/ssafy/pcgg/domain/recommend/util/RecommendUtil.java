@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +98,26 @@ public class RecommendUtil {
         }
         filterUnnecessaryCpu();
         logger.trace("classifyCpu 종료");
+    }
+
+    public void classifyMainboard(List<?> partList) {
+        String grade;
+        String pattern;
+        for(MainboardEntity mainboard : (List<MainboardEntity>)partList){
+            grade = mainboard.getGrade();
+            if(grade==null) continue;
+            logger.trace("mainboard의 grade :"+grade);
+            if(Pattern.compile("^(H.1.|A.+)$").matcher(grade).matches()){
+                mainboard.setClassColumn(LOW);
+            } else if(Pattern.compile("^B.+$").matcher(grade).matches()){
+                mainboard.setClassColumn(MIDDLE);
+            } else if(Pattern.compile("^H.1.+$").matcher(grade).matches()){
+                mainboard.setClassColumn(GOOD);
+            } else if(Pattern.compile("^(Z.+|X.+)$").matcher(grade).matches()){
+                mainboard.setClassColumn(HIGH);
+            }
+            logger.trace("다음 클래스로 분류됨 : "+mainboard.getClassColumn());
+        }
     }
 
     private void filterUnnecessaryRam() {
@@ -291,6 +312,8 @@ public class RecommendUtil {
             default -> throw new NoSuchPartTypeException();
         };
     }
+
+
 }
 
 /*

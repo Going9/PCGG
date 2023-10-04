@@ -5,7 +5,6 @@ import com.ssafy.pcgg.domain.recommend.dto.QuoteRequestDto;
 import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.service.RecommendService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,22 +34,14 @@ public class RecommendController {
     })
     @PostMapping("/desktop")
     public ResponseEntity<?> createDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
-        Map<String,Object> resultMap = new HashMap<>();
-        HttpStatus httpStatus;
-        logger.trace(quoteRequestDto.getUsage());
-        logger.trace(quoteRequestDto.getCaseSize());
-        logger.trace(String.valueOf(quoteRequestDto.getSsdSize()));
-        logger.trace(String.valueOf(quoteRequestDto.getAs()));
-        logger.trace(String.valueOf(quoteRequestDto.getPriority()));
         try{
-            resultMap.put("resultList",recommendService.createRecommend(quoteRequestDto));
-            httpStatus = HttpStatus.OK;
+            List<QuoteResponseDto> responseDtoList = recommendService.createRecommend(quoteRequestDto);
+            logger.trace("최종결과목록 "+responseDtoList.size());
+            return ResponseEntity.ok().body(responseDtoList);
         }catch(Exception e){
             logger.error(e.getMessage());
-            resultMap.put("message","unexpected ERROR"+e);
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            return ResponseEntity.internalServerError().build();
         }
-        return new ResponseEntity<>(resultMap, httpStatus);
     }
 
     @Operation(summary = "Laptop 추천받기", description = "Laptop을 추천받습니다.")
@@ -62,6 +53,7 @@ public class RecommendController {
             List<LaptopResponseDto> laptopResponseList = recommendService.getLaptopRecommend(laptopRequestDto);
             return ResponseEntity.ok().body(laptopResponseList);
         }catch(Exception e){
+            logger.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

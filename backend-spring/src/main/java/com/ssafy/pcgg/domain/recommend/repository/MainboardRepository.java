@@ -17,20 +17,23 @@ public interface MainboardRepository extends JpaRepository<MainboardEntity, Long
     @Query("SELECT m " +
             "FROM MainboardEntity m " +
             "WHERE m.size = :caseSize " +
-                "AND m.socketInfo = :socketInfo " +
+//                "AND m.socketInfo = :socketInfo " +
                 "AND m.classColumn = :class " +
                 "AND m.memorySpec = :memorySpec " +
-                "AND CASE " +
-                    "WHEN :pcieVer=3 THEN m.pcie3 " +
-                    "WHEN :pcieVer=4 THEN m.pcie4 " +
-                    "WHEN :pcieVer=5 THEN m.pcie5 " +
-                "END")
+                "AND m.price != 0 " +
+                "AND (m.pcie3 = false and m.pcie4 = false and m.pcie5 = false)"
+//                + "AND CASE " +
+//                    "WHEN :pcieVer=3 THEN m.pcie3 " +
+//                    "WHEN :pcieVer=4 THEN m.pcie4 " +
+//                    "WHEN :pcieVer=5 THEN m.pcie5 " +
+//                "END"
+    )
     List<MainboardEntity> findByCaseSizeSocketAndClassAndMemoryAndPcie(
-            @Param("caseSize")String caseSize,
-            @Param("socketInfo")String socketInfo,
-            @Param("class")Integer classColumn,
-            @Param("memorySpec")String memorySpec,
-            @Param("pcieVer")Integer pcieVer
+            @Param("caseSize")String caseSize
+//            , @Param("socketInfo")String socketInfo,
+            , @Param("class")Integer classColumn
+            , @Param("memorySpec")String memorySpec
+//            , @Param("pcieVer")Integer pcieVer
     );
 
     Slice<MainboardEntity> findSliceByNameContaining(Pageable pageable, String keyword);
@@ -39,4 +42,5 @@ public interface MainboardRepository extends JpaRepository<MainboardEntity, Long
 
     Slice<MainboardEntity> findSliceBy(Pageable pageable);
 
+    List<MainboardEntity> findByClassColumn(Integer classColumn);
 }

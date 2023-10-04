@@ -4,6 +4,7 @@ import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.util.PerformanceRequirement;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -44,16 +45,7 @@ public class MainboardEntity {
     @Column(name = "m2_count")
     private Integer m2Count;
 
+    @Setter
     @Column(name = "`class`", columnDefinition = "tinyint")
     private Integer classColumn;
-
-    public void setClassByUsage(String usage){
-        this.classColumn = switch(usage){
-            case "가성비사무","저사양개발", "캐주얼게임" -> PerformanceRequirement.LOW;
-            case "고성능사무", "중사양게임", "일반영상편집", "일반방송", "캐주얼게임방송" -> PerformanceRequirement.MIDDLE;
-            case "고사양게임", "전문영상편집", "3d디자인", "고성능게임방송" -> PerformanceRequirement.HIGH;
-            case "고사양개발" -> PerformanceRequirement.GOOD;
-            default -> throw new QuoteCandidateException("용도 매칭되지 않음. usage_ns의 레코드 점검필요");
-        };
-    }
 }

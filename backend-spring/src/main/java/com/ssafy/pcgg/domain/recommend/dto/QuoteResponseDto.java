@@ -1,14 +1,12 @@
 package com.ssafy.pcgg.domain.recommend.dto;
 
 import com.ssafy.pcgg.domain.recommend.entity.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @Getter
+@ToString
 @NoArgsConstructor
 public class QuoteResponseDto {
 	private CpuEntity cpu;
