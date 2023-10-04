@@ -4,7 +4,8 @@ import { loadShareListAPI } from "../api/shareAPI";
 export const shareStore = defineStore("shareStore", {
   state: () => ({
     shareList : [],
-    page : 0
+    page : 0,
+    maxPage : 0
   }),
   getters: {
     isShareList: (state) => {
@@ -20,7 +21,10 @@ export const shareStore = defineStore("shareStore", {
       await loadShareListAPI(
         pages,
         ({ data }) => {
-          this.shareList = data.content
+          this.shareList.push(...data.content)
+          if(data.content.length > 0){
+            this.maxPage = this.page
+          }
         },
         (error) => {
           console.log(error);
@@ -28,15 +32,19 @@ export const shareStore = defineStore("shareStore", {
       );
     },
     increasePage() {
-      this.page ++
-      this.loadShareList()
+      if(this.maxPage == this.page){
+        this.page += 1
+        this.loadShareList()
+      }
     },
     decreasePage() {
-      this.page --
+      this.page -= 1
       this.loadShareList()
     },
-    moveToPage(page) {
-      this.page = page
+    resetPage() {
+      this.shareList = []
+      this.page = 0
+      this.maxPage = 0
       this.loadShareList()
     },
   },

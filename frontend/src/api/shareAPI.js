@@ -3,9 +3,9 @@ import { apiSpringInstance, apiSpringAuthInstance } from "./index.js";
 const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
 
-async function loadShareListAPI(body, success, fail) {
-  const params = { pages : body.page }
-  await api.get("/shares/", JSON.stringify(params)).then(success).catch(fail);
+async function loadShareListAPI(data, success, fail) {
+  const params = { pages : data.page }
+  await api.get("/shares/", {params}).then(success).catch(fail);
 }
 
 async function loadShareDetailAPI(data, success, fail) {
@@ -44,4 +44,11 @@ async function loadLikeHistoryAPI(data, success, fail) {
 
 }
 
-export { loadShareListAPI,loadShareDetailAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI}
+async function saveMyQuoteAPI(data, success, fail){
+  await apiAuth
+  .post(`/recommends`, JSON.stringify(data))
+  .then(success)
+  .catch(fail);
+}
+
+export { loadShareListAPI,loadShareDetailAPI, createSharePostAPI, likeSharePostAPI, loadLikeHistoryAPI, deleteSharePostAPI, saveMyQuoteAPI}

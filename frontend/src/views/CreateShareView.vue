@@ -15,14 +15,14 @@ const createSharedPostEvent = () => {
       content: content.value,
       summary: summary.value,
       shareAddQuoteRequestDto: {
-      cpuId: partList.value[0].id,
-      mainboardId: partList.value[2].id,
-      ssdId: partList.value[5].id,
-      ramId: partList.value[3].id,
-      gpuId: partList.value[4].id,
-      chassisId: partList.value[6].id,
-      powerId: partList.value[7].id,
-      coolerId: partList.value[1].id,
+      cpuId: partList.value[0].id >= 0 ? partList.value[0].id : null,
+      coolerId: partList.value[1].id >= 0 ? partList.value[1].id : null,
+      mainboardId: partList.value[2].id >= 0 ? partList.value[2].id : null,
+      ramId: partList.value[3].id >= 0 ? partList.value[3].id : null,
+      gpuId: partList.value[4].id >= 0 ? partList.value[4].id : null,
+      ssdId: partList.value[5].id >= 0 ? partList.value[5].id : null,
+      chassisId: partList.value[6].id >= 0 ? partList.value[6].id : null,
+      powerId: partList.value[7].id >= 0 ? partList.value[7].id : null,
   } }
   console.log(data)
   createSharePostAPI(
