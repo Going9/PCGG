@@ -4,6 +4,12 @@ const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
 
 // 추천 api는?
+async function isCallPeripheralRecommend(data, success, fail) {
+  await apiAuth
+    .get(`/peripherals/${data.category}/recommends`)
+    .then(success)
+    .catch(fail);
+}
 
 // 목록 조회
 async function isCallPeripheralList(data, success, fail) {
@@ -68,6 +74,7 @@ async function isSaveMyPeripheral(data, success, fail) {
 }
 
 export {
+  isCallPeripheralRecommend,
   isCallPeripheralList,
   isCallPeripheralReview,
   isCreatePeripheralReview,

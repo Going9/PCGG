@@ -126,12 +126,12 @@ import { usePeripehralStore } from "@/store/peripheralStore";
 import { userStore } from "@/store/userStore";
 
 const store = usePeripehralStore();
+
 const user = userStore();
 
 const listData = computed(function () {
-  return store.peripheralList.map((item) => {
+  return store.recommendPeripheral.map((item) => {
     item.reviewRating = 0;
-    expandedItem.value = -1;
     return item;
   });
 });
@@ -160,7 +160,7 @@ const toggleReview = (index, item) => {
     expandedItem.value = index;
     const data = { category: store.peripheralCategory, peripheralId: item.id };
     console.log(store.peripheralCategory);
-    store.callReview(data);
+    store.callRecommend(data);
   }
   updating.value = -1;
 };
@@ -190,7 +190,7 @@ const updatedReview = async (item, reviewId) => {
     await store.updateReview(reviewData);
     updating.value = -1;
     const data = { category: store.peripheralCategory, peripheralId: item.id };
-    store.callReview(data);
+    store.callRecommend(data);
   } else {
     console.log("error");
   }
@@ -205,7 +205,7 @@ const deleteReview = async (item, reviewId) => {
   };
   await store.deleteReview(reviewData);
   const data = { category: store.peripheralCategory, peripheralId: item.id };
-  store.callReview(data);
+  store.callRecommend(data);
 };
 
 const goReview = async (item) => {
@@ -219,7 +219,7 @@ const goReview = async (item) => {
     console.log(reviewData);
     await store.createReview(reviewData);
     const data = { category: store.peripheralCategory, peripheralId: item.id };
-    store.callReview(data);
+    store.callRecommend(data);
   } else {
     console.log("error");
   }
