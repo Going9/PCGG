@@ -26,6 +26,10 @@ public class RecommendUtil {
     private final PowerRepository powerRepository;
     private final PartTypeNsRepository partTypeNsRepository;
     private final Logger logger = LoggerFactory.getLogger(RecommendUtil.class.getName());
+    private List<RamEntity>[] ramListCalced = new List[4];
+    private List<GpuEntity>[] gpuListCalced = new List[4];
+    private List<CpuEntity>[] cpuListCalced = new List[4];
+//    private List<RamEntity>[] ramListCalced = new List[4];
 
 
 
@@ -35,9 +39,8 @@ public class RecommendUtil {
         String grade;
         for(PowerEntity power : (List<PowerEntity>)partList){
             grade = power.getGrade();
-            if (grade==null) continue;
+            if (grade==null || grade.equals("")) continue;
             switch(grade){
-                case "" -> {}
                 case "standard","bronze" -> power.setClassColumn(LOW);
                 case "silver","gold" -> power.setClassColumn(MIDDLE);
                 case "platinum","titanium" -> power.setClassColumn(HIGH);
@@ -57,8 +60,8 @@ public class RecommendUtil {
             else if(performance<25000) gpu.setClassColumn(MIDDLE);
             else if(performance<30000) gpu.setClassColumn(GOOD);
             else gpu.setClassColumn(HIGH);
-
         }
+        filterUnneecessaryGpu();
     }
 
     @SuppressWarnings("unchecked")
@@ -68,12 +71,13 @@ public class RecommendUtil {
 //        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
             capacity = ram.getCapacity();
-            if(capacity==null || capacity==0) {continue;}
+            if(capacity==null || capacity==0) {}
             else if(capacity==4) ram.setClassColumn(LOW);
             else if(capacity==8) ram.setClassColumn(MIDDLE);
             else if(capacity==16) ram.setClassColumn(GOOD);
             else if(capacity==32 || capacity==64) ram.setClassColumn(HIGH);
         }
+        filterUnnecessaryRam();
     }
 
     @SuppressWarnings("unchecked")
@@ -84,23 +88,72 @@ public class RecommendUtil {
             performance = cpu.getSingleScore();
             logger.trace("cpu 분류중. 현재 cpu의 singlescore :"+performance);
             logger.trace(cpu.getName()+" / class:"+cpu.getClassColumn()+" / Id:"+cpu.getId()+" / price:"+cpu.getPrice());
-            if(performance==0 || performance==null) {continue;}
+            if(performance==null || performance==0) {continue;}
             else if(performance<1600) cpu.setClassColumn(LOW);
             else if(performance<1800) cpu.setClassColumn(MIDDLE);
             else if(performance<2000) cpu.setClassColumn(GOOD);
             else if(performance>=2000) cpu.setClassColumn(HIGH);
             logger.trace("다음 클래스로 분류됨 : "+cpu.getClassColumn());
         }
+        filterUnnecessaryCpu();
         logger.trace("classifyCpu 종료");
+    }
+
+    private void filterUnnecessaryRam() {
+        //필터링작업 - 윗용량의 제일 싼 물품보다 비싼 ram이 있다면 제거
+        // ex) 128기가 램 중 제일 싼 것이 130만원이면 64기가 중 130만원보다 비싼 램은 제거
+        List<RamEntity> ramList = ramRepository.findAllByClassColumnAndPriceAndCapacity();
+        logger.trace("제거작업 전 사이즈 : "+String.valueOf(ramList.size()));
+        int tmpCapacity = ramList.get(ramList.size()-1).getCapacity();
+        int minPriceOfNextCapacity = ramList.get(ramList.size()-1).getPrice();
+        for(int i=ramList.size()-1;i>=0;i--){
+            if(ramList.get(i).getCapacity()<tmpCapacity) minPriceOfNextCapacity = ramList.get(i+1).getPrice();
+            if(ramList.get(i).getPrice()>minPriceOfNextCapacity) ramList.remove(i);
+        }
+        logger.trace("제거작업 후 사이즈 : "+String.valueOf(ramList.size()));
+
+        for(int r=PerformanceRequirement.LOW; r<=PerformanceRequirement.HIGH; r++) {
+            ramList = ramRepository.findByClassColumnAndPriceAndCapacity(r);
+            ramListCalced[r - 1] = ramList;
+        }
+    }
+    private void filterUnnecessaryCpu() {
+        List<CpuEntity> cpuList = cpuRepository.findAllByClassColumnAndPriceAndScore();
+        logger.trace("제거작업 전 사이즈 : "+String.valueOf(cpuList.size()));
+        int tmpClass = cpuList.get(cpuList.size()-1).getClassColumn();
+        int minPriceOfNextClass = cpuList.get(cpuList.size()-1).getPrice();
+        for(int i=cpuList.size()-1;i>=0;i--){
+            if(cpuList.get(i).getClassColumn()<tmpClass) minPriceOfNextClass = cpuList.get(i+1).getPrice();
+            if(cpuList.get(i).getPrice()>minPriceOfNextClass) cpuList.remove(i);
+        }
+        logger.trace("제거작업 후 사이즈 : "+String.valueOf(cpuList.size()));
+
+        for(int r=PerformanceRequirement.LOW; r<=PerformanceRequirement.HIGH; r++) {
+            cpuList = cpuRepository.findByClassColumnAndPriceAndSingleScore(r);
+            cpuListCalced[r - 1] = cpuList;
+        }
+    }
+
+    private void filterUnneecessaryGpu() {
+        List<GpuEntity> gpuList = gpuRepository.findAllByClassColumnAndPriceAndScore();
+        logger.trace("gpu제거작업 전 사이즈 : "+gpuList.size());
+        int tmpClass = gpuList.get(gpuList.size()-1).getClassColumn();
+        int minPriceOfNextClass = gpuList.get(gpuList.size()-1).getPrice();
+        for(int i=gpuList.size()-1;i>=0;i--) {
+            if (gpuList.get(i).getClassColumn() < tmpClass) minPriceOfNextClass = gpuList.get(i + 1).getPrice();
+            if (gpuList.get(i).getPrice() > minPriceOfNextClass) gpuList.remove(i);
+        }
+        logger.trace("gpu제거작업 후 사이즈 : "+String.valueOf(gpuList.size()));
+
+        for(int g=PerformanceRequirement.LOW; g<=PerformanceRequirement.HIGH; g++) {
+            gpuList = gpuRepository.findByClassColumnAndPriceAndScore(g);
+            gpuListCalced[g - 1] = gpuList;
+        }
     }
 
     @Transactional
     public List<List<?>> makePartList(UsageNsEntity usage) {
-        List<CpuEntity> cpuList;
-        List<RamEntity> ramList;
-        List<GpuEntity> gpuList;
-//        List<PowerEntity> powerList;
-        int c,r,g/*,p*/;
+        int c,r,g;
 
         switch(usage.getName()){
             case "가성비사무","저사양개발"
@@ -117,7 +170,7 @@ public class RecommendUtil {
                     -> { c=GOOD; r=MIDDLE; g=MIDDLE; /*p=LOW;*/ }
             case "전문영상편집"
                     -> { c=HIGH; r=HIGH; g=GOOD; /*p=MIDDLE;*/ }
-            case "3d디자인"
+            case "3D디자인"
                     -> { c=HIGH; r=HIGH; g=HIGH; /*p=HIGH;*/ }
             case "일반방송"
                     -> { c=GOOD; r=LOW; g=MIDDLE; /*p=MIDDLE;*/ }
@@ -129,48 +182,45 @@ public class RecommendUtil {
                     -> { c=GOOD; r=HIGH; g=GOOD; /*p=MIDDLE;*/ }
             default -> throw new QuoteCandidateException("용도 매칭되지 않음. usage_ns의 레코드 점검필요");
         }
-        cpuList = pickCpu(c);
-        ramList = pickRam(r);
-        gpuList = pickGpu(g);
-//        powerList = pickPower(p);
-        List<List<?>> partList = new ArrayList<>();
 
-        partList.add(cpuList);
-        partList.add(ramList);
-        partList.add(gpuList);
-//        partList.add(powerList);
+        List<List<?>> partList = new ArrayList<>();
+        partList.add(cpuListCalced[c-1]);
+        partList.add(ramListCalced[r-1]);
+        partList.add(gpuListCalced[g-1]);
         return partList;
     }
 
     @Transactional
     public void generateScenario(UsageNsEntity usage, List<CpuEntity> cpuList, List<RamEntity> ramList, List<GpuEntity> gpuList) {
         logger.trace("generateScenario 메소드 진입");
-        //만약 list들의 크기가 너무 크다면 pick단계에서 적절히 조절해야한다.
         QuoteCandidateEntity tmpCandidate = new QuoteCandidateEntity();
         int count=0;
 
         for(CpuEntity cpu: cpuList){
             tmpCandidate.setCpu(cpu);
+            logger.trace("cpuId:"+cpu.getId());
             for(RamEntity ram: ramList){
                 if(checkAddable(tmpCandidate, ram)){
                     tmpCandidate.setRam(ram);
                     for(GpuEntity gpu: gpuList){
                         if (checkAddable(tmpCandidate, gpu)) {
                             tmpCandidate.setGpu(gpu);
-//                            for(PowerEntity power: powerList){
-//                                if(checkAddable(tmpCandidate, power)){
-//                                    tmpCandidate.setPower(power);
-                                    QuoteCandidateEntity quoteCandidateEntity = QuoteCandidateEntity.builder()
-                                            .usage(usage)
-                                            .cpu(tmpCandidate.getCpu())
-                                            .ram(tmpCandidate.getRam())
-                                            .gpu(tmpCandidate.getGpu())
-//                                            .power(tmpCandidate.getPower())
-                                            .build();
-                                    quoteCandidateRepository.save(quoteCandidateEntity);
-                                    count++;
-//                                }
-//                            }
+                            QuoteCandidateEntity quoteCandidateEntity = QuoteCandidateEntity.builder()
+                                    .usage(usage)
+                                    .cpu(tmpCandidate.getCpu())
+                                    .ram(tmpCandidate.getRam())
+                                    .gpu(tmpCandidate.getGpu())
+                                    .totalPrice(tmpCandidate.getCpu().getPrice()
+                                        +tmpCandidate.getRam().getPrice()
+                                        +tmpCandidate.getGpu().getPrice()
+                                    )
+                                    .benchScore(tmpCandidate.getCpu().getSingleScore()
+                                        +tmpCandidate.getRam().getMemoryClock()
+                                        +tmpCandidate.getGpu().getScore()
+                                    )
+                                    .build();
+                            quoteCandidateRepository.save(quoteCandidateEntity);
+                            count++;
                         }
                     }
                 } //else continue
@@ -191,29 +241,12 @@ public class RecommendUtil {
         }else throw new QuoteCandidateException("부품 정보에 이상있음.");
     }
     private boolean checkAddable(QuoteCandidateEntity tmpCandidate, GpuEntity gpu) {
-        logger.trace("checkAddable 메소드 진입");
+//        logger.trace("checkAddable 메소드 진입");
         //CPU와 호환여부 체크
         //https://m-sooriya.tistory.com/944
         //CPU <> GPU의 병목현상 정도를 계산해서 최악일 경우 걸러줄 수 있겠지만 cpu가 최악이 아닌 이상 유의미한 차이 없음
         //차후 추천로직 심화 시 반영 가능
         return true;
-    }
-
-
-    public List<PowerEntity> pickPower(Integer classColumn) {
-        return powerRepository.findByClassColumn(classColumn);
-    }
-
-    public List<GpuEntity> pickGpu(Integer classColumn) {
-        return gpuRepository.findAllByClassColumn(classColumn);
-    }
-
-    public List<RamEntity> pickRam(Integer classColumn) {
-        return ramRepository.findAllByClassColumn(classColumn);
-    }
-
-    public List<CpuEntity> pickCpu(Integer classColumn) {
-        return cpuRepository.findAllByClassColumn(classColumn);
     }
 
     public int getClassByUsageAndPartType(String usage, String partType) throws QuoteCandidateException{

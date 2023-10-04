@@ -44,7 +44,7 @@ public class RecommendService {
 
     private final ModelMapper modelMapper;
 
-
+    @Transactional
     public HttpStatus classifyAndCreateCandidate() {
         //분류
         logger.trace("견적후보 생성 service 레이어 진입");
@@ -65,6 +65,7 @@ public class RecommendService {
         return HttpStatus.OK;
     }
 
+    @Transactional
     public void classifyPart() throws ClassifyPartException{
         List<?> partList;
         int exceptionCount = 0;
@@ -127,7 +128,7 @@ public class RecommendService {
         //createCandidatea
         List<UsageNsEntity> usageList = usageNsRepository.findAll();
         for(UsageNsEntity usage : usageList){
-            logger.trace("loop반복중. 현재 usage = ",usage.toString());
+            logger.trace("loop반복중. 현재 usage = "+usage.getName());
             //용도별로 삭제 후 다시 insert
             quoteCandidateRepository.deleteByUsage(usage);
             //부품별 미분류된 리스트 추출
