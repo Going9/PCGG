@@ -38,6 +38,10 @@ async function getMyShareLikeAPI(success, fail) {
   await apiAuth.get("/users/sharelike").then(success).catch(fail);
 }
 
+async function getMySavedQuoteAPI(success, fail) {
+  await apiAuth.get("/users/quotes").then(success).catch(fail);
+}
+
 export {
   signupAPI,
   loginAPI,
@@ -46,4 +50,5 @@ export {
   deleteMyPeripheralAPI,
   getMyShareAPI,
   getMyShareLikeAPI,
+  getMySavedQuoteAPI,
 };
