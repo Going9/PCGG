@@ -193,6 +193,7 @@ public class ShareService {
 		ShareResponseDto shareResponseDto = ShareResponseDto.builder()
 			.id(share.getId())
 			.userId(share.getUser().getUserId())
+			.userNickname(share.getUser().getNickname())
 			.quoteId(share.getQuote().getId())
 			.title(share.getTitle())
 			.content(share.getContent())
