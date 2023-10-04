@@ -21,7 +21,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 def get_cpu_list(url: str):
     print("CPU 크롤링 시작")
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     # 코드 네임 전체 보기 클릭
     driver.find_element(
@@ -62,7 +62,7 @@ def get_cpu_list(url: str):
         for cpu in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(cpu, service)
+            name, price, detail_page = get_name_and_price(cpu)
 
             # 이름 파싱
             parsed_names = name.split()

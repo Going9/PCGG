@@ -22,7 +22,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 def get_power_list(url: str):
     print("power 크롤링 시작")
     global power_info
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     # atx, matx, tfx
     attribute_value = ["5529", "5530", "5531"]
@@ -63,7 +63,7 @@ def get_power_list(url: str):
         for power in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(power, service)
+            name, price, detail_page = get_name_and_price(power)
 
             # 이름 파싱
             # 파일명으로 사용할 수 없는 문자를 언더스코어로 대체

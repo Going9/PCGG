@@ -21,7 +21,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 def get_board_list(url: str):
     print("board_list 시작")
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     filter_options = ["748870", "801682", "212831"]
     for option in filter_options:
@@ -56,7 +56,7 @@ def get_board_list(url: str):
         for board in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(board, service)
+            name, price, detail_page = get_name_and_price(board)
 
             # 이름 파싱
             # 파일명으로 사용할 수 없는 문자를 언더스코어로 대체

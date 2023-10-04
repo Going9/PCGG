@@ -23,7 +23,7 @@ def get_laptop_list(url: str):
     global laptop_info
     print("laptop 크롤링 시작")
 
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     # 옵션 전체보기 클릭
     driver.find_element(
@@ -289,7 +289,7 @@ def get_laptop_list(url: str):
         for laptop in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(laptop, service)
+            name, price, detail_page = get_name_and_price(laptop)
 
             # 제조사 추출
             try:

@@ -22,7 +22,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 def get_gpu_list(url: str):
     print("gpu 크롤링 시작")
     global gpu_info
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     # 코드 네임 전체 보기 클릭
     driver.find_element(
@@ -61,7 +61,7 @@ def get_gpu_list(url: str):
         for gpu in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(gpu, service)
+            name, price, detail_page = get_name_and_price(gpu)
 
             # gpu set
             gpu_set = {

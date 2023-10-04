@@ -23,7 +23,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 def get_cooler_list(url: str):
     print("쿨러 크롤링 시작")
     global cooler_info
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     driver.implicitly_wait(10)
     attribute_value = ["29607", "865960", "29610", "29609"]
@@ -70,7 +70,7 @@ def get_cooler_list(url: str):
         for cooler in product_list:
             # 파싱 전 이름, 가격, 디테일 페이지 추출
             try:
-                name, price, detail_page = get_name_and_price(cooler, service)
+                name, price, detail_page = get_name_and_price(cooler)
 
             except Exception as e:
                 continue

@@ -22,7 +22,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 def get_ssd_list(url: str):
     print("ssd 크롤링 시작")
     global ssd_info
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     # 2280, pcie5, pcie4, pcie3
     filter_options = ["202347", "859759", "402191", "213230"]
@@ -53,7 +53,7 @@ def get_ssd_list(url: str):
         for ssd in product_list:
 
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(ssd, service)
+            name, price, detail_page = get_name_and_price(ssd)
 
             # 제조사 추출
             try:

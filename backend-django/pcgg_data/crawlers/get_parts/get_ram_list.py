@@ -22,7 +22,7 @@ from crawlers.get_parts.tools.tools import get_driver, get_product_list, save_cu
 
 def get_ram_list(url: str):
     print("램 크롤링 시작")
-    service, driver = get_driver(url)
+    driver = get_driver(url)
 
     # 데스크탑, DDR5, DDR4
     other_options = ["1223", "748099", "164333"]
@@ -51,7 +51,7 @@ def get_ram_list(url: str):
         # 개별 ram 정보 추출
         for ram in product_list:
             # 파싱 전 이름, 가격, 디테일 페이지 추출
-            name, price, detail_page = get_name_and_price(ram, service)
+            name, price, detail_page = get_name_and_price(ram)
 
             # 이름 파싱해서 램 용량 추출
             # 1개: (4GB), (8GB), (16GB), (32GB)
