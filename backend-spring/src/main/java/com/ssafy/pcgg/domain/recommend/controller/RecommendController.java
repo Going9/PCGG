@@ -116,7 +116,8 @@ public class RecommendController {
             httpStatus = recommendService.classifyAndCreateCandidate();
             resultMap.put("message","요청 처리됨");
         }catch(Exception e){
-            resultMap.put("message","unexpected ERROR:"+e);
+            logger.error("unexpected ERROR : "+e);
+            resultMap.put("message","unexpected ERROR");
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, httpStatus);
