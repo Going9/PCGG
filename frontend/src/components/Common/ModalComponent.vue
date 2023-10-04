@@ -1,29 +1,53 @@
 <script setup>
-import { defineProps, defineEmits, ref, onMounted } from 'vue';
+import { defineProps, defineEmits, ref, onMounted, onUpdated } from 'vue';
 import SearchBarComponent from './SearchBarComponent.vue';
 import ResultListComponent from './ModalComponent/ResultListComponent.vue';
+import { partSelectionStore } from '@/store/partSelectionStore'
 
 const props = defineProps({
   isModal: Boolean,
   partCategory : String,
+  label : String
 });
 
-const selectedPart = ref("")
+const partList = ref([]);
+const store = partSelectionStore();
+const selectedPart = ref("");
+const page = ref(0);
+const q = ref("");
 const emit = defineEmits(['closeModal']);
+
+onUpdated(() => {
+  callPartList(props.label)
+  })
+
+const callPartList = (label) => {
+  const data = {
+      q : q.value,
+      page : page.value,
+      partCategory : label,
+    }
+    store.loadPartList(data);
+    setTimeout(()=>{
+      partList.value = store.getlist;
+    },100)
+}
 
 // 선택된 부품 정보를 partSelectionComponent로 보냄
 const closeModal = () => {
   if(selectedPart.value != ""){
-    const newSelectedPart = selectedPart.value.name
+    const newSelectedPart = selectedPart.value
     emit('closeModal', newSelectedPart);
     selectedPart.value = ""
   }
   else{
-    emit('closeModal', "");
+    const newSelectedPart = {
+    name : "", id: -1}
+    emit('closeModal', newSelectedPart);
   }
 };
-const setItem = (itemName) => {
-  selectedPart.value = itemName
+const setItem = (item) => {
+  selectedPart.value = item
 };
 
 
@@ -68,6 +92,7 @@ const setItem = (itemName) => {
         </v-toolbar>
         <SearchBarComponent/>
         <ResultListComponent
+        :partList="partList"
         @msg="setItem"/>
       </v-card>
     </v-dialog>

@@ -22,7 +22,7 @@
             </div>
           </v-col>
           <v-col cols="12">
-            <div class="part-font">
+            <div :class="selectedItem?.length < 20 ? 'part-font' : 'part-font-long'">
               <div>
                 {{ selectedItem }}
               </div>
@@ -65,6 +65,7 @@ box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.30) inset;
   font-style: normal;
   font-weight: 700;
   line-height: 100%; /* 1.5rem */
+  max-width: 90%;
 
   display: flex;
   align-items: flex-start;
@@ -77,6 +78,20 @@ box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.30) inset;
   text-align: center;
   font-family: Lato;
   font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%; /* 1.5rem */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.part-font-long {
+  color: var(--Color, #FFF);
+  text-align: center;
+  font-family: Lato;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   line-height: 100%; /* 1.5rem */
