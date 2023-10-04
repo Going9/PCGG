@@ -27,6 +27,7 @@
     class="date">
       작성일 : {{ formatDate(post.createdAt) }}
     </div>
+    <hr/>
     <div class="title">
       <b>
         견적명 : {{post.title}}
@@ -67,7 +68,7 @@
           </v-col>
           <v-col
             class="nickname">
-            작성자 : <b>{{post.userNickname}}</b>
+            <b>작성자 : {{post.userNickname}}</b>
           </v-col>
           <!-- <v-col
           cols="2"
@@ -127,8 +128,8 @@
   height: 100%;
   width: 100%;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #A8A8A8;
+  border-radius: 0.625rem;
+  border: 0.1rem solid #A8A8A8;
   background: rgba(217, 217, 217, 0.10);
  }
 
@@ -138,7 +139,6 @@
     align-items: center;
  }
  .custom-padding {
-  /* padding: 0.1rem 0rem 0rem 0.1rem; */
   padding: 0.2rem;
  }
  v-container {
@@ -146,14 +146,14 @@
  }
 
  .date{
-  margin: 2%;
-  font-size: small;
+  margin: 1%;
+  font-size: x-small;
   text-align: end;
  }
 
  .title {
-  margin: 0 3%;
-  font-size: smaller;
+  margin: 1% 3%;
+  font-size: small;
   text-align: start;
  }
 

@@ -138,7 +138,7 @@ const goToCreateShare = () => {
 }
 .resultbox {
   margin: 1% 6%;
-  height: 1200px;
+  min-height: 50rem;
 
   display: flex;
   justify-content: flex-start;
