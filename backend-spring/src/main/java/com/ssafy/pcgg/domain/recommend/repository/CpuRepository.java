@@ -33,4 +33,12 @@ public interface CpuRepository extends JpaRepository<CpuEntity, Long> {
                 "end " +
             "order by c.singleScore, c.price")
     List<CpuEntity> findByClassColumnAndPriceAndSingleScore(@Param("classColumn")int classColumn);
+
+    @Query("SELECT c " +
+            "FROM CpuEntity c " +
+            "WHERE c.classColumn != 0 " +
+            "and c.price != 0 " +
+            "and c.singleScore !=0 " +
+            "order by c.singleScore, c.price")
+    List<CpuEntity> findAllByClassColumnAndPriceAndScore();
 }

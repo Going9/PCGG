@@ -24,8 +24,19 @@ public interface GpuRepository extends JpaRepository<GpuEntity, Long> {
 
     @Query("select g " +
             "from GpuEntity g " +
-            "where g.class = :clas " +
-            "and g.price != 0 " +
-            "and g.score !=0 ")
+            "where g.classColumn = :clas " +
+                "and g.price != 0 " +
+                "and g.score !=0 " +
+                "and g.neededPower != 0 " +
+            "order by g.classColumn, g.price")
     List<GpuEntity> findByClassColumnAndPriceAndScore(@Param("clas")int classColumn);
+
+    @Query("select g " +
+            "from GpuEntity g " +
+            "where g.classColumn != 0 " +
+            "and g.price != 0 " +
+            "and g.score !=0 " +
+            "and g.neededPower != 0 " +
+            "order by g.classColumn, g.price")
+    List<GpuEntity> findAllByClassColumnAndPriceAndScore();
 }

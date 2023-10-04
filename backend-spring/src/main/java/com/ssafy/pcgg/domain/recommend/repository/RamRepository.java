@@ -25,9 +25,17 @@ public interface RamRepository extends JpaRepository<RamEntity, Long> {
 
     @Query("select r " +
             "from RamEntity r " +
-            "where r.class = :clas " +
+            "where r.classColumn = :clas " +
                 "and r.price != 0 " +
                 "and r.capacity != 0 " +
             "order by r.capacity, r.price")
     List<RamEntity> findByClassColumnAndPriceAndCapacity(@Param("clas")int classColumn);
+
+    @Query("select r " +
+            "from RamEntity r " +
+            "where r.classColumn != 0 " +
+            "and r.price != 0 " +
+            "and r.capacity != 0 " +
+            "order by r.capacity, r.price")
+    List<RamEntity> findAllByClassColumnAndPriceAndCapacity();
 }
