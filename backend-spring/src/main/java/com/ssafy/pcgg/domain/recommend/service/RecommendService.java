@@ -4,11 +4,7 @@ import com.ssafy.pcgg.domain.part.dto.*;
 import com.ssafy.pcgg.domain.part.exception.NoSuchPartTypeException;
 import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.*;
-import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartAllFailedException;
-import com.ssafy.pcgg.domain.recommend.exception.ClassifyPartException;
-import com.ssafy.pcgg.domain.recommend.exception.NoSuchPriorityException;
-import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
-import com.ssafy.pcgg.domain.recommend.exception.SavingQuoteException;
+import com.ssafy.pcgg.domain.recommend.exception.*;
 import com.ssafy.pcgg.domain.recommend.repository.*;
 import com.ssafy.pcgg.domain.recommend.util.PrioritySelector;
 import com.ssafy.pcgg.domain.recommend.util.RecommendUtil;
@@ -43,7 +39,9 @@ public class RecommendService {
     private final SsdRepository ssdRepository;
     private final MainboardRepository mainboardRepository;
     private final ChassisRepository chassisRepository;
+    private final LaptopRepository laptopRepository;
     private final CoolerRepository coolerRepository;
+
     private final ModelMapper modelMapper;
 
 
@@ -198,7 +196,7 @@ public class RecommendService {
                     for(ChassisEntity chassis : chassisList){
                         if(budgetLeft - ssd.getPrice() - mainboard.getPrice() < chassis.getPrice()) continue; //todo:총액 계산 메소드 제작필요
                         //int totalPower = recommendUtil.getTotalPower(cpu, ram, gpu, ssd, mainboard, chassis)
-                        List<PowerEntity> powerList = powerRepository.checkByChassisAndClass(
+                        List<PowerEntity> powerList = powerRepository.findByChassisAndClass(
                                 chassis.getMaxPowerDepth(),
                                 recommendUtil.getClassByUsageAndPartType(usage,"power")
                         ); //출력, 깊이=샤씨깊이, 분류
@@ -234,36 +232,6 @@ public class RecommendService {
 
         //Entity > DTO 매핑 후 리턴
         return mapToDto(partRequestDto.getCategory(), listPart);
-        /*
-                                private String category;
-        private String usage;
-        private int budget;
-        private int priority;
-        private boolean as;
-         */
-        /*
-        1. 용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링 / SSD CHASSIS COOLER
-        1-2. AS=TRUE & POWER, COOLER면 보증기간도 체크
-        2. 가성비/성능/가격 별로 정렬 -> 우선순위 기준. 우선순위 -1 성능 0가성비 1가격
-        2-1. 가격ASC or 성능컬럼/가격DESC or 성능DESC
-         - 성능 >
-         CPU : 싱글코어점수single_score
-         RAM : 메모리스펙, 메모리클럭
-         GPU : score
-         MAINBOARD : X(class만 사용)
-         POWER : X(class만 사용)
-         CHASSIS : X
-         SSD : reading_speed
-         cooler : fan_count
-         */
-
-//        return switch(partRequestDto.getCategory()){
-//            case "cpu" -> searchCpu(partRequestDto);
-////            case "ram" ->
-////            case "gpu" ->
-////            case "power" ->
-//            default -> null;
-//        };
     }
 
     private List<?> mapToDto(String category, List<?> listPart) {
@@ -331,15 +299,18 @@ public class RecommendService {
     @SuppressWarnings("unchecked")
     private List<?> getComparatorAndSort(List<?> listPart, PartRequestDto partRequestDto) {
         /*
-         CPU : 싱글코어점수single_score
-         RAM : 메모리스펙, 메모리클럭
-         GPU : score
-         MAINBOARD : X(class만 사용)
-         POWER : X(class만 사용)
-         CHASSIS : X
-         SSD : reading_speed
-         cooler : fan_count
-         */
+        가성비/성능/가격 별로 정렬 -> 우선순위 기준. 우선순위 -1 성능 0가성비 1가격
+        가격ASC or 성능컬럼/가격DESC or 성능DESC
+            - 성능
+            CPU : 싱글코어점수single_score
+            RAM : 메모리스펙, 메모리클럭
+            GPU : score
+            MAINBOARD : X(class만 사용)
+            POWER : X(class만 사용)
+            CHASSIS : X
+            SSD : reading_speed
+            cooler : fan_count
+        */
         int priority = partRequestDto.getPriority();
         switch(partRequestDto.getCategory()){
             case "cpu"-> {
@@ -459,6 +430,7 @@ public class RecommendService {
         int budget = partRequestDto.getBudget();
         int partClass = recommendUtil.getClassByUsageAndPartType(usage,category);
 
+        //용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링
         switch(category){
             case "cpu"-> {
                 return cpuRepository.findAllByClassColumnAndPriceLessThanEqual(partClass, budget);
@@ -514,4 +486,11 @@ public class RecommendService {
             throw e;
         }
     }
+
+    public List<LaptopResponseDto> getLaptopRecommend(LaptopRequestDto laptopRequestDto){
+        return laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget());
+        //todo: 현재 OS, budget만 반영되어있음
+
+    }
+
 }
