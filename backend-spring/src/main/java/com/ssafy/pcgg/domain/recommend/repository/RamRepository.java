@@ -5,6 +5,8 @@ import com.ssafy.pcgg.domain.recommend.entity.RamEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +23,11 @@ public interface RamRepository extends JpaRepository<RamEntity, Long> {
 
     Slice<RamEntity> findSliceBy(Pageable pageable);
 
+    @Query("select r " +
+            "from RamEntity r " +
+            "where r.class = :clas " +
+                "and r.price != 0 " +
+                "and r.capacity != 0 " +
+            "order by r.capacity, r.price")
+    List<RamEntity> findByClassColumnAndPriceAndCapacity(@Param("clas")int classColumn);
 }

@@ -136,10 +136,38 @@ public class RecommendUtil {
         List<List<?>> partList = new ArrayList<>();
 
         partList.add(cpuList);
+        logger.trace("cpu목록산출 : "+String.valueOf(partList.get(0).size()));
         partList.add(ramList);
+        logger.trace("ram목록산출 : "+String.valueOf(partList.get(1).size()));
         partList.add(gpuList);
+        logger.trace("gpu목록산출 : "+String.valueOf(partList.get(2).size()));
 //        partList.add(powerList);
         return partList;
+    }
+
+    private List<GpuEntity> pickGpu(int g) {
+        List<GpuEntity> gpuList = gpuRepository.findByClassColumnAndPriceAndScore(g);
+
+        return gpuList;
+    }
+
+    private List<RamEntity> pickRam(int r) {
+        List<RamEntity> ramList = ramRepository.findByClassColumnAndPriceAndCapacity(r);
+        //필터링작업 - 윗용량의 제일 싼 물품보다 비싼 ram이 있다면 제거
+            // ex) 128기가 램 중 제일 싼 것이 130만원이면 64기가 중 130만원보다 비싼 램은 제거
+        int tmpCapacity = ramList.get(ramList.size()-1).getCapacity();
+        int minPriceOfNextCapacity = ramList.get(ramList.size()-1).getPrice();
+        for(int i=ramList.size()-1;i>=0;i--){
+            if(ramList.get(i).getCapacity()<tmpCapacity) minPriceOfNextCapacity = ramList.get(i+1).getPrice();
+            if(ramList.get(i).getPrice()>minPriceOfNextCapacity) ramList.remove(i);
+        }
+        return ramList;
+    }
+
+    private List<CpuEntity> pickCpu(int c) {
+        List<CpuEntity> cpuList = cpuRepository.findByClassColumnAndPriceAndSingleScore(c);
+        //필터링작업
+        return cpuList;
     }
 
     @Transactional
@@ -197,23 +225,6 @@ public class RecommendUtil {
         //CPU <> GPU의 병목현상 정도를 계산해서 최악일 경우 걸러줄 수 있겠지만 cpu가 최악이 아닌 이상 유의미한 차이 없음
         //차후 추천로직 심화 시 반영 가능
         return true;
-    }
-
-
-    public List<PowerEntity> pickPower(Integer classColumn) {
-        return powerRepository.findByClassColumn(classColumn);
-    }
-
-    public List<GpuEntity> pickGpu(Integer classColumn) {
-        return gpuRepository.findAllByClassColumn(classColumn);
-    }
-
-    public List<RamEntity> pickRam(Integer classColumn) {
-        return ramRepository.findAllByClassColumn(classColumn);
-    }
-
-    public List<CpuEntity> pickCpu(Integer classColumn) {
-        return cpuRepository.findAllByClassColumn(classColumn);
     }
 
     public int getClassByUsageAndPartType(String usage, String partType) throws QuoteCandidateException{
