@@ -1,15 +1,17 @@
 package com.ssafy.pcgg.domain.recommend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
+@ToString
 @Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class QuoteRequestDto {
 	private String usage;
-	private int budget;
-	private int priority;
+	private Integer budget;
+	private Integer priority;
 	private String caseSize;
-	private boolean as;
-	private int ssdSize;
+	private Boolean as;
+	private Integer ssdSize;
 }

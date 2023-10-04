@@ -37,15 +37,20 @@ public class RecommendController {
     public ResponseEntity<?> createDesktopRecommend(@RequestBody QuoteRequestDto quoteRequestDto){
         Map<String,Object> resultMap = new HashMap<>();
         HttpStatus httpStatus;
+        logger.trace(quoteRequestDto.getUsage());
+        logger.trace(quoteRequestDto.getCaseSize());
+        logger.trace(String.valueOf(quoteRequestDto.getSsdSize()));
+        logger.trace(String.valueOf(quoteRequestDto.getAs()));
+        logger.trace(String.valueOf(quoteRequestDto.getPriority()));
         try{
             resultMap.put("resultList",recommendService.createRecommend(quoteRequestDto));
             httpStatus = HttpStatus.OK;
         }catch(Exception e){
-            resultMap.put("message","unexpected ERROR");
+            logger.error(e.getMessage());
+            resultMap.put("message","unexpected ERROR"+e);
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, httpStatus);
-
     }
 
     @Operation(summary = "Laptop 추천받기", description = "Laptop을 추천받습니다.")
