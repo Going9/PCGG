@@ -34,6 +34,9 @@ import XWIcon from "./xw.png";
 import XBIcon from "./xb.png";
 import like from "./like.png";
 import dislike from "./dislike.png";
+import deleteIcon from "./Delete.png";
+import editIcon from "./Edit.png";
+
 export {
   like,
   dislike,
@@ -71,4 +74,6 @@ export {
   OBIcon,
   XWIcon,
   XBIcon,
+  deleteIcon,
+  editIcon,
 };
