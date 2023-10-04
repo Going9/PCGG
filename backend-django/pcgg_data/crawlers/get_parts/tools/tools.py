@@ -3,7 +3,6 @@ import requests
 import boto3
 import crawlers
 
-
 from botocore.exceptions import NoCredentialsError
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -13,20 +12,17 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from decouple import config
 from crawlers.models import PriceHistory
 from django.utils import timezone
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def get_driver(url: str):
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-
-    service = ChromeService(
-        config("chrome_driver"))
-    driver = webdriver.Chrome(service=service, options=options)
-    # driver = webdriver.Chrome(service=service)
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     driver.get(url)
     driver.implicitly_wait(10)
 
-    return service, driver
+    return driver
 
 
 def save_current_page(driver: webdriver) -> int:
@@ -71,7 +67,7 @@ def move_to_next_page(driver: webdriver, current_page):
     return True, current_page  # 페이지 이동 성공 시 True와 현재 페이지 반환
 
 
-def get_name_and_price(product, service):
+def get_name_and_price(product):
     # 상세 링크 저장
     wait = WebDriverWait(product, 10)
     link = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".prod_name a"))).get_attribute("href")
@@ -79,7 +75,7 @@ def get_name_and_price(product, service):
     # 디테일 페이지로 이동
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-    detail_page = webdriver.Chrome(service=service, options=options)
+    detail_page = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     detail_page.get(link)
     time.sleep(2)
     detail_page.implicitly_wait(30)
