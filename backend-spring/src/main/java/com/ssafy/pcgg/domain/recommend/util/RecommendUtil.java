@@ -60,12 +60,13 @@ public class RecommendUtil {
     @SuppressWarnings("unchecked")
     @Transactional
     public void classifyRam(List<?> partList) {
-        int capacity;
+        Integer capacity;
 //        int readSpeed;
         for(RamEntity ram : (List<RamEntity>)partList){
             logger.trace("ram 분류중"+ram.getName()+"/"+ram.getPrice()+"/"+ram.getCapacity());
             capacity = ram.getCapacity(); //todo:Ram 크롤링 결과 나오면 컬럼 추가 및 세부수치 조정
-            if(capacity==4) ram.setClassColumn(LOW);
+            if(capacity==null || capacity==0) {continue;}
+            else if(capacity==4) ram.setClassColumn(LOW);
             else if(capacity==8) ram.setClassColumn(MIDDLE);
             else if(capacity==16) ram.setClassColumn(GOOD);
             else if(capacity==32 || capacity==64) ram.setClassColumn(HIGH);
@@ -75,12 +76,12 @@ public class RecommendUtil {
     @SuppressWarnings("unchecked")
     @Transactional
     public void classifyCpu(List<?> partList) {
-        int performance;
+        Integer performance;
         for(CpuEntity cpu : (List<CpuEntity>)partList){
             performance = cpu.getSingleScore();
             logger.trace("cpu 분류중. 현재 cpu의 singlescore :"+performance);
             logger.trace(cpu.getName()+" / class:"+cpu.getClassColumn()+" / Id:"+cpu.getId()+" / price:"+cpu.getPrice());
-            if(performance==0) {continue;}
+            if(performance==0 || performance==null) {continue;}
             else if(performance<1600) cpu.setClassColumn(LOW);
             else if(performance<1800) cpu.setClassColumn(MIDDLE);
             else if(performance<2000) cpu.setClassColumn(GOOD);
