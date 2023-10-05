@@ -58,6 +58,9 @@ public class UserService {
     private final RedisService redisService;
     private static final String AUTH_CODE_PREFIX = "AuthCode";
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
     @Value("${spring.mail.auth-code-expiration-millis}")
     private long authCodeExpirationMillis;
 
@@ -73,8 +76,11 @@ public class UserService {
             }
         }
 
-        String title = "Travel with me 이메일 인증 번호";
-        String text = createCode();
+        String title = "pcgg 이메일 인증번호";
+        String code = createCode();
+        String text = "pcgg 회원가입 인증번호입니다. ";
+        text += "인증번호는 " + code + " 입니다.";
+
         SimpleMailMessage emailForm = createEmailForm(toEmail, title, text);
 
         try {
@@ -84,7 +90,7 @@ public class UserService {
         }
 
         try {
-            redisService.setValues(AUTH_CODE_PREFIX + toEmail, text, Duration.ofMillis(this.authCodeExpirationMillis));
+            redisService.setValues(AUTH_CODE_PREFIX + toEmail, code, Duration.ofMillis(this.authCodeExpirationMillis));
         } catch (RuntimeException e) {
             throw new CustomException(REDIS_ERROR);
         }
@@ -117,7 +123,7 @@ public class UserService {
 
     public SimpleMailMessage createEmailForm(String toEmail, String title, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("a01037103261@gmail.com");
+        message.setFrom(fromEmail);
         message.setTo(toEmail);
         message.setSubject(title);
         message.setText(text);
