@@ -93,7 +93,6 @@ const handleIntersection = (entries) => {
       data["userId"] = user.userInfo["userid"];
       console.log(user.userInfo);
       store.callList(data);
-      store.callRecommend(data);
       data["page"] += 1;
     }
   });
