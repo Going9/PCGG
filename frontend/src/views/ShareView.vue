@@ -108,7 +108,7 @@ const goToCreateShare = () => {
     </div>
     <div class="mainbox flex-center">
       <div class="resultbox">
-        <v-container>
+        <v-container v-if="shareList.length>0">
           <v-row>
             <v-col
               cols="12"
@@ -128,6 +128,11 @@ const goToCreateShare = () => {
             </v-col>
           </v-row>
         </v-container>
+        <div v-else class="no-result">
+            <h1>
+              결과가 없습니다
+            </h1>
+        </div>
       </div>
     </div>
     <router-view />
@@ -188,7 +193,7 @@ const goToCreateShare = () => {
 }
 .resultbox {
   margin: 1% 6%;
-  min-height: 50rem;
+  min-height: 1vh;
 
   display: flex;
   justify-content: flex-start;
@@ -198,6 +203,18 @@ const goToCreateShare = () => {
   padding: var(--Number, 0rem);
   gap: 3.125rem 3.75rem;
   padding: 1% 0% 0% 1%;
+}
+
+.no-result {
+  margin: 1% 6%;
+  min-height: 1vh;
+  min-width: 30rem;
+  margin-right: 10rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 
 .post {
