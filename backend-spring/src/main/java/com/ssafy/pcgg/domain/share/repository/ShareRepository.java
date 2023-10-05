@@ -13,5 +13,7 @@ import java.util.List;
 public interface ShareRepository extends JpaRepository<Share, Long> {
 	Slice<Share> findSliceBy(Pageable pageable);
 
+	Slice<Share> findSliceByTitleContaining(Pageable pageable, String keyword);
+
 	List<Share> findByUser_UserId(Long userId);
 }

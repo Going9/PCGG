@@ -59,9 +59,9 @@ public class ShareController {
 
 	@Operation(summary = "공유마당 게시글 목록 조회", description = "공유마당 게시글 목록을 조회합니다.")
 	@GetMapping("/")
-	public ResponseEntity<Slice<ShareResponseDto>> getShares(@RequestParam(value = "pages", defaultValue = "0") int pages) {
-		logger.info("getShares(), page = {}", pages);
-		Slice<ShareResponseDto> shareResponseDto = shareService.getAllShare(pages);
+	public ResponseEntity<Slice<ShareResponseDto>> getShares(@RequestParam(name = "q", required = false) String keyword, @RequestParam(value = "pages", defaultValue = "0") int pages) {
+		logger.info("getShares(), keyword = {}, page = {}", keyword, pages);
+		Slice<ShareResponseDto> shareResponseDto = shareService.getShares(keyword, pages);
 		return ResponseEntity.ok().body(shareResponseDto);
 	}
 
