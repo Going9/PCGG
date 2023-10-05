@@ -11,7 +11,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.Random;
 
 import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.*;
 
@@ -44,7 +47,7 @@ public class TestController {
         String toEmail = emailTestDto.getEmail();
 
         String title = "TEST";
-        String text = "test";
+        String text = createCode();
         SimpleMailMessage emilaForm = createEmailForm(toEmail, title, text);
 
         try {
@@ -70,5 +73,19 @@ public class TestController {
         message.setText(text);
 
         return message;
+    }
+
+    private String createCode() {
+        int length = 6;
+        try {
+            Random random = SecureRandom.getInstanceStrong();
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                builder.append(random.nextInt(10));
+            }
+            return builder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new CustomException(EMAIL_CODE_ERROR);
+        }
     }
 }
