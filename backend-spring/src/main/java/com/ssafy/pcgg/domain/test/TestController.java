@@ -75,6 +75,8 @@ public class TestController {
         return message;
     }
 
+    // test 결과 createCode()가 로컬에서는 연속으로 해도 문제 없지만
+    // 서버에서는 트래픽 문제가 발생
     private String createCode() {
         int length = 6;
         try {
