@@ -12,7 +12,7 @@ const apiDjango = apiDjangoInstance();
 async function isCallPeripheralRecommend(data, success, fail) {
   await apiDjango
     .get(`/recommends/${data.category}/${data.userId}/`)
-    .then(success)
+    .then(success, console.log(success))
     .catch(fail);
 }
 
