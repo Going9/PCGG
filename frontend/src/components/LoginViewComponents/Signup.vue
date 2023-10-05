@@ -23,6 +23,7 @@
           variant="outlined"
           @click:append-inner="verifiedCode"
           v-model="code"
+          :rules="[user_codeVerify_rule]"
         ></v-text-field>
 
         <v-text-field
@@ -188,6 +189,22 @@ function user_emailCheck_rule(v) {
     return true;
   } else {
     return "이메일을 인증해주세요.";
+  }
+}
+
+function user_codeVerify_rule(v) {
+  if (v == null) {
+    return "인증번호를 입력해주세요.";
+  }
+
+  if (v.length == 0) {
+    return "인증번호를 입력해주세요.";
+  }
+
+  if (emailCheck.value == false) {
+    return "체크표시를 눌러 인증하세요.";
+  } else {
+    return true;
   }
 }
 
