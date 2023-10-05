@@ -74,7 +74,7 @@ public class LaptopEntity {
     private BigDecimal weight;
 
     @Column(columnDefinition = "decimal(7,2)")
-    private BigDecimal batter;
+    private BigDecimal battery;
 
     @Column(length = 100)
     private String name;
