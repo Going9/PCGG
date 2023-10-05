@@ -11,11 +11,9 @@ import com.ssafy.pcgg.domain.share.repository.ShareRepository;
 import com.ssafy.pcgg.domain.user.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.QuoteEntity;
 import com.ssafy.pcgg.domain.recommend.repository.QuoteSavedRepository;
-import com.ssafy.pcgg.domain.user.dto.UserListResponse;
 import com.ssafy.pcgg.domain.user.dto.UserMyResponse;
 import com.ssafy.pcgg.domain.user.dto.UserPeripheralResponse;
 import com.ssafy.pcgg.domain.user.dto.UserSignupRequest;
-import com.ssafy.pcgg.domain.user.exception.DuplicateUserException;
 import com.ssafy.pcgg.global.handler.ErrorHandler.CustomException;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +31,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.*;
 
@@ -69,7 +66,11 @@ public class UserService {
         // 이메일 중복 검사
         Optional<UserEntity> userEntity = userRepository.findByEmail(toEmail);
         if (userEntity.isPresent()) {
-            throw new CustomException(EMAIL_DUPLICATE);
+//            UserEntity userEntity1 = userRepository.findByEmail(toEmail)
+//                    .orElseThrow(() -> new CustomException(EMAIL_NOT_FOUND));
+            if (userEntity.get().isActivated()) {
+                throw new CustomException(EMAIL_DUPLICATE);
+            }
         }
 
         String title = "Travel with me 이메일 인증 번호";
@@ -110,8 +111,8 @@ public class UserService {
 
     public SimpleMailMessage createEmailForm(String toEmail, String title, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(toEmail);
-        message.setTo("a01037103261@gmail.com");
+        message.setFrom("a01037103261@gmail.com");
+        message.setTo(toEmail);
         message.setSubject(title);
         message.setText(text);
 
@@ -121,9 +122,10 @@ public class UserService {
     public void signup(UserSignupRequest userSignupRequest) {
         String email = userSignupRequest.getEmail();
 
-        if (userRepository.findOneWithAuthoritiesByEmail(email).orElse(null) != null) {
-            throw new DuplicateUserException("이미 가입되어 있는 유저입니다.");
-        }
+        // 이메일 인증에서 이미 중복 확인
+//        if (userRepository.findOneWithAuthoritiesByEmail(email).orElse(null) != null) {
+//            throw new DuplicateUserException("이미 가입되어 있는 유저입니다.");
+//        }
 
         String password = userSignupRequest.getPassword();
         String name = userSignupRequest.getName();
@@ -147,7 +149,12 @@ public class UserService {
                 .authorities(Collections.singleton(authorityEntity))
                 .build();
 
-        userRepository.save(userEntity);
+        Optional<UserEntity> ue = userRepository.findByEmail(email);
+        if (ue.isPresent()) {
+            ue.get().reSignup(passwordEncoder.encode(password), name, nickname);
+        } else {
+            userRepository.save(userEntity);
+        }
     }
 
     public UserMyResponse getMyUser(Long userId) {
@@ -252,6 +259,15 @@ public class UserService {
         Slice<QuoteEntity> quoteEntities = quoteSavedRepository.findQuotesByUserId(userId.getUserId(), pageRequest);
 
         return quoteEntities;
+    }
+
+    public String withdrawal(Long userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(EMAIL_NOT_FOUND));
+
+        userEntity.withdrawal();
+
+        return "회원탈퇴 완료";
     }
     
 //    public List<UserListResponse> getUsers() {
