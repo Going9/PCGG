@@ -1,7 +1,10 @@
 package com.ssafy.pcgg.domain.share.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -160,6 +163,40 @@ public class ShareService {
 		return shareDetailDto;
 	}
 
+	public List<ShareDetailDto> getTop5SharesWithMostLikeCnt() {
+		List<Share> result = shareRepository.findTop5SharesWithMostLikes();
+		List<ShareDetailDto> shareDetailDtos = new ArrayList<>();
+		for(Share share : result){
+			QuoteEntity quoteEntity = QuoteEntity.builder()
+				.id(share.getQuote().getId())
+				.cpu(share.getQuote().getCpu())
+				.mainboard(share.getQuote().getMainboard())
+				.ssd(share.getQuote().getSsd())
+				.ram(share.getQuote().getRam())
+				.gpu(share.getQuote().getGpu())
+				.chassis(share.getQuote().getChassis())
+				.power(share.getQuote().getPower())
+				.cooler(share.getQuote().getCooler())
+				.build();
+
+			ShareDetailDto shareDetailDto = ShareDetailDto.builder()
+				.id(share.getId())
+				.userId(share.getUser().getUserId())
+				.userNickname(share.getUser().getNickname())
+				.quoteEntity(quoteEntity)
+				.title(share.getTitle())
+				.content(share.getContent())
+				.summary(share.getSummary())
+				.createdAt(share.getCreatedAt())
+				.likeCnt(shareLikeRepository.countLikesForShareWithId(share.getId(), 1))
+				.dislikeCnt(shareLikeRepository.countLikesForShareWithId(share.getId(), -1))
+				.build();
+
+			shareDetailDtos.add(shareDetailDto);
+		}
+		return shareDetailDtos;
+	}
+
 	/**
 	 * 공유마당 삭제
 	 */
@@ -285,4 +322,5 @@ public class ShareService {
 			.createdAt(LocalDateTime.now())
 			.build()).getId();
 	}
+
 }
