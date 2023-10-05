@@ -9,6 +9,7 @@ import {
   getMyShareAPI,
   getMyShareLikeAPI,
   getMySavedQuoteAPI,
+  deleteMySavedQuoteAPI,
 } from "@/api/userAPI";
 import router from "@/router";
 
@@ -178,11 +179,21 @@ export const userStore = defineStore("userStore", {
         }
       );
     },
-
     async getMySavedQuote() {
       await getMySavedQuoteAPI(
         ({ data }) => {
-          this.savedQuoteList = data;
+          this.savedQuoteList = data.content;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async deleteMySavedQuote(quoteId) {
+      await deleteMySavedQuoteAPI(
+        quoteId,
+        ({ data }) => {
+          console.log(data);
         },
         (error) => {
           console.log(error);

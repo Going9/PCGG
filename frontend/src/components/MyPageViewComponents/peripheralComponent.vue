@@ -15,7 +15,7 @@
       </v-btn>
     </v-btn-toggle>
   </div>
-  <div v-if="peripheralList.length == 0" v-for="item in buttonItems">
+  <div if="peripheralList.length == 0" v-for="item in buttonItems" :key="item">
     <div class="non-item-text" v-if="category === item.value">
       저장한 {{ item.label }}가 없습니다.
     </div>
