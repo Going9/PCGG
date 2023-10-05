@@ -45,14 +45,13 @@ public class RecommendController {
 
     @Operation(summary = "Laptop 추천받기", description = "Laptop을 추천받습니다.")
     @PostMapping("/laptop")
-    public ResponseEntity<?> getLaptopRecommend(@RequestParam LaptopRequestDto laptopRequestDto){
-        logger.trace("노트북추천 controller 진입");
+    public ResponseEntity<?> getLaptopRecommend(@RequestBody LaptopRequestDto laptopRequestDto){
         logger.info(laptopRequestDto.toString());
         try{
             List<LaptopResponseDto> laptopResponseList = recommendService.getLaptopRecommend(laptopRequestDto);
             return ResponseEntity.ok().body(laptopResponseList);
         }catch(Exception e){
-            logger.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -66,6 +65,7 @@ public class RecommendController {
             List<?> partDtoList = recommendService.getPartRecommend(partRequestDto);
             return ResponseEntity.ok().body(partDtoList);
         }catch(Exception e){
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
