@@ -41,6 +41,9 @@ public class EmailConfig {
     @Value("${spring.mail.properties.mail.smtp.writetimeout}")
     private int writeTimeout;
 
+    public EmailConfig() {
+    }
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
