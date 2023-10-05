@@ -127,6 +127,7 @@
 }
 
  .container {
+  min-width: 15rem;
   height: 100%;
   width: 100%;
 

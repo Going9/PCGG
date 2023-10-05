@@ -56,13 +56,20 @@ function select(item) {
 <template>
   <v-container class="container">
     <v-col class="leftSide" :cols="selectedItem ? 8 : 12">
-      <v-col v-for="item in partList" :key="item.id">
+      <v-col
+        v-if="partList.length>0">
         <ItemComponent
+          v-for="item in partList" :key="item.id"
           :class="{ 'selected' : selectedItem.id == item.id }"
           :item="item"
           @click="select(item)"
         />
       </v-col>
+      <div v-else class="no-result">
+          <h1>
+            결과가 없습니다
+          </h1>
+      </div>
       <v-col>
         <footer>
           <div class="footer-back"></div>
@@ -107,5 +114,16 @@ function select(item) {
   margin-top: 50px;
   background-color: #FFF;
   height: 300px;
+}
+
+.no-result {
+  margin: 1% 6%;
+  min-height: 1vh;
+  margin-top: 10rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 </style>
