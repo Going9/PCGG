@@ -6,6 +6,7 @@
       <div class="nickname">
         {{ nickname }}
       </div>
+      <v-btn class="withdrawal-btn" @click="withdrawalEvent"> 회원탈퇴 </v-btn>
     </div>
     <div class="button-container">
       <v-btn-toggle v-model="category" class="buttons">
@@ -25,7 +26,7 @@
     </div>
     <div class="productinfo">
       <profile-component v-if="category === 'share'" />
-      
+
       <saved-quote-component v-if="category === 'savedQuote'" />
       <peripheral-component v-if="category === 'peripheral'" />
       <used-market-component v-if="category === 'usedMarket'" />
@@ -40,6 +41,8 @@ import ProfileComponent from "../components/MyPageViewComponents/shareComponent.
 import SavedQuoteComponent from "../components/MyPageViewComponents/savedQuoteComponent.vue";
 import PeripheralComponent from "../components/MyPageViewComponents/peripheralComponent.vue";
 import UsedMarketComponent from "../components/MyPageViewComponents/usedMarketComponent.vue";
+import { withdrawalAPI } from "@/api/userAPI";
+import router from "@/router";
 
 const store = userStore();
 const userInfo = store.getUserInfo;
@@ -55,6 +58,24 @@ const buttonItems = [
 onMounted(() => {
   category.value = store.getCategory;
 });
+
+const withdrawalEvent = async () => {
+  if (!confirm("회원탈퇴 하시겠습니까?")) {
+    return;
+  }
+
+  await withdrawalAPI(
+    ({ data }) => {
+      alert(data);
+      store.logout();
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+
+  router.push({ name: "Home" });
+};
 
 const buttonEvent = async (value) => {
   category.value = value;
@@ -127,6 +148,11 @@ const buttonEvent = async (value) => {
   position: absolute;
   top: 45%;
   left: 30%;
+}
+.withdrawal-btn {
+  position: absolute;
+  top: 85%;
+  left: 75%;
 }
 .button-container {
   width: 1200px;

@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { userStore } from "@/store/userStore";
 import { signupAPI, sendToEmailAPI, verifiedCodeAPI } from "@/api/userAPI";
 
@@ -101,6 +101,7 @@ const visible2 = ref(false);
 const form = ref(null);
 const emailVisible = ref(false);
 const emailCheck = ref(false);
+let checkedEmail = "";
 const email = ref("");
 const code = ref("");
 const password = ref("");
@@ -137,6 +138,7 @@ const verifiedCode = () => {
         alert("이메일 인증이 완료되었습니다.");
         emailVisible.value = false;
         emailCheck.value = true;
+        checkedEmail = email.value;
       } else {
         alert("인증번호를 다시 확인해주세요.");
       }
@@ -154,6 +156,10 @@ function user_emailCheck_rule(v) {
 
   if (v.length == 0) {
     return "이메일을 입력해주세요.";
+  }
+
+  if (checkedEmail != email.value) {
+    return "이메일을 인증해주세요.";
   }
 
   if (emailCheck.value == true) {
@@ -216,6 +222,12 @@ const signupEvent = async () => {
 
   if (emailCheck.value == false) {
     alert("이메일 인증을 완료해주세요.");
+    return;
+  }
+
+  if (checkedEmail != email.value) {
+    alert("이메일을 다시 확인해주세요.");
+    return;
   }
 
   if (validate) {
