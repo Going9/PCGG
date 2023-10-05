@@ -209,17 +209,17 @@
       <v-col
         cols="2">
         <h3>
-          추천인 : {{ post?.userNickname }}
+          작성자 : {{ post?.userNickname }}
         </h3>
       </v-col>
-      <v-col
+      <!-- <v-col
         class="profileImageBox"
         cols="2">
         <img
         :src="profileExampleImg"
         class ="profileImage"
         alt="profileExample">
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <v-row>
