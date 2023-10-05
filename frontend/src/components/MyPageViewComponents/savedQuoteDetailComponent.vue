@@ -1,10 +1,5 @@
 <template>
   <div class="container">
-    <div class="card-up">
-      <v-btn class="close-button" icon @click="deleteEvent">
-        <img :src="close" alt="" />
-      </v-btn>
-    </div>
     <div class="card-down">
       <div class="part-container" v-for="part in partList" :key="part">
         <img
@@ -22,6 +17,11 @@
           <p class="part-info">가격 : {{ post[part.value].price }}</p>
         </div>
       </div>
+    </div>
+    <div class="card-up">
+      <v-btn class="close-button" icon @click="deleteEvent">
+        <img :src="close" alt="" />
+      </v-btn>
     </div>
   </div>
 </template>
@@ -52,18 +52,16 @@ const deleteEvent = async () => {
 
 <style scoped>
 .container {
-  height: 100%;
   width: 100%;
-
   border-radius: 10px;
   background-color: #f4f4f4;
   box-shadow: 0px 16px 40px rgba(112, 128, 144, 0.2);
+  display: flex;
 }
 
 .header {
   height: 3%;
   position: relative;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,14 +69,11 @@ const deleteEvent = async () => {
   flex-direction: column;
 }
 .card-up {
-  margin: 1% 1% 0;
   position: relative;
   height: 10%;
   background-color: r #f4f4f4;
-  display: flex;
-  justify-content: right;
-  flex-wrap: wrap;
-  flex-direction: column;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .card-down {
@@ -86,8 +81,6 @@ const deleteEvent = async () => {
 }
 
 .close-button {
-  margin-top: 15px;
-  margin-left: 95%;
   display: flex;
   justify-content: center;
   align-items: right;
@@ -112,7 +105,7 @@ v-container {
 
 .part-container {
   display: flex;
-  margin: 2rem 3rem 0rem 3rem;
+  margin: 1rem;
   align-items: center;
   background-color: #d9d9d9;
   border-radius: 10px;

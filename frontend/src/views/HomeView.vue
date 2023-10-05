@@ -1,12 +1,7 @@
 <script setup>
-import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { rankingIcon } from "@/assets/Icon";
-import { pcIcon } from "@/assets/Icon";
-import { partIcon } from "@/assets/Icon";
 import { mainbannerImg } from "@/assets/image";
-
-const modaldialog = ref(false);
 </script>
 
 <template>
@@ -22,35 +17,15 @@ const modaldialog = ref(false);
         </div>
       </div>
       <div class="button-tap-up flex-center">
-        <v-btn
-          class="estimate text-2"
-          color="#4599FC"
-          size="x-large"
-          :style="{ height: '5.0625rem' }"
-          @click="modaldialog = true"
-          >견적 받으러 가기</v-btn
-        >
-        <!-- 견적버튼 누르면 나올 모달창 -->
-        <v-dialog v-model="modaldialog" width="auto">
-          <div class="modal">
-            <RouterLink to="/estimaterecommend">
-              <V-btn class="btn-inner">
-                <div>
-                  <p>노트북 / 데스크탑</p>
-                  <img :src="pcIcon" alt="noimage" />
-                </div>
-              </V-btn>
-            </RouterLink>
-            <RouterLink to="/partrecommend">
-              <V-btn class="btn-inner">
-                <div>
-                  <p>부품</p>
-                  <img :src="partIcon" alt="noimage" />
-                </div>
-              </V-btn>
-            </RouterLink>
-          </div>
-        </v-dialog>
+        <RouterLink to="/estimaterecommend">
+          <v-btn
+            class="estimate text-2"
+            color="#4599FC"
+            size="x-large"
+            :style="{ height: '5.0625rem' }"
+            >견적 받으러 가기</v-btn
+          >
+        </RouterLink>
 
         <RouterLink to="/recommendation">
           <v-hover>
