@@ -2,14 +2,15 @@
   <div class="container">
     <v-container>
       <v-row>
-        <v-col
-          class="post"
-          v-for="post in savedQuoteList"
-          :key="post.id"
-          style="{{ margin-top: 1%;}}"
-        >
-          <savedQuoteDetailComponent :post="post" />
-        </v-col>
+        <div style="overflow-x: auto; width: 100%; display: flex">
+          <div
+            v-for="post in savedQuoteList"
+            :key="post.id"
+            style="margin: 1% 10px 1% 10px"
+          >
+            <savedQuoteDetailComponent :post="post" />
+          </div>
+        </div>
       </v-row>
     </v-container>
   </div>
@@ -34,9 +35,7 @@ onMounted(async () => {
 
 <style scoped>
 .container {
-  height: 100%;
   width: 100%;
-
   border-radius: 10px;
   background-color: #f4f4f4;
   box-shadow: 0px 16px 40px rgba(112, 128, 144, 0.2);
@@ -45,15 +44,10 @@ onMounted(async () => {
 .header {
   height: 3%;
   position: relative;
-
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   flex-direction: column;
-}
-
-v-container {
-  padding: 0rem;
 }
 </style>
