@@ -63,7 +63,7 @@ public class SimulationService {
 
 	private void check(List<PartCheckResponseDto> responseDtoList, RamEntity ram, MainboardEntity mainboard) {
 		if(mainboard == null) return;
-		if(mainboard.getMemorySpec()!=ram.getMemorySpec()) responseDtoList.add(new PartCheckResponseDto("ram","mainboard","DDR 버전 상이"));
+		if(!mainboard.getMemorySpec().equals(ram.getMemorySpec())) responseDtoList.add(new PartCheckResponseDto("ram","mainboard","DDR 버전 상이"));
 	}
 
 	private void check(List<PartCheckResponseDto> responseDtoList, MainboardEntity mainboard, SsdEntity ssd) {
@@ -78,7 +78,7 @@ public class SimulationService {
 
 	private void check(List<PartCheckResponseDto> responseDtoList, CpuEntity cpu, MainboardEntity mainboard) {
 		if(mainboard == null) return;
-		if(cpu.getSocketInfo() != mainboard.getSocketInfo()) responseDtoList.add(new PartCheckResponseDto("cpu","mainboard","소켓버전 상이. cpu:"+cpu.getSocketInfo()+" vs. mainboard:"+mainboard.getSocketInfo()));
+		if(!cpu.getSocketInfo().equals(mainboard.getSocketInfo())) responseDtoList.add(new PartCheckResponseDto("cpu","mainboard","소켓버전 상이. cpu:"+cpu.getSocketInfo()+" vs. mainboard:"+mainboard.getSocketInfo()));
 	}
 
 	private void check(List<PartCheckResponseDto> responseDtoList, CpuEntity cpu, RamEntity ram) {
