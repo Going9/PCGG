@@ -178,12 +178,20 @@ public class ShareService {
 	}
 
 	/**
-	* 공유마당 목록 조회
-	*/
+	 * 공유마당 목록 조회
+	 */
 	@Transactional(readOnly = true)
-	public Slice<ShareResponseDto> getAllShare(int pages){
+	public Slice<ShareResponseDto> getShares(String keyword, int pages){
 		PageRequest pageRequest = PageRequest.of(pages, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Slice<Share> shareResponseDtoList = shareRepository.findSliceBy(pageRequest);
+		Slice<Share> shareResponseDtoList;
+
+		if(keyword == null || keyword.isEmpty()){
+			shareResponseDtoList = shareRepository.findSliceBy(pageRequest);
+		} else if(keyword.length() < 2){
+			throw new IllegalArgumentException("검색어의 길이는 최소 2글자 이상이어야 합니다.");
+		} else{
+			shareResponseDtoList = shareRepository.findSliceByTitleContaining(pageRequest, keyword);
+		}
 
 		return shareResponseDtoList.map(this::convertToDto);
 	}
