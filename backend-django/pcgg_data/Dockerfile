@@ -5,9 +5,8 @@ FROM ubuntu:latest
 WORKDIR /usr/src/app
 
 # 필요한 패키지들을 설치합니다.
-RUN apt-get update
-RUN apt install python3.11 -y
-RUN apt install python3-pip -y
+RUN apt-get update && apt-get install -y python3.11 python3-pip
+
 # requirements.txt 파일을 Docker 이미지로 복사합니다.
 COPY requirements.txt ./
 
