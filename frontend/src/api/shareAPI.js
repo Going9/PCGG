@@ -8,6 +8,10 @@ async function loadShareListAPI(data, success, fail) {
   await api.get("/shares/", { params }).then(success).catch(fail);
 }
 
+async function loadShareTop5API(success, fail) {
+  await apiAuth.get("/shares/top5").then(success).catch(fail);
+}
+
 async function loadShareDetailAPI(data, success, fail) {
   await api.get(`/shares/${data.articleId}`).then(success).catch(fail);
 }
@@ -48,6 +52,7 @@ async function saveMyQuoteAPI(data, success, fail) {
 export {
   loadShareListAPI,
   loadShareDetailAPI,
+  loadShareTop5API,
   createSharePostAPI,
   likeSharePostAPI,
   loadLikeHistoryAPI,
