@@ -100,19 +100,6 @@ const store = userStore();
 const triggerShot = () => {
   store.triggerActivation();
 };
-
-// const goToLoginPage = () => {
-//   store.changePageLoginSignup();
-// };
-
-// function isLogin() {
-//   store.login();
-// }
-
-// function moveToMain() {
-//   isLogin();
-//   router.push({ name: "Home" });
-// }
 </script>
 
 <style scoped>
