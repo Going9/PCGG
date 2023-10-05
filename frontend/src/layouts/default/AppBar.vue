@@ -9,13 +9,14 @@
         <RouterLink to="/login" class="login">
           <span v-if="!store.isLogin" class="text"> Login</span>
         </RouterLink>
-        <RouterLink to="/">
+        <div
+         @click="toggleIsCategory">
           <img
             alt="hambergerIcon"
             class="hamberger"
             src="@/assets/Icon/hambergerIcon.png"
           />
-        </RouterLink>
+        </div>
       </div>
     </nav>
 
@@ -37,27 +38,75 @@
             src="@/assets/Icon/profileIcon.png"
           />
         </RouterLink>
-        <RouterLink to="/mypage_EX">
-          <img alt="bellIcon" class="bell" src="@/assets/Icon/bellIcon.png" />
-        </RouterLink>
-        <RouterLink to="/">
+        <div
+         @click="toggleIsCategory">
           <img
             alt="hambergerIcon"
             class="hamberger"
             src="@/assets/Icon/hambergerIcon.png"
           />
-        </RouterLink>
+        </div>
       </div>
     </nav>
+
+    <div class="category" v-if="isCategory">
+      <v-container>
+        <v-col cols="12">
+          <h1>분류</h1>
+        </v-col>
+        <hr>
+        <v-col cols="12">
+          <RouterLink to="/share" class="no-deco">
+            <h2>
+              공유 마당
+            </h2>
+          </RouterLink>
+        </v-col>
+        <hr>
+        <v-col cols="12">
+          <RouterLink to="/peripheral" class="no-deco">
+            <h2>
+              주변기기
+            </h2>
+          </RouterLink>
+        </v-col>
+        <hr>
+        <v-col cols="12">
+          <RouterLink to="/recommendation" class="no-deco">
+            <h2>
+              견적랭킹
+            </h2>
+          </RouterLink>
+        </v-col>
+        <hr>
+        <v-col cols="12">
+          <RouterLink to="/simulation" class="no-deco">
+            <h2>
+              시뮬레이션
+            </h2>
+          </RouterLink>
+        </v-col>
+        <hr>
+      </v-container>
+
+    </div>
   </div>
 </template>
 
 <script setup>
+import {ref} from "vue";
 import { RouterLink } from "vue-router";
 import { userStore } from "@/store/userStore";
 import router from "@/router";
 
+
+const isCategory = ref(false)
 const store = userStore();
+
+const toggleIsCategory = ()=>{
+  console.log(isCategory.value)
+  isCategory.value = !isCategory.value
+}
 
 const logoutEvent = () => {
   store.logout();
@@ -66,6 +115,18 @@ const logoutEvent = () => {
 </script>
 
 <style scoped>
+.container {
+  position: relative;
+}
+
+.category {
+ z-index: 100;
+ position: absolute;
+ right: 0;
+ height: 100vh;
+ min-width: 20%;
+ background-color: white;
+}
 .text {
   color: white;
 }
@@ -155,5 +216,10 @@ nav .nav-tap {
 
 .sloth {
   display: flex;
+}
+
+.no-deco{
+  text-decoration: none;
+  color: black;
 }
 </style>
