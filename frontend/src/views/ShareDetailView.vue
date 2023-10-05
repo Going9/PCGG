@@ -14,9 +14,10 @@
   const post = ref([]);
   const likeCnt = ref(0);
   const dislikeCnt = ref(0);
-  const store = shareStore();
+  const store = userStore();
   const isLike = ref(0);
   const isLogin = ref(false);
+  const nickname = ref("");
 
   const returnToList = () => {
     router.push({ name: "Share"});
@@ -119,7 +120,10 @@
 
 
   onMounted(()=>{
-    isLogin.value = userStore().isLogin;
+    isLogin.value = store.isLogin;
+    if(isLogin.value){
+      nickname.value = store.getUserInfo.nickname;
+    }
     const data = { articleId : id,}
 
     // 해당 id의 post를 가져옴
@@ -165,7 +169,7 @@
         @click="returnToList"
         >목록으로 돌아가기</v-btn>
         <v-btn
-        v-if="isLogin"
+        v-if="isLogin && nickname == post.userNickname"
         class="btn"
         color="rgba(112, 110, 110, 0.7)"
         @click="deletSharePost"
@@ -205,17 +209,17 @@
       <v-col
         cols="2">
         <h3>
-          추천인 : {{ post?.userNickname }}
+          작성자 : {{ post?.userNickname }}
         </h3>
       </v-col>
-      <v-col
+      <!-- <v-col
         class="profileImageBox"
         cols="2">
         <img
         :src="profileExampleImg"
         class ="profileImage"
         alt="profileExample">
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <v-row>

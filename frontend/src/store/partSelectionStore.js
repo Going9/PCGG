@@ -14,6 +14,9 @@ export const partSelectionStore = defineStore("partSelectionStore", {
     getlist: (state) => {
       return state.partList;
     },
+    getPartCategory : (state) =>{
+      return state.partCategory;
+    }
   },
   actions: {
     // 처음 부품을 선택하면 초기값으로 초기화 후 리스트를 다시 불러옴
