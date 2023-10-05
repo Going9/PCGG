@@ -5,29 +5,42 @@ export const shareStore = defineStore("shareStore", {
   state: () => ({
     shareList : [],
     page : 0,
-    maxPage : 0
+    maxPage : 0,
+    q : "",
+    isLoading : false,
   }),
   getters: {
-    isShareList: (state) => {
+    getShareList: (state) => {
       return state.shareList;
     },
-    isPage: (state) => {
+    getPage: (state) => {
       return state.page
     }
   },
   actions: {
     async loadShareList() {
-      const pages = { page : this.page}
+      if(this.isLoading){
+        return
+      }else{
+        this.isLoading = true
+      }
+      const data = {
+        page : this.page,
+        q : this.q}
       await loadShareListAPI(
-        pages,
+        data,
         ({ data }) => {
           this.shareList.push(...data.content)
           if(data.content.length > 0){
             this.maxPage = this.page
           }
+          setTimeout(()=>{
+            this.isLoading = false;
+          },100)
         },
         (error) => {
           console.log(error);
+          this.isLoading = false;
         }
       );
     },
@@ -42,10 +55,18 @@ export const shareStore = defineStore("shareStore", {
       this.loadShareList()
     },
     resetPage() {
+      this.q = ""
       this.shareList = []
       this.page = 0
       this.maxPage = 0
       this.loadShareList()
     },
+    search(value){
+      this.q = value
+      this.page = 0
+      this.maxPage = 0
+      this.shareList = []
+      this.loadShareList()
+    }
   },
 });
