@@ -17,9 +17,11 @@ public interface LaptopRepository extends JpaRepository<LaptopEntity,Long> {
             "FROM LaptopEntity l " +
             "WHERE " +
             "CASE :os " +
-            "WHEN true THEN (l.os != '미포함') " +
-            "WHEN false THEN (l.os = '미포함') " +
+            "WHEN true THEN (l.os not like '미포함%') " +
+            "WHEN false THEN (l.os like '미포함%') " +
             "END " +
-            "AND l.price < :budget")
-    List<LaptopResponseDto> findByOsAndBudget(@Param("os")boolean os, @Param("budget")int budget);
+            "AND l.price < :budget " +
+            "AND l.price != 0 " +
+            "AND left(l.cpu,2) = :cpu")
+    List<LaptopEntity> findByOsAndBudget(@Param("os")boolean os, @Param("budget")int budget, @Param("cpu")String cpu);
 }

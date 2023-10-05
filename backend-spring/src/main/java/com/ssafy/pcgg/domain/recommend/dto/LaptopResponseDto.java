@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class LaptopResponseDto {
     private Long id;
     private String type;

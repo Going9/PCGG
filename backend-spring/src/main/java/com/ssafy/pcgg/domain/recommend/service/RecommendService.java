@@ -475,9 +475,19 @@ public class RecommendService {
     }
 
     public List<LaptopResponseDto> getLaptopRecommend(LaptopRequestDto laptopRequestDto){
-        List<LaptopResponseDto> laptopResponseDtoList = laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget());
-        logger.trace(laptopResponseDtoList.size()+" < size");
-
+        String usage = laptopRequestDto.getUsage();
+        List<LaptopEntity> laptopList;
+        switch(usage){
+            case "저" -> laptopList = laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget(),"i3");
+            case "중" -> {
+                laptopList = laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget(),"i5");
+                laptopList.addAll(laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget(),"i7"));
+            }
+            default -> laptopList = laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget(),"i9");
+        }
+        List<LaptopResponseDto> laptopResponseDtoList = laptopList.stream()
+                .map(laptop -> modelMapper.map(laptop, LaptopResponseDto.class))
+                .collect((Collectors.toList()));
         return laptopResponseDtoList;
     }
 
