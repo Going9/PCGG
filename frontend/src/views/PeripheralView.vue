@@ -94,7 +94,6 @@ const handleIntersection = (entries) => {
       console.log(user.userInfo);
       store.callList(data);
       store.callRecommend(data);
-      store.isTest();
       data["page"] += 1;
     }
   });
