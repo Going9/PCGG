@@ -1,5 +1,7 @@
 package com.ssafy.pcgg.domain.share.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Slice;
@@ -98,6 +100,13 @@ public class ShareController {
 		logger.info("saveShare()");
 		// shareService.saveShare(userId, shareAddQuoteRequestDto);
 		return ResponseEntity.ok().body(shareService.saveShare(userId, shareAddQuoteRequestDto));
+	}
+
+	@Operation(summary = "공유마당 좋아요가 가장 많은 상위 5개", description = "공유마당 좋아요가 가장 많은 상위 5개의 게시글을 조회합니다.")
+	@GetMapping("/top5")
+	public ResponseEntity<List<ShareDetailDto>> getTop5SharesWithMostLikes() {
+		logger.info("getTop5SharesWithMostLikes()");
+		return ResponseEntity.ok().body(shareService.getTop5SharesWithMostLikeCnt());
 	}
 
 }
