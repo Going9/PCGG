@@ -69,9 +69,9 @@ public class SimulationService {
 	private void check(List<PartCheckResponseDto> responseDtoList, MainboardEntity mainboard, SsdEntity ssd) {
 		if(ssd == null) return;
 		switch(ssd.getPcieVer()){
-			case 3 -> {if(!mainboard.getPcie3()) responseDtoList.add(new PartCheckResponseDto("mainboard","ssd","pcie버전 상이. ssd pcie ver.3"));}
-			case 4 -> {if(!mainboard.getPcie4()) responseDtoList.add(new PartCheckResponseDto("mainboard","ssd","pcie버전 상이. ssd pcie ver.4"));}
-			case 5 -> {if(!mainboard.getPcie5()) responseDtoList.add(new PartCheckResponseDto("mainboard","ssd","pcie버전 상이. ssd pcie ver.5"));}
+			case 3 -> {if(!mainboard.getPcie3()) responseDtoList.add(new PartCheckResponseDto("mainboard","ssd","메인보드와 SSD의 pcie버전 상이. SSD pcie ver.3"));}
+			case 4 -> {if(!mainboard.getPcie4()) responseDtoList.add(new PartCheckResponseDto("mainboard","ssd","메인보드와 SSD의 pcie버전 상이. SSD pcie ver.4"));}
+			case 5 -> {if(!mainboard.getPcie5()) responseDtoList.add(new PartCheckResponseDto("mainboard","ssd","메인보드와 SSD의 pcie버전 상이. SSD pcie ver.5"));}
 			default -> {}
 		}
 	}
@@ -84,8 +84,8 @@ public class SimulationService {
 	private void check(List<PartCheckResponseDto> responseDtoList, CpuEntity cpu, RamEntity ram) {
 		if(ram == null) return;
 		switch(ram.getMemorySpec()){
-			case "DDR4" -> {if(!cpu.getDdr4()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","CPU가 지원하지 않는 메모리의 DDR버전 상이. ram:"+ram.getMemorySpec()));}
-			case "DDR5" -> {if(!cpu.getDdr5()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","CPU가 지원하지 않는 메모리의 DDR버전 상이. ram:"+ram.getMemorySpec()));}
+			case "DDR4" -> {if(!cpu.getDdr4()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","CPU가 지원하지 않는 메모리. ram:"+ram.getMemorySpec()));}
+			case "DDR5" -> {if(!cpu.getDdr5()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","CPU가 지원하지 않는 메모리. ram:"+ram.getMemorySpec()));}
 		}
 	}
 
