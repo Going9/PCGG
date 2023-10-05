@@ -75,13 +75,18 @@ public class UserService {
 
         String title = "Travel with me 이메일 인증 번호";
         String text = createCode();
-        SimpleMailMessage emilaForm = createEmailForm(toEmail, title, text);
+        SimpleMailMessage emailForm = createEmailForm(toEmail, title, text);
 
         try {
-            javaMailSender.send(emilaForm);
+            javaMailSender.send(emailForm);
+        } catch (RuntimeException e) {
+            throw new CustomException(EMAIL_SEND_ERROR);
+        }
+
+        try {
             redisService.setValues(AUTH_CODE_PREFIX + toEmail, text, Duration.ofMillis(this.authCodeExpirationMillis));
         } catch (RuntimeException e) {
-            throw new CustomException(EMAIL_ERROR);
+            throw new CustomException(REDIS_ERROR);
         }
     }
 
