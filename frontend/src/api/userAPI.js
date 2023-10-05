@@ -59,8 +59,14 @@ async function getMyShareLikeAPI(success, fail) {
   await apiAuth.get("/users/sharelike").then(success).catch(fail);
 }
 
+// 견적 마이페이지 저장
 async function getMySavedQuoteAPI(success, fail) {
   await apiAuth.get("/users/quotes").then(success).catch(fail);
+}
+
+// 견적 마이페이지 삭제
+async function deleteMySavedQuoteAPI(quoteId, success, fail) {
+  await apiAuth.delete(`/shares/${quoteId}/quotes`).then(success).catch(fail);
 }
 
 // 회원탈퇴
@@ -80,5 +86,6 @@ export {
   getMyShareAPI,
   getMyShareLikeAPI,
   getMySavedQuoteAPI,
+  deleteMySavedQuoteAPI,
   withdrawalAPI,
 };
