@@ -1,7 +1,9 @@
 package com.ssafy.pcgg.domain.recommend.service;
 
 import com.ssafy.pcgg.domain.part.dto.*;
+import com.ssafy.pcgg.domain.part.entity.*;
 import com.ssafy.pcgg.domain.part.exception.NoSuchPartTypeException;
+import com.ssafy.pcgg.domain.part.repository.*;
 import com.ssafy.pcgg.domain.recommend.dto.*;
 import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.*;
@@ -19,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service

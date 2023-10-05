@@ -1,5 +1,6 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
+import com.ssafy.pcgg.domain.part.entity.PartTypeNsEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;

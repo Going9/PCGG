@@ -1,7 +1,7 @@
 package com.ssafy.pcgg.domain.recommend.repository;
 
 import com.ssafy.pcgg.domain.recommend.entity.QuoteCandidateEntity;
-import com.ssafy.pcgg.domain.recommend.entity.UsageNsEntity;
+import com.ssafy.pcgg.domain.part.entity.UsageNsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

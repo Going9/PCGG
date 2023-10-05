@@ -65,4 +65,15 @@ public class UserEntity {
         this.activated = activated;
         this.authorities = authorities;
     }
+
+    public void reSignup(String password, String name, String nickname) {
+        this.activated = true;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+    }
+
+    public void withdrawal() {
+        this.activated = false;
+    }
 }

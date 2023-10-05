@@ -1,6 +1,6 @@
 package com.ssafy.pcgg.domain.recommend.dto;
 
-import com.ssafy.pcgg.domain.recommend.entity.*;
+import com.ssafy.pcgg.domain.part.entity.*;
 import lombok.*;
 
 @Builder

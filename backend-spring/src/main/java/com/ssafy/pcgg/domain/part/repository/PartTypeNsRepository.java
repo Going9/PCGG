@@ -1,6 +1,6 @@
-package com.ssafy.pcgg.domain.recommend.repository;
+package com.ssafy.pcgg.domain.part.repository;
 
-import com.ssafy.pcgg.domain.recommend.entity.PartTypeNsEntity;
+import com.ssafy.pcgg.domain.part.entity.PartTypeNsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

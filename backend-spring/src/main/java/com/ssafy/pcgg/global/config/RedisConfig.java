@@ -1,6 +1,7 @@
 package com.ssafy.pcgg.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +17,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     private final RedisProperties redisProperties;
 
+//    @Value("{spring.redis.host}")
+//    private String redisHost;
+
     // RedisProperties로 yaml에 저장한 host, post를 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+        return new LettuceConnectionFactory("pcgg.kro.kr", redisProperties.getPort());
+//        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
     }
 
     // serializer 설정으로 redis-cli를 통해 직접 데이터를 조회할 수 있도록 설정

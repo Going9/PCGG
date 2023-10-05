@@ -1,6 +1,6 @@
-package com.ssafy.pcgg.domain.recommend.repository;
+package com.ssafy.pcgg.domain.part.repository;
 
-import com.ssafy.pcgg.domain.recommend.entity.SsdEntity;
+import com.ssafy.pcgg.domain.part.entity.SsdEntity;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
