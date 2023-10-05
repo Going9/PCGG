@@ -26,4 +26,8 @@ async function isCallEstimateLaptop(data, success, fail) {
   await api.post(`/recommends/laptop`, params).then(success).catch(fail);
 }
 
-export { isCallEstimatePc, isCallEstimateLaptop };
+async function isSaveEstimate(data, success, fail) {
+  await apiAuth.post(`/recommends`, data).then(success).catch(fail);
+}
+
+export { isCallEstimatePc, isCallEstimateLaptop, isSaveEstimate };
