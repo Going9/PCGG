@@ -59,7 +59,7 @@ export const usePeripehralStore = defineStore("peripheral", {
       await isCallPeripheralRecommend(
         value,
         ({ data }) => {
-          this.recommendPeripheral.push(data.content);
+          this.recommendPeripheral.push(data);
           console.log("추천");
           console.log(this.recommendPeripheral);
         },

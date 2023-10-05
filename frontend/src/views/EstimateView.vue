@@ -52,7 +52,7 @@
           suffix="원"
           v-model="choiceBudget"
           type="number"
-          step="10000"
+          step="100000"
           @input="filterNegativeNumbers"
         ></v-text-field>
       </div>
@@ -142,9 +142,66 @@
     </div>
 
     <div class="result">
-      <v-btn color="#DA0000" class="callrecommend" @click="addEstimate()">
+      <v-btn
+        v-if="store.recommendToggle == false"
+        color="#DA0000"
+        class="callrecommend"
+        @click="addEstimate()"
+      >
         추천받기</v-btn
       >
+      <v-btn
+        v-else
+        color="#4599fc"
+        class="callrecommend"
+        @click="resetEstimate()"
+      >
+        {{ user.userInfo["nickname"] }}님께 추천 드리는 견적</v-btn
+      >
+    </div>
+
+    <div>
+      <div
+        v-if="store.recommendToggle == false"
+        style="display: flex; justify-content: center; margin-top: 5rem"
+      >
+        <p style="font-size: larger; font-weight: bolder">
+          추천받은 내용이 없습니다.
+        </p>
+      </div>
+      <div v-else>
+        <div v-for="(item, index) in listData" :key="index" class="recoitem">
+          <img :src="item.chassis.imageSource" alt="noimg" />
+          <v-divider class="border-opacity-100" vertical></v-divider>
+          <div class="summary">
+            <div class="recosummary1">
+              <p>CPU : {{ item.cpu["name"] }}</p>
+              <p>GPU : {{ item.gpu["name"] }}</p>
+              <p>메인보드 : {{ item.mainboard["name"] }}</p>
+              <p>파워 : {{ item.power["name"] }}</p>
+            </div>
+            <div class="recosummary2">
+              <p>ram : {{ item.ram["name"] }}</p>
+              <p>ssd : {{ item.ssd }}</p>
+              <p>예상 비용: {{ item.totalPrice }}</p>
+            </div>
+          </div>
+          <v-divider
+            class="border-opacity-100"
+            vertical
+            v-if="user.loginActivated"
+          ></v-divider>
+          <v-btn
+            icon="$vuetify"
+            class="itembtn"
+            variant="text"
+            @click="saveEstimate(item)"
+            v-if="user.loginActivated"
+          >
+            <img :src="appendIcon" alt="no" class="append" />
+          </v-btn>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -159,10 +216,18 @@ import { OWIcon } from "@/assets/Icon";
 import { OBIcon } from "@/assets/Icon";
 import { XWIcon } from "@/assets/Icon";
 import { XBIcon } from "@/assets/Icon";
+import { appendIcon } from "@/assets/Icon";
 import { useEstimateStore } from "@/store/estimateStore";
+import { userStore } from "@/store/userStore";
 
 const store = useEstimateStore();
+const user = userStore();
 
+const listData = computed(function () {
+  return store.recommendEstimate.map((item) => {
+    return item;
+  });
+});
 const choiceLaptop = ref(true);
 
 const choiceUsage = ref([
@@ -253,7 +318,7 @@ const choiceAs = ref(null);
 const choiceCase = ref([
   {
     selectedItem: null,
-    items: ["micro", "mini", "standard", "extend"],
+    items: ["M-ATX", "ATX", "M-ITX"],
     label: "케이스 크기",
   },
 ]);
@@ -341,6 +406,29 @@ const addEstimate = () => {
 
   console.log(estimate.value);
   estimate.value = [];
+  listData.value = store.recommendEstimate;
+};
+
+const resetEstimate = () => {
+  store.recommendToggle = false;
+  store.recommendEstimate = [];
+  console.log(store.recommendEstimate);
+  console.log(store.recommendToggle);
+};
+
+const saveEstimate = (item) => {
+  const data = {
+    cpuId: item.cpu["id"],
+    mainboardId: item.mainboard["id"],
+    ssdId: null,
+    ramId: item.ram["id"],
+    gpuId: item.gpu["id"],
+    chassisId: item.chassis["id"],
+    powerId: item.power["id"],
+    coolerId: null,
+    userId: user.userInfo["userid"],
+  };
+  store.saveEstimate(data);
 };
 </script>
 
@@ -479,5 +567,61 @@ const addEstimate = () => {
   width: 100%;
   font-size: large;
   font-weight: bolder;
+}
+
+.recoitem {
+  height: 7rem;
+  display: flex;
+  justify-content: space-between;
+  margin: 2%;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  align-items: center;
+  padding: 0% 2%;
+}
+
+.recoitem img {
+  height: 6rem;
+  margin-right: 1rem;
+  border-radius: 10px;
+}
+
+.summary {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0rem 1rem;
+}
+
+.recosummary1 {
+  height: 6rem;
+  max-width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.recosummary2 {
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itembtn {
+  margin-left: 1rem;
+}
+
+.itembtn img {
+  margin-right: 0rem;
+}
+.append {
+  width: 100%;
+  height: 100% !important;
 }
 </style>
