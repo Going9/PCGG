@@ -81,6 +81,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getMyQuotes(userId, pages));
     }
 
+    @PutMapping
+    @CurrentUserId("userId")
+    public ResponseEntity<String> withdrawal(UserIdDto userId, HttpServletRequest request) {
+        return ResponseEntity.ok().body(userService.withdrawal(userId.getUserId()));
+    }
 //    @GetMapping
 //    public ResponseEntity<List<UserListResponse>> getUsers() {
 //        List<UserListResponse> userListResponse = userService.getUsers();
