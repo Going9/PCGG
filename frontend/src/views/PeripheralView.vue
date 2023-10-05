@@ -118,6 +118,7 @@ onMounted(() => {
       .get("https://pcgg.kro.kr/api2/v1/recommends/keyboard/27/")
       .then((response) => {
         console.log(response.data);
+        store.callRecommend(response);
       })
       .catch((error) => {
         console.error(error);

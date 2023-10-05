@@ -1,5 +1,4 @@
 import {
-  isCallPeripheralRecommend,
   isCallPeripheralList,
   isSaveMyPeripheral,
   isDeletePeripheralReview,
@@ -7,7 +6,6 @@ import {
   isCallPeripheralReview,
   isCreatePeripheralReview,
 } from "@/api/peripheralAPI";
-import axios from "axios";
 import { defineStore } from "pinia";
 
 export const usePeripehralStore = defineStore("peripheral", {
@@ -56,24 +54,8 @@ export const usePeripehralStore = defineStore("peripheral", {
     },
 
     // 추천받기
-    async callRecommend(value) {
-      await isCallPeripheralRecommend(
-        value,
-        (data) => {
-          console.log(data);
-          this.recommendPeripheral.push(data);
-          console.log("추천");
-          console.log(this.recommendPeripheral);
-        },
-        (error) => {
-          console.log(value);
-          console.log(error);
-        }
-      );
-    },
-
-    isTest() {
-      axios.get(`https://naver.com`).then((response) => console.log(response));
+    callRecommend(value) {
+      this.recommendPeripheral.push(value);
     },
 
     // 전체목록 불러오기
