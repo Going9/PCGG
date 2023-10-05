@@ -78,9 +78,7 @@ export const userStore = defineStore("userStore", {
     },
     getMySavedQuoteList: (state) => {
       return state.savedQuoteList;
-    }
-
-    
+    },
   },
   // 이게 actions랑 mutations합친거인듯. 액션에서 뮤테이션 보내고 뮤테이션에서 스테이트 바꾸고 하는게 아니고 한번에 바꿈
   // vuex배울때 이러면 뭔가 문제가 될수 있다 그랬던거 같은데 기억안남
@@ -101,7 +99,7 @@ export const userStore = defineStore("userStore", {
     async loginUser() {
       await getUserInfoAPI(
         ({ data }) => {
-          this.userid = data.userid;
+          this.userInfo.userid = data.userId;
           this.userInfo.nickname = data.nickname;
           router.push({ name: "Home" });
         },
@@ -116,6 +114,7 @@ export const userStore = defineStore("userStore", {
       this.loginActivated = false;
       this.accessToken = "";
       this.userInfo = {
+        userid: "",
         nickname: "",
       };
       this.mypageCategory = "share";
@@ -187,8 +186,8 @@ export const userStore = defineStore("userStore", {
         (error) => {
           console.log(error);
         }
-      )
-    }
+      );
+    },
   },
   // 위 3개가 끝임.
 });

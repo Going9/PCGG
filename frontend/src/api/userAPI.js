@@ -55,6 +55,11 @@ async function getMySavedQuoteAPI(success, fail) {
   await apiAuth.get("/users/quotes").then(success).catch(fail);
 }
 
+// 회원탈퇴
+async function withdrawalAPI(success, fail) {
+  await apiAuth.put("/users").then(success).catch(fail);
+}
+
 export {
   sendToEmailAPI,
   verifiedCodeAPI,
@@ -66,4 +71,5 @@ export {
   getMyShareAPI,
   getMyShareLikeAPI,
   getMySavedQuoteAPI,
+  withdrawalAPI,
 };
