@@ -15,6 +15,11 @@
       </v-btn>
     </v-btn-toggle>
   </div>
+  <div v-if="peripheralList.length == 0" v-for="item in buttonItems">
+    <div class="non-item-text" v-if="category === item.value">
+      저장한 {{ item.label }}가 없습니다.
+    </div>
+  </div>
   <div
     class="peripheral-container"
     v-for="peripheral in peripheralList"
@@ -100,6 +105,10 @@ const removeMyPeripheral = async (peripheralId) => {
   position: relative;
   margin: auto;
   margin-top: 50px;
+}
+.non-item-text {
+  font-weight: bold;
+  text-align: center;
 }
 .buttons {
   display: flex;

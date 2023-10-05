@@ -37,7 +37,7 @@
             src="@/assets/Icon/profileIcon.png"
           />
         </RouterLink>
-        <RouterLink to="/mypage_EX">
+        <RouterLink to="/">
           <img alt="bellIcon" class="bell" src="@/assets/Icon/bellIcon.png" />
         </RouterLink>
         <RouterLink to="/">

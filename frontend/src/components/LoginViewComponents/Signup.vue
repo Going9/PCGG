@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn @click="sendToEmailTest"> email send test </v-btn>
+    <!-- <v-btn @click="sendToEmailTest"> email send test </v-btn> -->
     <v-card class="mx-auto pa-4" elevation="8" width="100%" rounded="lg">
       <v-form ref="form">
         <v-text-field
@@ -97,7 +97,7 @@ import { userStore } from "@/store/userStore";
 import {
   signupAPI,
   sendToEmailAPI,
-  sendToEmailTestAPI,
+  // sendToEmailTestAPI,
   verifiedCodeAPI,
 } from "@/api/userAPI";
 
@@ -131,21 +131,21 @@ const sendToEmail = () => {
   );
 };
 
-const sendToEmailTest = () => {
-  const emailJSON = {
-    email: email.value,
-  };
+// const sendToEmailTest = () => {
+//   const emailJSON = {
+//     email: email.value,
+//   };
 
-  sendToEmailTestAPI(
-    emailJSON,
-    ({ data }) => {
-      console.log(data);
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
+//   sendToEmailTestAPI(
+//     emailJSON,
+//     ({ data }) => {
+//       console.log(data);
+//     },
+//     (error) => {
+//       console.log(error);
+//     }
+//   );
+// };
 
 const verifiedCode = () => {
   const emailCode = {
