@@ -4,7 +4,7 @@ const api = apiSpringInstance();
 const apiAuth = apiSpringAuthInstance();
 
 async function loadShareListAPI(data, success, fail) {
-  const params = { pages : data.page }
+  const params = { pages : data.page, q: data.q }
   await api.get("/shares/", {params}).then(success).catch(fail);
 }
 
