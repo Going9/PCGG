@@ -55,7 +55,8 @@ export const usePeripehralStore = defineStore("peripheral", {
 
     // 추천받기
     callRecommend(value) {
-      this.recommendPeripheral(value);
+      this.recommendPeripheral = [];
+      this.recommendPeripheral.push(value);
       console.log("store", this.recommendPeripheral, value);
     },
 
