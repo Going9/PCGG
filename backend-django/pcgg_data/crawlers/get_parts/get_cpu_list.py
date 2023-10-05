@@ -80,6 +80,7 @@ def get_cpu_list(url: str):
             # 만약 크롤링한 데이터에도 있고 DB에도 있는 데이터라면
             try:
                 update_history(Cpu, parsed_name, price, "cpu")
+                print(f"{parsed_name} 업데이트 완료")
 
             # 그렇지 않고 크롤링한 데이터에는 있고 db에 없는 데이터라면
             except:
@@ -149,6 +150,7 @@ def get_cpu_list(url: str):
                     price=price
                 )
                 price_history.save()
+                print(f"{parsed_name} 저장 완료")
 
         # 스크롤 끝까지 내리고
         driver.execute_script(

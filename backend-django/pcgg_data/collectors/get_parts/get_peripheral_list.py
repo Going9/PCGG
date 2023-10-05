@@ -18,7 +18,7 @@ from decouple import config
 from asgiref.sync import sync_to_async
 
 
-# @sync_to_async
+@sync_to_async
 def get_peripherals_list(peripheral_device: str, model):
     print(f"{peripheral_device} 콜렉팅 시작")
 

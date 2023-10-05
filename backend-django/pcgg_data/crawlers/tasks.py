@@ -1,6 +1,6 @@
 # tasks.py (크롤링을 처리하는 Django 앱 내에서)
 
-from celery import shared_task
+from celery import Celery
 from crawlers.get_parts.get_cpu_list import get_cpu_list
 from crawlers.get_parts.get_board_list import get_board_list
 from crawlers.get_parts.get_cooler_list import get_cooler_list
@@ -10,9 +10,15 @@ from crawlers.get_parts.get_gpu_list import get_gpu_list
 from crawlers.get_parts.get_case_list import get_case_list
 from crawlers.get_parts.get_power_list import get_power_list
 from crawlers.get_parts.get_laptop_list import get_laptop_list
+from collectors.get_parts.get_peripheral_list import main
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+app = Celery('tasks', broker=BROKER_URL, backend=CELERY_RESULT_BACKEND)
 
 
-@shared_task
+@app.task
 def crawling_task():
     # 크롤링 작업을 여기에 구현
     funcs = {
@@ -26,7 +32,7 @@ def crawling_task():
         get_board_list: "https://prod.danawa.com/list/?cate=112751&15main_11_02",
         get_laptop_list: "https://prod.danawa.com/list/?cate=112758&15main_11_02",
     }
-
+    main()
     for func, url in funcs.items():
         try:
             func(url)
