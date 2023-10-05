@@ -63,7 +63,7 @@ public class SimulationService {
 
 	private void check(List<PartCheckResponseDto> responseDtoList, RamEntity ram, MainboardEntity mainboard) {
 		if(mainboard == null) return;
-		if(!mainboard.getMemorySpec().equals(ram.getMemorySpec())) responseDtoList.add(new PartCheckResponseDto("ram","mainboard","DDR 버전 상이"));
+		if(!mainboard.getMemorySpec().equals(ram.getMemorySpec())) responseDtoList.add(new PartCheckResponseDto("ram","mainboard","메모리와 메인보드 DDR 버전 상이"));
 	}
 
 	private void check(List<PartCheckResponseDto> responseDtoList, MainboardEntity mainboard, SsdEntity ssd) {
@@ -78,37 +78,37 @@ public class SimulationService {
 
 	private void check(List<PartCheckResponseDto> responseDtoList, CpuEntity cpu, MainboardEntity mainboard) {
 		if(mainboard == null) return;
-		if(!cpu.getSocketInfo().equals(mainboard.getSocketInfo())) responseDtoList.add(new PartCheckResponseDto("cpu","mainboard","소켓버전 상이. cpu:"+cpu.getSocketInfo()+" vs. mainboard:"+mainboard.getSocketInfo()));
+		if(!cpu.getSocketInfo().equals(mainboard.getSocketInfo())) responseDtoList.add(new PartCheckResponseDto("cpu","mainboard","소켓버전 상이. CPU:"+cpu.getSocketInfo()+" vs. 메인보드:"+mainboard.getSocketInfo()));
 	}
 
 	private void check(List<PartCheckResponseDto> responseDtoList, CpuEntity cpu, RamEntity ram) {
 		if(ram == null) return;
 		switch(ram.getMemorySpec()){
-			case "DDR4" -> {if(!cpu.getDdr4()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","DDR버전 상이. ram:"+ram.getMemorySpec()));}
-			case "DDR5" -> {if(!cpu.getDdr5()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","DDR버전 상이. ram:"+ram.getMemorySpec()));}
+			case "DDR4" -> {if(!cpu.getDdr4()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","CPU가 지원하지 않는 메모리의 DDR버전 상이. ram:"+ram.getMemorySpec()));}
+			case "DDR5" -> {if(!cpu.getDdr5()) responseDtoList.add(new PartCheckResponseDto("cpu","ram","CPU가 지원하지 않는 메모리의 DDR버전 상이. ram:"+ram.getMemorySpec()));}
 		}
 	}
 
 	private void check(List<PartCheckResponseDto> responseDtoList, ChassisEntity chassis, CoolerEntity cooler) {
 		if(cooler == null) return;
-		if(chassis.getMaxCoolerDepth().compareTo(cooler.getHeight())<0) responseDtoList.add(new PartCheckResponseDto("case","cooler","케이스 크기 작음"));
+		if(chassis.getMaxCoolerDepth().compareTo(cooler.getHeight())<0) responseDtoList.add(new PartCheckResponseDto("case","cooler","쿨러가 케이스 허용치보다 큼"));
 
 	}
 	private void check(List<PartCheckResponseDto> responseDtoList, ChassisEntity chassis, GpuEntity gpu) {
 		if(gpu == null) return;
-		if(chassis.getMaxGpuDepth().compareTo(gpu.getWidth())<0) responseDtoList.add(new PartCheckResponseDto("case","gpu","케이스 크기 작음"));
+		if(chassis.getMaxGpuDepth().compareTo(gpu.getWidth())<0) responseDtoList.add(new PartCheckResponseDto("case","gpu","그래픽 카드가 케이스 허용치보다 큼"));
 	}
 	private void check(List<PartCheckResponseDto> responseDtoList, ChassisEntity chassis, MainboardEntity mainboard) {
 		if(mainboard == null) return;
 		switch(mainboard.getSize()){
-			case "M-ATX" -> {if(!chassis.getMicroAtx()) responseDtoList.add(new PartCheckResponseDto("case","mainboard","케이스<>메인보드 사이즈 부적합"));}
-			case "M-iTX" -> {if(!chassis.getMiniItx()) responseDtoList.add(new PartCheckResponseDto("case","mainboard","케이스<>메인보드 사이즈 부적합"));}
-			case "ATX" -> {if(!chassis.getStandardAtx()) responseDtoList.add(new PartCheckResponseDto("case","mainboard","케이스<>메인보드 사이즈 부적합"));}
+			case "M-ATX" -> {if(!chassis.getMicroAtx()) responseDtoList.add(new PartCheckResponseDto("case","mainboard","케이스 ↔ 메인보드 사이즈 부적합"));}
+			case "M-iTX" -> {if(!chassis.getMiniItx()) responseDtoList.add(new PartCheckResponseDto("case","mainboard","케이스 ↔ 메인보드 사이즈 부적합"));}
+			case "ATX" -> {if(!chassis.getStandardAtx()) responseDtoList.add(new PartCheckResponseDto("case","mainboard","케이스 ↔ 메인보드 사이즈 부적합"));}
 		}
 	}
 	private void check(List<PartCheckResponseDto> responseDtoList, ChassisEntity chassis, PowerEntity power) {
 		if(power == null) return;
-		if(chassis.getMaxPowerDepth().compareTo(power.getDepth())<0) responseDtoList.add(new PartCheckResponseDto("case","power","케이스 크기 작음"));
+		if(chassis.getMaxPowerDepth().compareTo(power.getDepth())<0) responseDtoList.add(new PartCheckResponseDto("case","power","파워가 케이스 허용치보다 큼"));
 	}
 
 
