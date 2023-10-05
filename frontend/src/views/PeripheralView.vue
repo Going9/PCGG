@@ -50,12 +50,18 @@ import { peripheralIcon } from "@/assets/Icon";
 import { searchIcon } from "@/assets/Icon";
 import PeripheralComponentVue from "../components/PeripheralViewComponents/PeripheralComponent.vue";
 import { usePeripehralStore } from "@/store/peripheralStore";
+import { userStore } from "@/store/userStore";
 
 const store = usePeripehralStore();
+const user = userStore();
 
 const toggle = ref(null);
 
-const data = { category: store.peripheralCategory, page: 0 };
+const data = {
+  category: store.peripheralCategory,
+  page: 0,
+  userId: user.userInfo["userid"],
+};
 
 const setToggle = (value) => {
   toggle.value = value;
@@ -83,6 +89,8 @@ const handleIntersection = (entries) => {
     if (entry.isIntersecting) {
       console.log("reload");
       data["category"] = store.peripheralCategory;
+      data["userId"] = user.userInfo["userid"];
+      console.log(user.userInfo);
       store.callList(data);
       store.callRecommend(data);
       data["page"] += 1;
