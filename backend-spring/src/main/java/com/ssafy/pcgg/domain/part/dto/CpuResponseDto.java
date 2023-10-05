@@ -1,20 +1,20 @@
 package com.ssafy.pcgg.domain.part.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @ToString
 @Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class CpuResponseDto extends PartDto {
 	Long id;
-	String socket_info;
+	String socketInfo;
 	boolean DDR4;
 	boolean DDR5;
-	boolean integrated_graphics;
-	boolean cooler_included;
-	Integer single_score;
-	Integer multi_score;
+	boolean integratedGraphics;
+	boolean coolerIncluded;
+	Integer singleScore;
+	Integer multiScore;
 	int classNumber;
 }

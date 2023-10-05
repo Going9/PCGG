@@ -238,6 +238,7 @@ public class RecommendService {
     public List<?> getPartRecommend(PartRequestDto partRequestDto) {
         //1. 용도별 분류가 된 부품(CPU, RAM, GPU, MAINBOARD, POWER)은 매칭되는 CLASS 필터링 / exclude SSD CHASSIS COOLER
         List<?> listPart = getPartList(partRequestDto);
+        logger.trace(listPart.size()+" < size");
 
         //2. 우선순위에 따라 정렬방식 변경
         listPart = getComparatorAndSort(listPart, partRequestDto);
@@ -474,7 +475,10 @@ public class RecommendService {
     }
 
     public List<LaptopResponseDto> getLaptopRecommend(LaptopRequestDto laptopRequestDto){
-        return laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget());
+        List<LaptopResponseDto> laptopResponseDtoList = laptopRepository.findByOsAndBudget(laptopRequestDto.isOs(), laptopRequestDto.getBudget());
+        logger.trace(laptopResponseDtoList.size()+" < size");
+
+        return laptopResponseDtoList;
     }
 
 }
