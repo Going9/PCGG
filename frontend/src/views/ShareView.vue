@@ -1,6 +1,6 @@
 <script setup>
 import PostComponent from "@/components/ShareViewComponents/PostComponent.vue";
-import SearchComponent from "@/components/Common/SearchBarComponent.vue";
+import SearchBarComponent from "@/components/Common/SearchBarComponent.vue";
 import { userStore } from '@/store/userStore';
 import { shareStore } from "@/store/shareStore";
 import { onMounted, ref } from "vue";
@@ -11,6 +11,7 @@ const page = ref(0);
 const store = shareStore();
 const isLogin = ref(false);
 const loading = ref(false);
+const q = ref("")
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
@@ -19,11 +20,34 @@ onMounted(() => {
   console.log('reset')
   store.resetPage();
   setTimeout(() => {
-    shareList.value = store.isShareList;
-    console.log(shareList.value);
+    shareList.value = store.getShareList;
     loading.value = false
   }, 200);
 });
+
+const callShareList = () => {
+  const data = {
+      q : q.value,
+    }
+    store.loadShareList(data);
+    setTimeout(()=>{
+      shareList.value = store.getShareList;
+    },100)
+}
+
+const search = (value) => {
+  if(value.length<2){
+    alert("검색어는 최소 2글자 이상 입력해야합니다.")
+    return
+  }
+  q.value = value
+  store.search(value)
+  callShareList()
+  setTimeout(()=>{
+    shareList.value = store.getShareList;
+  },200)
+}
+
 
 
 // 스크롤 이벤트 핸들러
@@ -38,7 +62,7 @@ const handleScroll = () => {
     store.increasePage();
     loading.value = true
     setTimeout(()=>{
-      shareList.value = store.isShareList;
+      shareList.value = store.getShareList;
       loading.value = false
     },1000)
   }
@@ -72,7 +96,8 @@ const goToCreateShare = () => {
       </div>
     </div>
     <div class="searchbox flex-center">
-      <SearchComponent />
+      <SearchBarComponent
+         @q="search"/>
     </div>
     <div class="writebox">
       <div>
