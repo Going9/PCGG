@@ -28,7 +28,7 @@ public class SimulationController {
      * 부품호환성 검사
      * @param partCheckRequestDto
      */
-    @Operation(summary = "PC부품 검색", description = "PC부품을 검색합니다.")
+    @Operation(summary = "부품호환성 체크", description = "현재 선택된 부품들의 호환성을 check합니다.")
     @PostMapping
     public ResponseEntity<?> checkCompatibility(@RequestBody PartCheckRequestDto partCheckRequestDto) {
         try{
