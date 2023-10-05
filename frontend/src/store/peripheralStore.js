@@ -7,6 +7,7 @@ import {
   isCallPeripheralReview,
   isCreatePeripheralReview,
 } from "@/api/peripheralAPI";
+import axios from "axios";
 import { defineStore } from "pinia";
 
 export const usePeripehralStore = defineStore("peripheral", {
@@ -69,6 +70,10 @@ export const usePeripehralStore = defineStore("peripheral", {
           console.log(error);
         }
       );
+    },
+
+    isTest() {
+      axios.get(`https://naver.com`).then((response) => console.log(response));
     },
 
     // 전체목록 불러오기
