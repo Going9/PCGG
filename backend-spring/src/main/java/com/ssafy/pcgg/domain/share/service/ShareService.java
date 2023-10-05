@@ -323,4 +323,13 @@ public class ShareService {
 			.build()).getId();
 	}
 
+	@Transactional
+	public String deleteShare(UserIdDto userIdDto, long quoteId) {
+		QuoteSaved quoteSaved = quoteSavedRepository.findQuotesByUserIdAndQuoteId(userIdDto.getUserId(), quoteId);
+
+		quoteSavedRepository.delete(quoteSaved);
+
+		return "내 견적 삭제 완료";
+	}
+
 }

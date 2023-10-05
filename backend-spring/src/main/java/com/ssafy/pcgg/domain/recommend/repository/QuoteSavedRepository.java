@@ -15,4 +15,6 @@ public interface QuoteSavedRepository extends JpaRepository<QuoteSaved, Long> {
 
 	@Query("SELECT qs.quote FROM QuoteSaved qs WHERE qs.userId = :userId")
 	Slice<QuoteEntity> findQuotesByUserId(@Param("userId") Long userId, Pageable pageable);
+
+	QuoteSaved findQuotesByUserIdAndQuoteId(Long userId, Long quoteId);
 }

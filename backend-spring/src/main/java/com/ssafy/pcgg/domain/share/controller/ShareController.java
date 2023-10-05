@@ -109,4 +109,9 @@ public class ShareController {
 		return ResponseEntity.ok().body(shareService.getTop5SharesWithMostLikeCnt());
 	}
 
+	@DeleteMapping("/{quoteId}/quotes")
+	@CurrentUserId("userId")
+	public ResponseEntity<String> deleteShare(UserIdDto userId, HttpServletRequest request, @PathVariable long quoteId) {
+		return ResponseEntity.ok().body(shareService.deleteShare(userId, quoteId));
+	}
 }
