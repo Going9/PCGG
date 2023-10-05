@@ -20,14 +20,10 @@ public class RedisConfig {
     @Value("{spring.redis.host}")
     private String redisHost;
 
-    @Value("{spring.redis.port}")
-    private int redisPort;
-
     // RedisProperties로 yaml에 저장한 host, post를 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         redisProperties.setHost(redisHost);
-        redisProperties.setPort(redisPort);
         return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
     }
 
