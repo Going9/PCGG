@@ -51,6 +51,7 @@ import { searchIcon } from "@/assets/Icon";
 import PeripheralComponentVue from "../components/PeripheralViewComponents/PeripheralComponent.vue";
 import { usePeripehralStore } from "@/store/peripheralStore";
 import { userStore } from "@/store/userStore";
+import axios from "axios";
 
 const store = usePeripehralStore();
 const user = userStore();
@@ -112,6 +113,17 @@ onMounted(() => {
 
   const observer = new IntersectionObserver(handleIntersection, options);
   observer.observe(footer);
+  const fetchData = () => {
+    axios
+      .get("https://pcgg.kro.kr/api2/v1/recommends/keyboard/27/")
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  fetchData();
 });
 </script>
 
