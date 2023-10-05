@@ -10,7 +10,7 @@
         <!-- {{ slide }} -->
         <!-- <img src="@/assets/laptopImg.jpg" alt="laptopImg" width="400" height="200"> -->
         <div class="item">
-          <BestSeller />
+          <BestSeller :item="top5List[slide-1]"/>
         </div>
       </div>
     </Slide>
@@ -21,42 +21,44 @@
   </Carousel>
 </template>
 
-<script>
+<script setup>
 import BestSeller from "@/components/RecommendationViewComponents/BestSellerComponent.vue";
-import { defineComponent } from "vue";
 import { Carousel, Navigation, Slide, Pagination } from "vue3-carousel";
-import "vue3-carousel/dist/carousel.css";
-export default defineComponent({
-  name: "ExamplePagination",
-  components: {
-    Pagination,
-    Carousel,
-    Slide,
-    Navigation,
-    BestSeller,
+import {onMounted, ref} from "vue"
+import {loadShareTop5API} from "@/api/shareAPI"
+
+
+const top5List = ref([])
+const settings = {
+  itemsToShow: 1,
+  snapAlign: "center",
+};
+
+const loadShareTop5 = () =>{
+  loadShareTop5API(
+    ({ data }) => {
+      console.log(data)
+      top5List.value = data},
+    (error) => {
+          console.log(error);
+        }
+  )
+}
+
+onMounted(() => {
+  loadShareTop5();
+})
+
+const breakpoints = {
+  700: {
+    itemsToShow: 3.5,
+    snapAlign: "center",
   },
-  data: () => ({
-    // carousel settings
-    settings: {
-      itemsToShow: 1,
-      snapAlign: "center",
-    },
-    // breakpoints are mobile first
-    // any settings not specified will fallback to the carousel settings
-    breakpoints: {
-      // 700px and up
-      700: {
-        itemsToShow: 3.5,
-        snapAlign: "center",
-      },
-      // 1024 and up
-      1024: {
-        itemsToShow: 5,
-        snapAlign: "start",
-      },
-    },
-  }),
-});
+  1024: {
+    itemsToShow: 5,
+    snapAlign: "start",
+  },
+};
 </script>
 
 <style scoped>

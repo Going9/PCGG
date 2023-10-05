@@ -5,14 +5,14 @@
         <img alt="BannerImg" class="bannerImg" :src="rankingbannerImg" />
         <div class="box">
           <div class="bannerComment">
-            <span>견적 랭킹에서는 가장 많이 판매되는 제품을 확인하세요.</span>
+            <span>견적 랭킹에서 가장 인기있는 견적을 확인하세요.</span>
           </div>
         </div>
       </div>
       <div class="maincarouselbox">
-        <Carousel3D />
+        <Carousel3D/>
       </div>
-      <div class="subcarouselbox" ref="subCarouselBox">
+      <div class="subcarouselbox" ref="subCarouselBox" v-if="false">
         <div>
           <div class="subCarouselComment">
             <span>닉네임님에게 추천하는 상품</span>
@@ -38,7 +38,6 @@ let isIntersecting = ref(false);
 
 const onIntersect = debounce((entries) => {
   const entry = entries[0];
-  console.log(entry.intersectionRatio);
   if (entry.intersectionRatio > 0.8 && entry.intersectionRatio != 1) {
     isIntersecting.value = true;
   } else {
@@ -109,8 +108,9 @@ onMounted(() => {
 }
 .container {
   width: 100%;
-  /* height: rem; */
-  height: 120rem;
+  height: 1vh
+  /* height: 120rem; */
+
 }
 .maincarouselbox {
   margin-top: 2%;

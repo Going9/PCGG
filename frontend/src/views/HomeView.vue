@@ -67,9 +67,6 @@ import { mainbannerImg } from "@/assets/image";
               </RouterLink>
             </v-col>
             <v-col>
-              <v-btn class="used-market text-2" size="x-large">중고 장터</v-btn>
-            </v-col>
-            <v-col>
               <RouterLink to="/simulation">
                 <v-btn class="simulation text-2" size="x-large"
                   >시뮬레이션</v-btn
@@ -84,6 +81,7 @@ import { mainbannerImg } from "@/assets/image";
 </template>
 
 <style scoped>
+
 .banner {
   position: relative; /* 부모 요소에 상대적 위치를 설정합니다. */
   width: 100%;
@@ -179,7 +177,6 @@ import { mainbannerImg } from "@/assets/image";
   flex-shrink: 0;
   background-color: #f9d13e;
   color: white;
-
   border-radius: 0.5rem;
   margin-left: 100%;
 }
