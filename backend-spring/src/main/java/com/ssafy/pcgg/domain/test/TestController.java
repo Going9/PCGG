@@ -5,6 +5,7 @@ import com.ssafy.pcgg.domain.test.dto.RedisTestDto;
 import com.ssafy.pcgg.domain.user.RedisService;
 import com.ssafy.pcgg.global.handler.ErrorHandler.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 
-import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.EMAIL_ERROR;
+import static com.ssafy.pcgg.global.handler.ErrorHandler.ErrorCode.*;
 
 @RestController
 @RequestMapping("/api/v1/test")
@@ -21,6 +22,11 @@ public class TestController {
 
     private final RedisService redisService;
     private final JavaMailSender javaMailSender;
+
+    private static final String AUTH_CODE_PREFIX = "AuthCode";
+
+    @Value("${spring.mail.auth-code-expiration-millis}")
+    private long authCodeExpirationMillis;
 
     @GetMapping
     public ResponseEntity<String> test() {
@@ -44,7 +50,13 @@ public class TestController {
         try {
             javaMailSender.send(emilaForm);
         } catch (RuntimeException e) {
-            throw new CustomException(EMAIL_ERROR);
+            throw new CustomException(EMAIL_SEND_ERROR);
+        }
+
+        try {
+            redisService.setValues(AUTH_CODE_PREFIX + toEmail, text, Duration.ofMillis(this.authCodeExpirationMillis));
+        } catch (RuntimeException e) {
+            throw new CustomException(REDIS_ERROR);
         }
 
         return ResponseEntity.ok().body("이메일 성공");
