@@ -146,6 +146,7 @@ public class RecommendService {
     }
 
     public List<QuoteResponseDto> createRecommend(QuoteRequestDto quoteRequestDto){
+        checkNull(quoteRequestDto);
         Integer budget = quoteRequestDto.getBudget();
         UsageNsEntity usage = usageNsRepository.findById(quoteRequestDto.getUsage()).orElseThrow(() -> new NullPointerException("해당 이름을 가지는 UsageEntity 없음"));
         String caseSize = quoteRequestDto.getCaseSize();
@@ -233,6 +234,18 @@ public class RecommendService {
             responseList.add(responseCandidateList.get(0));
         }
         return responseList;
+    }
+
+    private void checkNull(QuoteRequestDto quoteRequestDto) {
+        if(quoteRequestDto.getBudget()==null || quoteRequestDto.getBudget() == 0){
+            quoteRequestDto.setBudget(10000000);
+        }
+        if(quoteRequestDto.getUsage() == null || quoteRequestDto.getUsage().equals("")){
+            quoteRequestDto.setUsage("캐주얼게임");
+        }
+        if(quoteRequestDto.getCaseSize() == null || quoteRequestDto.getCaseSize().equals("")){
+            quoteRequestDto.setCaseSize("M-ATX");
+        }
     }
 
     public List<?> getPartRecommend(PartRequestDto partRequestDto) {
