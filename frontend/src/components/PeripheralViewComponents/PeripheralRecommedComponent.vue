@@ -2,7 +2,7 @@
   <div>
     <div v-for="(item, index) in listData" :key="index">
       <div class="listitem" :class="{ open: expandedItem === index }">
-        <img :src="item['imageSource']" alt="noimage!" class="itemimg" />
+        <img :src="item['image_source']" alt="noimage!" class="itemimg" />
         <v-divider class="border-opacity-100" vertical></v-divider>
         <div class="itemsummary" @click="toggleReview(index, item)">
           <div class="summary">
@@ -161,6 +161,7 @@ const toggleReview = (index, item) => {
     expandedItem.value = index;
     const data = { category: store.peripheralCategory, peripheralId: item.id };
     console.log(store.peripheralCategory);
+    console.log(listData);
     store.callRecommend(data);
   }
   updating.value = -1;
