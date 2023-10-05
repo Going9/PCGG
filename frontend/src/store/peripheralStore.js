@@ -72,12 +72,8 @@ export const usePeripehralStore = defineStore("peripheral", {
       );
     },
 
-    isTest(value) {
-      axios
-        .get(
-          `https://pcgg.kro.kr:30000/api2/v1/recommends/${value.category}/${value.userId}/`
-        )
-        .then((response) => console.log(response));
+    isTest() {
+      axios.get(`https://naver.com`).then((response) => console.log(response));
     },
 
     // 전체목록 불러오기
