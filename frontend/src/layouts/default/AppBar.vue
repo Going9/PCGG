@@ -10,6 +10,7 @@
           <span v-if="!store.isLogin" class="text"> Login</span>
         </RouterLink>
         <div
+        class="mr-5"
          @click="toggleIsCategory">
           <img
             alt="hambergerIcon"
@@ -39,6 +40,7 @@
           />
         </RouterLink>
         <div
+        class="mr-5"
          @click="toggleIsCategory">
           <img
             alt="hambergerIcon"
@@ -222,4 +224,5 @@ nav .nav-tap {
   text-decoration: none;
   color: black;
 }
+
 </style>

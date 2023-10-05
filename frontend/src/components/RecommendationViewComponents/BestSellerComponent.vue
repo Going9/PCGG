@@ -2,18 +2,23 @@
   <div class="container">
     <img :src="bestsellerImg" class="outerImg" alt="bestSeller" />
     <div class="innerImg">
-      <img
-        :src="laptopImg"
-        alt="laptopImg"
-        style="{{ width: 80%; height: 80%; }}"
-      />
+      <PostComponent
+      style="{{ color = black; }}"
+      :post="props.item"
+      v-if="props.item"/>
     </div>
   </div>
 </template>
 
 <script setup>
+import {defineProps} from 'vue'
+import PostComponent from "@/components/ShareViewComponents/PostComponent.vue";
 import { bestsellerImg } from "@/assets/image";
 import { laptopImg } from "@/assets/image";
+
+const props = defineProps({
+  item: Object
+});
 </script>
 
 <style scoped>
@@ -21,13 +26,13 @@ import { laptopImg } from "@/assets/image";
   margin-top: 5%;
   height: 88%;
   width: 88%;
-  color: white;
+  color: black;
   position: relative;
 }
 
 .outerImg {
   position: relative;
-  width: 100%;
+  width: 110%;
   height: 100%;
 }
 .innerImg {
