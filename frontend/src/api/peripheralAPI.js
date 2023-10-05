@@ -11,7 +11,7 @@ const apiDjango = apiDjangoInstance();
 // 추천 api는?
 async function isCallPeripheralRecommend(data, success, fail) {
   await apiDjango
-    .get(`/recommends/${data.category}/27/`)
+    .get(`/recommends/${data.category}/${data.userId}/?format=json`)
     .then(success)
     .catch(fail);
 }

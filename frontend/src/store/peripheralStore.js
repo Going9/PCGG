@@ -64,6 +64,7 @@ export const usePeripehralStore = defineStore("peripheral", {
           console.log(this.recommendPeripheral);
         },
         (error) => {
+          console.log(value);
           console.log(error);
         }
       );
