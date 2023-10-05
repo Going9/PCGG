@@ -38,6 +38,11 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(EMAIL_NOT_FOUND));
 
+        // email은 있지만 회원 탈퇴가 되었다면
+        if (!userEntity.isActivated()) {
+            throw new CustomException(EMAIL_NOT_FOUND);
+        }
+
         // password가 틀리면
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new CustomException(PWD_NOT_MATCH);
