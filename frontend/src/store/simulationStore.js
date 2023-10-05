@@ -1,14 +1,23 @@
 import { defineStore } from "pinia";
+import { isSimulate } from "../api/simulationAPI";
 
 export const useSimulationStore = defineStore("simulation", {
   state: () => ({
-    partCategory: "CPU",
-    partList: [],
+    simulateResult: [],
   }),
   getters: {},
   actions: {
-    isPartCategory(value) {
-      this.partCategory = value;
+    async goSimulate(value) {
+      await isSimulate(
+        value,
+        ({ data }) => {
+          this.simulateResult = [];
+          this.simulateResult.push(data[0]);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
   },
 });
