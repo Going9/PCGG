@@ -103,13 +103,14 @@ public class UserService {
     private String createCode() {
         int length = 6;
         try {
-            Random random = SecureRandom.getInstanceStrong();
+//            Random random = SecureRandom.getInstanceStrong();
+            Random random = new SecureRandom();
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < length; i++) {
                 builder.append(random.nextInt(10));
             }
             return builder.toString();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (RuntimeException e) {
             throw new CustomException(EMAIL_CODE_ERROR);
         }
     }
