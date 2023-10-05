@@ -160,7 +160,6 @@
         {{ user.userInfo["nickname"] }}님께 추천 드리는 견적</v-btn
       >
     </div>
-
     <div>
       <div
         v-if="store.recommendToggle == false"
@@ -202,6 +201,16 @@
           >
             <img :src="appendIcon" alt="no" class="append" />
           </v-btn>
+          <v-dialog v-model="dialog" activator="parent" width="auto">
+            <v-card>
+              <v-card-text> </v-card-text>
+              <v-card-actions>
+                <v-btn color="primary" block @click="dialog = false"
+                  >Close Detail</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </div>
       </div>
     </div>
@@ -445,6 +454,8 @@ const saveEstimate = (item) => {
   };
   store.saveEstimate(data);
 };
+
+const dialog = ref(false);
 </script>
 
 <style scoped>
