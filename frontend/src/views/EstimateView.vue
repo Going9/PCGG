@@ -4,18 +4,6 @@
       <div class="main-select">
         <V-btn
           class="btn-main"
-          @click="choiceLaptop = true"
-          :class="{ active: choiceLaptop }"
-          variant="flat"
-        >
-          <div>
-            <p>노트북</p>
-            <img :src="laptopWIcon" alt="noimage" v-if="choiceLaptop" />
-            <img :src="laptopIcon" alt="noimage" v-else />
-          </div>
-        </V-btn>
-        <V-btn
-          class="btn-main"
           @click="choiceLaptop = false"
           :class="{ active: !choiceLaptop }"
           variant="flat"
@@ -24,6 +12,18 @@
             <p>데스크탑</p>
             <img :src="desktopIcon" alt="noimage" v-if="choiceLaptop" />
             <img :src="desktopWIcon" alt="noimage" v-else />
+          </div>
+        </V-btn>
+        <V-btn
+          class="btn-main"
+          @click="choiceLaptop = true"
+          :class="{ active: choiceLaptop }"
+          variant="flat"
+        >
+          <div>
+            <p>노트북</p>
+            <img :src="laptopWIcon" alt="noimage" v-if="choiceLaptop" />
+            <img :src="laptopIcon" alt="noimage" v-else />
           </div>
         </V-btn>
       </div>
@@ -146,7 +146,8 @@
         v-if="store.recommendToggle == false"
         color="#DA0000"
         class="callrecommend"
-        @click="addEstimate()"
+        :loading="isLoading"
+        @click="performAction()"
       >
         추천받기</v-btn
       >
@@ -181,6 +182,7 @@
               <p>파워 : {{ item.power["name"] }}</p>
             </div>
             <div class="recosummary2">
+              <p>케이스 : {{ item.chassis["name"] }}</p>
               <p>ram : {{ item.ram["name"] }}</p>
               <p>ssd : {{ item.ssd }}</p>
               <p>예상 비용: {{ item.totalPrice }}</p>
@@ -228,7 +230,7 @@ const listData = computed(function () {
     return item;
   });
 });
-const choiceLaptop = ref(true);
+const choiceLaptop = ref(false);
 
 const choiceUsage = ref([
   {
@@ -333,6 +335,8 @@ const choiceSsd = ref([
 
 const estimate = ref([]);
 
+const isLoading = ref(false);
+
 const addEstimate = () => {
   if (choiceLaptop.value) {
     estimate.value.push("laptop");
@@ -409,7 +413,18 @@ const addEstimate = () => {
   listData.value = store.recommendEstimate;
 };
 
+const performAction = async () => {
+  try {
+    isLoading.value = !store.recommendToggle;
+    await addEstimate();
+  } catch (error) {
+    console.error(error);
+    isLoading.value = store.recommendToggle;
+  }
+};
+
 const resetEstimate = () => {
+  isLoading.value = false;
   store.recommendToggle = false;
   store.recommendEstimate = [];
   console.log(store.recommendEstimate);
