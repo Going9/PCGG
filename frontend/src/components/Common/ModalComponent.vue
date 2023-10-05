@@ -31,7 +31,7 @@ const callPartList = () => {
     },100)
 }
 
-const setQ = (value) => {
+const search = (value) => {
   q.value = value
   store.search(value)
   callPartList()
@@ -96,7 +96,7 @@ const setItem = (item) => {
           </v-toolbar-items>
         </v-toolbar>
         <SearchBarComponent
-         @q="setQ"/>
+         @q="search"/>
         <ResultListComponent
         :partList="partList"
         @increase="callPartList"
