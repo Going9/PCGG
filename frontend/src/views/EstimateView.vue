@@ -187,6 +187,84 @@
               <p>예상 비용: {{ item.totalPrice }}</p>
             </div>
           </div>
+          <v-dialog v-model="item.dialog" activator="parent" width="auto">
+            <v-card>
+              <v-card-text>
+                <h3>CPU</h3>
+                <div style="display: flex">
+                  <img :src="item.cpu['imageSource']" alt="noimg" />
+                  <div>
+                    <p>제품명 : {{ item.cpu["name"] }}</p>
+                    <p>소켓정보 : {{ item.cpu["socketInfo"] }}</p>
+                    <p>
+                      램 호환성 :
+                      <span v-if="item.cpu['ddr4'] == true">ddr4</span
+                      ><span v-if="item.cpu['ddr5'] == true"> ddr5</span>
+                    </p>
+                    <p>내장그래픽 : {{ item.cpu["integratedGraphics"] }}</p>
+                    <p>쿨러 포함 : {{ item.cpu["coolerIncluded"] }}</p>
+                    <p>싱글 벤치 : {{ item.cpu["singleScore"] }}점</p>
+                    <p>멀티 벤치 : {{ item.cpu["multiScore"] }}점</p>
+                    <p>가격 : {{ item.cpu["price"] }}원</p>
+                  </div>
+                </div>
+                <h3>GPU</h3>
+                <div style="display: flex">
+                  <img :src="item.gpu['imageSource']" alt="noimage" />
+                  <div>
+                    <p>제품명 : {{ item.gpu["name"] }}</p>
+                    <p>필요 전력 : {{ item.gpu["neededPower"] }}W</p>
+                    <p>
+                      사이즈 : {{ item.gpu["width"] }}cm X
+                      {{ item.gpu["thickness"] }}cm
+                    </p>
+                    <p>벤치 점수 : {{ item.gpu["score"] }}점</p>
+                    <p>가격 : {{ item.gpu["price"] }}원</p>
+                  </div>
+                </div>
+                <h3>메인보드</h3>
+                <div style="display: flex">
+                  <img :src="item.mainboard['imageSource']" alt="" />
+                  <div>
+                    <p>제품명 : {{ item.mainboard["name"] }}</p>
+                    <p>소켓정보 : {{ item.mainboard["socketInfo"] }}</p>
+                    <p>제품명 : {{ item.mainboard["name"] }}</p>
+                    <p>제품명 : {{ item.mainboard["name"] }}</p>
+                    <p>제품명 : {{ item.mainboard }}</p>
+                  </div>
+                </div>
+                <h3>파워</h3>
+                <div style="display: flex">
+                  <div>
+                    <p>제품명 : {{ item.power }}</p>
+                  </div>
+                </div>
+                <h3>케이스</h3>
+                <div style="display: flex">
+                  <div>
+                    <p>제품명 : {{ item.chassis }}</p>
+                  </div>
+                </div>
+                <h3>ram</h3>
+                <div style="display: flex">
+                  <div>
+                    <p>제품명 : {{ item.ram }}</p>
+                  </div>
+                </div>
+                <h3>ssd</h3>
+                <div style="display: flex">
+                  <div>
+                    <p>제품명 : {{ item.ssd }}</p>
+                  </div>
+                </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="primary" block @click="dialog = false"
+                  >Close Detail</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-divider
             class="border-opacity-100"
             vertical
@@ -201,16 +279,6 @@
           >
             <img :src="appendIcon" alt="no" class="append" />
           </v-btn>
-          <v-dialog v-model="dialog" activator="parent" width="auto">
-            <v-card>
-              <v-card-text> </v-card-text>
-              <v-card-actions>
-                <v-btn color="primary" block @click="dialog = false"
-                  >Close Detail</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </div>
       </div>
     </div>
@@ -236,9 +304,10 @@ const user = userStore();
 
 const listData = computed(function () {
   return store.recommendEstimate.map((item) => {
-    return item;
+    return { ...item, dialog: false };
   });
 });
+
 const choiceLaptop = ref(false);
 
 const choiceUsage = ref([
