@@ -131,8 +131,6 @@ const user = userStore();
 
 const listData = computed(function () {
   return store.recommendPeripheral.map((item) => {
-    item.reviewRating = 0;
-    expandedItem.value = -1;
     return item;
   });
 });
