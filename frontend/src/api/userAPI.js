@@ -8,6 +8,14 @@ async function sendToEmailAPI(email, success, fail) {
   await api.post(`/users/${email}`).then(success).catch(fail);
 }
 
+// 이메일 인증번호 발송 test
+async function sendToEmailTestAPI(email, success, fail) {
+  await api
+    .post("/test/email", JSON.stringify(email))
+    .then(success)
+    .catch(fail);
+}
+
 // 이메일 인증
 async function verifiedCodeAPI(emailCode, success, fail) {
   await api
@@ -62,6 +70,7 @@ async function withdrawalAPI(success, fail) {
 
 export {
   sendToEmailAPI,
+  sendToEmailTestAPI,
   verifiedCodeAPI,
   signupAPI,
   loginAPI,
