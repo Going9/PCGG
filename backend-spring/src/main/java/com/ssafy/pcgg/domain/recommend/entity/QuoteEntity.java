@@ -2,6 +2,7 @@ package com.ssafy.pcgg.domain.recommend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.ssafy.pcgg.domain.part.entity.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

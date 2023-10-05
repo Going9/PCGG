@@ -1,5 +1,9 @@
 package com.ssafy.pcgg.domain.recommend.entity;
 
+import com.ssafy.pcgg.domain.part.entity.CpuEntity;
+import com.ssafy.pcgg.domain.part.entity.GpuEntity;
+import com.ssafy.pcgg.domain.part.entity.RamEntity;
+import com.ssafy.pcgg.domain.part.entity.UsageNsEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

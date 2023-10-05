@@ -5,14 +5,14 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.pcgg.domain.part.PartTypeFormat;
-import com.ssafy.pcgg.domain.recommend.repository.ChassisRepository;
-import com.ssafy.pcgg.domain.recommend.repository.CoolerRepository;
-import com.ssafy.pcgg.domain.recommend.repository.CpuRepository;
-import com.ssafy.pcgg.domain.recommend.repository.GpuRepository;
-import com.ssafy.pcgg.domain.recommend.repository.MainboardRepository;
-import com.ssafy.pcgg.domain.recommend.repository.PowerRepository;
-import com.ssafy.pcgg.domain.recommend.repository.RamRepository;
-import com.ssafy.pcgg.domain.recommend.repository.SsdRepository;
+import com.ssafy.pcgg.domain.part.repository.ChassisRepository;
+import com.ssafy.pcgg.domain.part.repository.CoolerRepository;
+import com.ssafy.pcgg.domain.part.repository.CpuRepository;
+import com.ssafy.pcgg.domain.part.repository.GpuRepository;
+import com.ssafy.pcgg.domain.part.repository.MainboardRepository;
+import com.ssafy.pcgg.domain.part.repository.PowerRepository;
+import com.ssafy.pcgg.domain.part.repository.RamRepository;
+import com.ssafy.pcgg.domain.part.repository.SsdRepository;
 
 import lombok.RequiredArgsConstructor;
 

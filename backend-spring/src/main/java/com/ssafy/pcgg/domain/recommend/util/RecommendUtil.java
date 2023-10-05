@@ -1,6 +1,8 @@
 package com.ssafy.pcgg.domain.recommend.util;
 
+import com.ssafy.pcgg.domain.part.entity.*;
 import com.ssafy.pcgg.domain.part.exception.NoSuchPartTypeException;
+import com.ssafy.pcgg.domain.part.repository.*;
 import com.ssafy.pcgg.domain.recommend.entity.*;
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.repository.*;

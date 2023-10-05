@@ -1,4 +1,4 @@
-package com.ssafy.pcgg.domain.recommend.entity;
+package com.ssafy.pcgg.domain.part.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Null;

@@ -1,4 +1,4 @@
-package com.ssafy.pcgg.domain.recommend.entity;
+package com.ssafy.pcgg.domain.part.entity;
 
 import com.ssafy.pcgg.domain.recommend.exception.QuoteCandidateException;
 import com.ssafy.pcgg.domain.recommend.util.PerformanceRequirement;
@@ -25,7 +25,7 @@ public class MainboardEntity {
 
     private Boolean extinct;
 
-    @Column(length=20)
+    @Column(name = "socket_info", length=20)
     private String socketInfo;
 
     @Column(length=20)

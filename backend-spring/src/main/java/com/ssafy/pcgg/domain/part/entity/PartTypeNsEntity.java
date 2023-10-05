@@ -1,4 +1,4 @@
-package com.ssafy.pcgg.domain.recommend.entity;
+package com.ssafy.pcgg.domain.part.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "usage_ns")
-public class UsageNsEntity {
+@Table(name = "part_type_ns")
+public class PartTypeNsEntity {
 
     @Id
     @Column(length = 10)

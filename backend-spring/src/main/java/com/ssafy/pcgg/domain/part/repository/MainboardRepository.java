@@ -1,6 +1,6 @@
-package com.ssafy.pcgg.domain.recommend.repository;
+package com.ssafy.pcgg.domain.part.repository;
 
-import com.ssafy.pcgg.domain.recommend.entity.MainboardEntity;
+import com.ssafy.pcgg.domain.part.entity.MainboardEntity;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
