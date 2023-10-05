@@ -73,6 +73,10 @@ onMounted(async () => {
 .share-container {
 }
 
+.post {
+  min-height: 30%;
+}
+
 .indexTitle {
   font-weight: bold;
   text-align: center;

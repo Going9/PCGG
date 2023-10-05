@@ -4,7 +4,7 @@
       <div class="main-select">
         <V-btn
           class="btn-main"
-          @click="choiceLaptop = false"
+          @click="(choiceLaptop = false), resetEstimate()"
           :class="{ active: !choiceLaptop }"
           variant="flat"
         >
@@ -16,7 +16,7 @@
         </V-btn>
         <V-btn
           class="btn-main"
-          @click="choiceLaptop = true"
+          @click="(choiceLaptop = true), resetEstimate()"
           :class="{ active: choiceLaptop }"
           variant="flat"
         >
@@ -27,7 +27,7 @@
           </div>
         </V-btn>
       </div>
-      <div class="usage">
+      <div class="usage" v-if="!choiceLaptop">
         <h3>용도</h3>
         <div class="usage-combo">
           <v-select
@@ -39,6 +39,21 @@
             @click="resetOtherCombos(index)"
             variant="solo"
             class="cleanbtn"
+          ></v-select>
+        </div>
+      </div>
+      <div class="usage2" v-if="choiceLaptop">
+        <h3>용도</h3>
+        <div class="usage-laptop">
+          <v-select
+            v-for="(combo, index) in choiceUsageLaptop"
+            :key="index"
+            v-model="combo.selectedItem"
+            :items="combo.items.map((item) => item.label)"
+            :label="combo.label"
+            @click="resetOtherCombos(index)"
+            variant="solo"
+            class="laptopbtn"
           ></v-select>
         </div>
       </div>
@@ -100,7 +115,7 @@
           ></v-slider>
         </div>
       </div>
-      <div class="as">
+      <div class="as" v-if="!choiceLaptop">
         <h3>AS여부</h3>
         <div class="sub-select">
           <V-btn
@@ -169,7 +184,7 @@
           추천받은 내용이 없습니다.
         </p>
       </div>
-      <div v-else>
+      <div v-if="!choiceLaptop">
         <div v-for="(item, index) in listData" :key="index" class="recoitem">
           <img :src="item.chassis.imageSource" alt="noimg" />
           <v-divider class="border-opacity-100" vertical></v-divider>
@@ -185,6 +200,44 @@
               <p>ram : {{ item.ram["name"] }}</p>
               <p>ssd : {{ item.ssd }}</p>
               <p>예상 비용: {{ item.totalPrice }}</p>
+            </div>
+          </div>
+          <v-divider
+            class="border-opacity-100"
+            vertical
+            v-if="user.loginActivated"
+          ></v-divider>
+          <v-btn
+            icon="$vuetify"
+            class="itembtn"
+            variant="text"
+            @click="saveEstimate(item)"
+            v-if="user.loginActivated"
+          >
+            <img :src="appendIcon" alt="no" class="append" />
+          </v-btn>
+        </div>
+      </div>
+      <div v-else>
+        <div v-for="(item, index) in listData" :key="index" class="recoitem">
+          <div class="summary">
+            <div class="recosummary1">
+              <p>CPU : {{ item.cpu }}</p>
+              <p>GPU : {{ item.gpu }}</p>
+              <p>ssd : {{ item.ssd * 1000 }}GB</p>
+              <p>OS여부 : {{ item.os }}</p>
+            </div>
+            <div class="recosummary2">
+              <p>hdmi : {{ item.hdmi }}</p>
+              <p>usbA : {{ item.usbA }}개</p>
+              <p>usbC : {{ item.usbC }}개</p>
+              <p>썬더볼트: {{ item.thunderbolt }}</p>
+            </div>
+            <div class="recosummary2">
+              <p>제조사 : {{ item.manufacturer }}</p>
+              <p>해상도 : {{ item.resolution }}</p>
+              <p>주사율 : {{ item.refreshRate }}Hz</p>
+              <p>예상 비용: {{ item.price }}</p>
             </div>
           </div>
           <v-divider
@@ -278,6 +331,17 @@ const choiceUsage = ref([
     label: "고성능 개발",
   },
 ]);
+const choiceUsageLaptop = ref([
+  {
+    selectedItem: null,
+    items: [
+      { value: "고", label: "고사양 노트북" },
+      { value: "중", label: "중사양 노트북" },
+      { value: "저", label: "저사양 노트북" },
+    ],
+    label: "노트북 성능",
+  },
+]);
 
 const resetOtherCombos = (currentIndex) => {
   choiceUsage.value.forEach((combo, index) => {
@@ -340,22 +404,33 @@ const isLoading = ref(false);
 const addEstimate = () => {
   if (choiceLaptop.value) {
     estimate.value.push("laptop");
+    choiceUsageLaptop.value.forEach((combo) => {
+      if (combo.selectedItem) {
+        const selectedItemLabel = combo.selectedItem;
+        const matchingItem = combo.items.find(
+          (item) => item.label === selectedItemLabel
+        );
+        if (matchingItem) {
+          const selectedItemValue = matchingItem.value;
+          estimate.value.push(selectedItemValue);
+        }
+      }
+    });
   } else {
     estimate.value.push("desktop");
-  }
-
-  choiceUsage.value.forEach((combo) => {
-    if (combo.selectedItem) {
-      const selectedItemLabel = combo.selectedItem;
-      const matchingItem = combo.items.find(
-        (item) => item.label === selectedItemLabel
-      );
-      if (matchingItem) {
-        const selectedItemValue = matchingItem.value;
-        estimate.value.push(selectedItemValue);
+    choiceUsage.value.forEach((combo) => {
+      if (combo.selectedItem) {
+        const selectedItemLabel = combo.selectedItem;
+        const matchingItem = combo.items.find(
+          (item) => item.label === selectedItemLabel
+        );
+        if (matchingItem) {
+          const selectedItemValue = matchingItem.value;
+          estimate.value.push(selectedItemValue);
+        }
       }
-    }
-  });
+    });
+  }
 
   estimate.value.push(budgetValue.value);
 
@@ -500,13 +575,35 @@ const saveEstimate = (item) => {
   margin-left: 2%;
 }
 
+.usage2 {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-left: 2%;
+  align-items: flex-end;
+}
+
+.usage2 h3 {
+  margin-right: 45%;
+}
+
 .usage-combo {
   display: flex;
   height: 100%;
 }
 
+.usage-laptop {
+  display: flex;
+  height: 100%;
+  width: 50%;
+}
+
 .cleanbtn {
   max-width: 15% !important;
+  margin-right: 1%;
+}
+
+.laptopbtn {
   margin-right: 1%;
 }
 
@@ -535,7 +632,7 @@ const saveEstimate = (item) => {
 .selecttwo {
   margin: 2%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .budget {

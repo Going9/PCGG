@@ -1,66 +1,72 @@
 <template>
-  <div class="button-container">
-    <v-btn-toggle v-model="category" class="buttons">
-      <v-btn
-        v-for="item in buttonItems"
-        :key="item.value"
-        :value="item.value"
-        :class="{
-          'active-button': category === item.value,
-          'inactive-button': category !== item.value,
-        }"
-        @click="buttonEvent(item.value)"
-      >
-        {{ item.label }}
-      </v-btn>
-    </v-btn-toggle>
-  </div>
-  <div if="peripheralList.length == 0" v-for="item in buttonItems" :key="item">
-    <div class="non-item-text" v-if="category === item.value">
-      저장한 {{ item.label }}가 없습니다.
+  <div style="position: static; top: 10px">
+    <div class="button-container">
+      <v-btn-toggle v-model="category" class="buttons">
+        <v-btn
+          v-for="item in buttonItems"
+          :key="item.value"
+          :value="item.value"
+          :class="{
+            'active-button': category === item.value,
+            'inactive-button': category !== item.value,
+          }"
+          @click="buttonEvent(item.value)"
+        >
+          {{ item.label }}
+        </v-btn>
+      </v-btn-toggle>
     </div>
-  </div>
-  <div
-    class="peripheral-container"
-    v-for="peripheral in peripheralList"
-    :key="peripheral"
-  >
-    <img
-      :src="peripheral['imageSource']"
-      alt="noimage!"
-      class="peripheralimg"
-    />
-    <v-divider class="border-opacity-100" vertical />
-    <div class="peripherals">
-      <div class="peripheral">
-        <div>
-          <p>제품명: {{ peripheral["name"] }}</p>
-        </div>
-        <div class="peripheral">
-          <p>최고가: {{ peripheral["hprice"] }}</p>
-        </div>
-        <div class="peripheral">
-          <p>최저가: {{ peripheral["lprice"] }}</p>
-        </div>
-      </div>
-      <div class="peripheral">
-        <div>
-          <p>브랜드: {{ peripheral["brand"] }}</p>
-        </div>
-        <div>
-          <v-btn :href="peripheral['link']">상품 페이지</v-btn>
-        </div>
-      </div>
-    </div>
-    <v-divider class="border-opacity-100" vertical />
-    <v-btn
-      icon="$vuetify"
-      class="peripheralbtn"
-      variant="text"
-      @click="removeMyPeripheral(peripheral['id'])"
+    <div
+      if="peripheralList.length == 0"
+      v-for="item in buttonItems"
+      :key="item"
     >
-      <img :src="removeIcon" alt="no" class="remove" />
-    </v-btn>
+      <div class="non-item-text" v-if="category === item.value">
+        저장한 {{ item.label }}가 없습니다.
+      </div>
+    </div>
+    <div
+      class="peripheral-container"
+      v-for="peripheral in peripheralList"
+      :key="peripheral"
+    >
+      <img
+        :src="peripheral['imageSource']"
+        alt="noimage!"
+        class="peripheralimg"
+      />
+      <v-divider class="border-opacity-100" vertical />
+      <div class="peripherals">
+        <div class="peripheral">
+          <div>
+            <p>제품명: {{ peripheral["name"] }}</p>
+          </div>
+          <div class="peripheral">
+            <p>최고가: {{ peripheral["hprice"] }}</p>
+          </div>
+          <div class="peripheral">
+            <p>최저가: {{ peripheral["lprice"] }}</p>
+          </div>
+        </div>
+        <div class="peripheral">
+          <div>
+            <p>브랜드: {{ peripheral["brand"] }}</p>
+          </div>
+          <div>
+            <v-btn :href="peripheral['link']">상품 페이지</v-btn>
+          </div>
+        </div>
+      </div>
+      <v-divider class="border-opacity-100" vertical />
+      <v-btn
+        icon="$vuetify"
+        class="peripheralbtn"
+        variant="text"
+        @click="removeMyPeripheral(peripheral['id'])"
+      >
+        <img :src="removeIcon" alt="no" class="remove" />
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -109,6 +115,7 @@ const removeMyPeripheral = async (peripheralId) => {
 .non-item-text {
   font-weight: bold;
   text-align: center;
+  margin-top: 5rem;
 }
 .buttons {
   display: flex;
