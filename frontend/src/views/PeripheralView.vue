@@ -113,7 +113,9 @@ onMounted(() => {
   observer.observe(footer);
   const fetchData = () => {
     axios
-      .get("https://pcgg.kro.kr/api2/v1/recommends/keyboard/27/")
+      .get(
+        `https://pcgg.kro.kr/api2/v1/recommends/${store.peripheralCategory}/${user.userInfo["userid"]}/`
+      )
       .then((response) => {
         console.log(response.data, "view");
         store.callRecommend(response.data);
