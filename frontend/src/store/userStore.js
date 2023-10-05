@@ -122,6 +122,7 @@ export const userStore = defineStore("userStore", {
       this.peripheralList = [];
       this.shareList = [];
       this.shareLikeList = [];
+      this.savedQuoteList = [];
     },
     triggerActivation() {
       this.triggerOne = !this.triggerOne;

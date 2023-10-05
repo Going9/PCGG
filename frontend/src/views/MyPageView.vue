@@ -151,8 +151,8 @@ const buttonEvent = async (value) => {
 }
 .withdrawal-btn {
   position: absolute;
-  top: 85%;
-  left: 75%;
+  bottom: 10%;
+  right: 5%;
 }
 .button-container {
   width: 1200px;

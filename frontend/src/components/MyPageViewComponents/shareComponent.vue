@@ -1,7 +1,10 @@
 <template>
   <div class="share-container">
+    <div class="indexTitle" v-if="shareList.length > 0">내가 쓴 글</div>
+    <div class="indexTitle" v-if="shareList.length == 0">
+      내가 쓴 글이 없습니다.
+    </div>
     <v-container>
-      내가 쓴 글
       <v-row>
         <v-col
           cols="12"
@@ -19,9 +22,12 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-divider />
+    <v-divider :thickness="5" class="border-opacity-25" color="info" inset />
+    <div class="indexTitle" v-if="shareLikeList.length > 0">좋아요 누른 글</div>
+    <div class="indexTitle" v-if="shareLikeList.length == 0">
+      좋아요 누른 글이 없습니다.
+    </div>
     <v-container>
-      좋아요 누른 글
       <v-row>
         <v-col
           cols="12"
@@ -65,5 +71,10 @@ onMounted(async () => {
 
 <style>
 .share-container {
+}
+
+.indexTitle {
+  font-weight: bold;
+  text-align: center;
 }
 </style>
