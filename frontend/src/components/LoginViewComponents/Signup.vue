@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-btn @click="sendToEmailTest"> email send test </v-btn>
     <v-card class="mx-auto pa-4" elevation="8" width="100%" rounded="lg">
       <v-form ref="form">
         <v-text-field
@@ -93,7 +94,12 @@
 <script setup>
 import { ref, computed } from "vue";
 import { userStore } from "@/store/userStore";
-import { signupAPI, sendToEmailAPI, verifiedCodeAPI } from "@/api/userAPI";
+import {
+  signupAPI,
+  sendToEmailAPI,
+  sendToEmailTestAPI,
+  verifiedCodeAPI,
+} from "@/api/userAPI";
 
 const store = userStore();
 const visible = ref(false);
@@ -120,6 +126,22 @@ const sendToEmail = () => {
       if (error.response.data.status == 409) {
         alert(error.response.data.message);
       }
+    }
+  );
+};
+
+const sendToEmailTest = () => {
+  const emailJSON = {
+    email: email.value,
+  };
+
+  sendToEmailTestAPI(
+    emailJSON,
+    ({ data }) => {
+      console.log(data);
+    },
+    (error) => {
+      console.log(error);
     }
   );
 };
