@@ -58,6 +58,20 @@ const user = userStore();
 
 const toggle = ref(null);
 
+const fetchData = () => {
+  axios
+    .get(
+      `https://pcgg.kro.kr/api2/v1/recommends/${store.peripheralCategory}/${user.userInfo["userid"]}/`
+    )
+    .then((response) => {
+      console.log(response.data, "view");
+      store.callRecommend(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 const data = {
   category: store.peripheralCategory,
   page: 0,
@@ -69,6 +83,7 @@ const setToggle = (value) => {
   store.isPeripheralCategory(value);
   store.isSearchInit();
   data["page"] = 0;
+  fetchData();
 };
 
 const buttonItems = [
@@ -111,19 +126,6 @@ onMounted(() => {
 
   const observer = new IntersectionObserver(handleIntersection, options);
   observer.observe(footer);
-  const fetchData = () => {
-    axios
-      .get(
-        `https://pcgg.kro.kr/api2/v1/recommends/${store.peripheralCategory}/${user.userInfo["userid"]}/`
-      )
-      .then((response) => {
-        console.log(response.data, "view");
-        store.callRecommend(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
   fetchData();
 });
 </script>
