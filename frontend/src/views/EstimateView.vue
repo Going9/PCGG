@@ -198,7 +198,6 @@
             <div class="recosummary2">
               <p>케이스 : {{ item.chassis["name"] }}</p>
               <p>ram : {{ item.ram["name"] }}</p>
-              <p>ssd : {{ item.ssd }}</p>
               <p>예상 비용: {{ item.totalPrice }}</p>
             </div>
           </div>
