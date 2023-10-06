@@ -30,10 +30,8 @@
 - 부품 세트를 입력하면 호환성을 체크
 #### 주변기기 추천 
 - 사용자 리뷰 데이터를 기반으로 추천 알고리즘을 통해 주변기기 추천
-#### 중고거래 
-- 중고거래를 할 수 있는 게시판
 ####  공유마당 
-- 사용자간 견적을 공유 할 수 있는 커뮤니티 게시판. 마이페이지, 시뮬레이션과 연동됨
+- 사용자간 견적을 공유 할 수 있는 커뮤니티 게시판. 마이페이지, 시뮬레이션과 연동 가능
 
 ## ⚙️ 기술스택
 - `Frontend` - Vue
@@ -47,11 +45,11 @@
 ![PC.GG](/uploads/c4588bd7e9a8a83136e7ceaf34d4c42d/PC.GG.png)
 
 ## 🔌아키텍처
-![아키텍처](/uploads/491a90642fcc04d8cb048446b38cc916/아키텍처.png)
+![121212.PNG](/uploads/85b050f9cbc7647c8a7644c4e077f480/121212.PNG.png)
 
 ## 📅 일정
 - 기획: 2023.08.28 ~ 2023.09.01 (1주)
-- 개발: 2023.09.04 ~ ing
+- 개발: 2023.09.04 ~ 2023.10.06 (5주)
 
 ## 👪 팀원 및 역할
 <table>
@@ -63,8 +61,8 @@
       <td align="center"><a href="https://lab.ssafy.com/thdl9893"><img src="https://secure.gravatar.com/avatar/1dd3239aff334f6cbfaecacf92108958?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE 팀원 : 김소이</b><br /><b>주변기기추천/ 공유마당</b></sub></a><br /></td>
      <tr/>
       <td align="center"><a href="https://lab.ssafy.com/poi1229"><img src="https://secure.gravatar.com/avatar/2f2f0289c3a6be08891f7aa080d47ca7?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>FE 팀원 : 류성하</b><br /><b>주변기기/ 시뮬레이션 페이지</b></sub></a><br /></td>
-      <td align="center"><a href="https://lab.ssafy.com/wnddnjs843"><img src="https://secure.gravatar.com/avatar/5a2d393458ff42eefa2d0a544d8a55e5?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE,FE 팀원 : 장중원</b><br /><b>주변기기추천/ JWT 인증</b></sub></a><br /></td>
-      <td align="center"><a href="https://lab.ssafy.com/ischar"><img src="https://secure.gravatar.com/avatar/d9939c7c2ac8a72ca0161df2dd6be413?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE,FE 팀원 : 차재호</b><br /><b>Infra/ 중고거래</b></sub></a><br /></td>
+      <td align="center"><a href="https://lab.ssafy.com/wnddnjs843"><img src="https://secure.gravatar.com/avatar/5a2d393458ff42eefa2d0a544d8a55e5?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>BE,FE 팀원 : 장중원</b><br /><b>JWT인증/ 마이페이지</b></sub></a><br /></td>
+      <td align="center"><a href="https://lab.ssafy.com/ischar"><img src="https://secure.gravatar.com/avatar/d9939c7c2ac8a72ca0161df2dd6be413?s=192&d=identicon" width="100px" alt=""/><br /><sub><b>INFRA 팀원 : 차재호</b><br /><b>MSA 서버 배포</b></sub></a><br /></td>
     </tr>
   </tbody>
 </table>
